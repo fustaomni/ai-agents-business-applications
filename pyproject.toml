@@ -1,5 +1,5 @@
 [project]
-name = "cscie103-data-engineering"
+name = "ai-agents-business-applications"
 version = "0.1.0"
 description = "CSCI E-103 coursework: assignments, case studies, final project"
 # MUST MATCH .python-version AND THE BUNDLE'S environment_version.

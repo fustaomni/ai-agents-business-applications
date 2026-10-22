@@ -1,6 +1,6 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "https://github.com/fustaomni/cscie103-data-engineering/contracts/environment-versions.json",
+  "$id": "https://github.com/fustaomni/ai-agents-business-applications/contracts/environment-versions.json",
   "title": "Databricks environment version -> local toolchain mapping",
   "description": "Transcribed from the published environment version reference. Databricks exposes environment version contents as documentation, not as an API, so this file is the one hand-maintained link between the version declared in the bundle and the interpreter pinned locally. It exists to make that seam explicit and checkable rather than implicit and assumed. Verified 2026-09-02.",
   "x-source": "https://docs.databricks.com/aws/en/release-notes/serverless/environment-version/",

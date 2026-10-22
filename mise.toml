@@ -793,12 +793,12 @@ sp_id="$(databricks api get /api/2.0/account/scim/v2/ServicePrincipals \
   | uv run --no-sync python -c "
 import sys, json
 for r in json.load(sys.stdin).get('Resources', []):
-    if r.get('displayName') == 'cscie103-ci':
+    if r.get('displayName') == 'aiba-ci':
         print(r['id'])
 ")"
 
 if [ -z "$sp_id" ]; then
-  echo "cscie103-ci not found; run 'mise run bootstrap:identity' first" >&2
+  echo "aiba-ci not found; run 'mise run bootstrap:identity' first" >&2
   exit 1
 fi
 

@@ -179,7 +179,7 @@ jobs:
           DATABRICKS_HOST: https://dbc-c7e8aa56-e393.cloud.databricks.com
           # NOT A SECRET. The OAuth client ID identifies the service principal
           # the way a username does. Only the secret is sensitive.
-          DATABRICKS_CLIENT_ID: 223db154-8528-4bdb-b579-866010b8fc1c
+          DATABRICKS_CLIENT_ID: 00000000-0000-4000-8000-000000000000
           DATABRICKS_CLIENT_SECRET: ${{ secrets.DATABRICKS_CLIENT_SECRET }}
           # EXPLICIT AUTH TYPE, BECAUSE THE BUNDLE FORCES A PROFILE LOOKUP.
           #
@@ -220,6 +220,6 @@ jobs:
         run: mise run auth:describe || true
         env:
           DATABRICKS_HOST: https://dbc-c7e8aa56-e393.cloud.databricks.com
-          DATABRICKS_CLIENT_ID: 223db154-8528-4bdb-b579-866010b8fc1c
+          DATABRICKS_CLIENT_ID: 00000000-0000-4000-8000-000000000000
           DATABRICKS_CLIENT_SECRET: ${{ secrets.DATABRICKS_CLIENT_SECRET }}
           DATABRICKS_AUTH_TYPE: oauth-m2m

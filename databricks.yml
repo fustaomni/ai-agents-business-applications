@@ -22,7 +22,7 @@
 #   Only the project's own schema, which does not yet exist, is declared.
 
 bundle:
-  name: cscie103-data-engineering
+  name: ai-agents-business-applications
 
 include:
   - resources/*.yml
@@ -167,13 +167,13 @@ targets:
 variables:
   catalog:
     description: Unity Catalog catalog. NOT created by this bundle - prerequisite.
-    default: cscie103_catalog
+    default: aiba_catalog
   schema:
     description: >-
       Bare schema name. The RESOURCE keeps this plain value. Never interpolate
       schema_prefix into resources.schemas.*.name -- the CLI adds its own prefix
       on top and you get dev_user_dev_user_<schema>.
-    default: assignment_01
+    default: aiba
   reader_principal:
     description: >-
       Account group granted read access to this bundle's UC objects. Provisioned
@@ -191,7 +191,7 @@ variables:
 
       NOT a user identity: owners already hold all privileges, so a self-grant is
       redundant, and UC best practice is to avoid direct grants to users.
-    default: cscie103_readers
+    default: aiba_readers
   schema_prefix:
     description: >-
       What the CLI prepends in this target. Consumers -- job parameters, notebook

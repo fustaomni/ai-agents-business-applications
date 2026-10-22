@@ -6,15 +6,15 @@
 # rewrites exactly those lines, so a generated project takes its own identity in one
 # recorded operation -- and policies/identity refuses any copy that lives anywhere else.
 contract = "project-identity/v1"
-name = "cscie103-data-engineering"
-catalog = "cscie103_catalog"
-reader_group = "cscie103_readers"
-ci_principal = "cscie103-ci"
-default_schema = "assignment_01"
-repository = "https://github.com/fustaomni/cscie103-data-engineering"
+name = "ai-agents-business-applications"
+catalog = "aiba_catalog"
+reader_group = "aiba_readers"
+ci_principal = "aiba-ci"
+default_schema = "aiba"
+repository = "https://github.com/fustaomni/ai-agents-business-applications"
 workspace_host = "https://dbc-c7e8aa56-e393.cloud.databricks.com"
 account_id = "a0144c7d-8847-4012-b4c2-3880901a4a1c"
-ci_client_id = "223db154-8528-4bdb-b579-866010b8fc1c"
+ci_client_id = "00000000-0000-4000-8000-000000000000"
 
 # Paths whose identity is derived, quoted verbatim, or coursework rather than declared.
 exempt = [

@@ -11,7 +11,7 @@
   #   java -> temurin-bin-17     (NOT jdk17. mise defaults to OpenJDK and the
   #                               vendor prefix is mandatory there for the same
   #                               reason: a different build is a different tool)
-  description = "cscie103-data-engineering toolchain";
+  description = "ai-agents-business-applications toolchain";
 
   inputs = {
     # UNSTABLE, WHICH IS THE RIGHT BRANCH FOR A DEV TOOLCHAIN.
