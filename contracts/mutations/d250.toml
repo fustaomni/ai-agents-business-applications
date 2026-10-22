@@ -1,0 +1,23 @@
+# contracts/mutations/d250.toml
+# source:apply's delete removes the directories it leaves empty, as git rm does (D.250).
+
+[[mutants]]
+id = "pruning-skipped"
+file = "scripts/source_apply.py"
+before = "            _prune(target, base)"
+after = "            pass"
+killers = ["tests/test_source_apply.py::test_a_delete_removes_the_directories_it_empties"]
+
+[[mutants]]
+id = "one-level-only"
+file = "scripts/source_apply.py"
+before = "    while parent != base and parent.is_relative_to(base):"
+after = "    if parent != base and parent.is_relative_to(base):"
+killers = ["tests/test_source_apply.py::test_a_delete_removes_the_directories_it_empties"]
+
+[[mutants]]
+id = "removes-a-held-directory"
+file = "scripts/source_apply.py"
+before = "            parent.rmdir()"
+after = "            __import__(\"shutil\").rmtree(parent)"
+killers = ["tests/test_source_apply.py::test_a_delete_keeps_a_directory_that_still_holds_files"]

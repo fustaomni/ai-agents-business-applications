@@ -1,0 +1,641 @@
+# context/review-d168.toml
+# THE D.168 REVIEW, AS DATA: 72 critiques of the push-gate draft, each grounded in a live
+# 2026 search, recorded as R1-R67 with amendments. Implementation reads this file and
+# context/plan.toml, never chat memory (M62). A record's step is filled when the step is added.
+
+[meta]
+review = "D168-REVIEW"
+date = "2026-10-13"
+subject = "D.168 push-gate draft: gate before the push connects, marker reused by the pre-push hook"
+verdict = "a sound reliability fix that mistook a claim of prior verification for evidence of it"
+superseded = "the paused D.168 spec; D.168 is reissued as the ruleset step"
+
+[[facts]]
+id = "R15.6"
+state = "settled"
+finding = "run_task, run_ledger and nix_ledger lock with fcntl.flock: kernel locks, released on death"
+
+[[facts]]
+id = "R19.1"
+state = "settled"
+finding = "quality gate required by name only, strict policy off, bypass_actors undeclared"
+
+[[facts]]
+id = "R21.3"
+state = "settled"
+finding = "spine.evaluate judges every declared code, fails undeclared fired codes, never passes unknown"
+
+[[facts]]
+id = "R26.1"
+state = "settled"
+finding = "environment.snapshot() is the validated ambient snapshot; gitenv reads it"
+
+[[facts]]
+id = "R52.4"
+state = "settled"
+finding = "check:policy already runs opa check --strict, regal lint and opa test --fail-on-empty"
+
+[[facts]]
+id = "R58.1"
+state = "settled"
+finding = "tool.mypy enables no plugins; pydantic.mypy is off"
+
+[[facts]]
+id = "CI-TOKEN"
+state = "settled"
+finding = "ci.yml grants contents: read only; check runs are unreadable there"
+
+[[facts]]
+id = "BYPASS-READ"
+state = "settled"
+finding = "REST bypass_actors needs write access to the ruleset; the GraphQL bypassActors count does not"
+
+[[facts]]
+id = "R24.1"
+state = "open"
+finding = "whether plan_files validates depends_on as a graph: existence, cycles, done before dependencies"
+
+[[facts]]
+id = "R27.4"
+state = "open"
+finding = "repository visibility, and whether artifact attestations are available on its plan"
+
+[[facts]]
+id = "R46.1"
+state = "open"
+finding = "how source_apply computes inside, and what a write failing part way leaves"
+
+[[facts]]
+id = "R12a.3"
+state = "open"
+finding = "whether and how commits are signed today"
+
+[[records]]
+id = "R1"
+phase = 2
+title = "the marker becomes a signed claim"
+requirement = "replace the environment marker with a signed claim bound to commit, tree, gate definition, policy revision and run; local skip is efficiency only"
+
+[[records]]
+id = "R2"
+phase = 2
+title = "typed gate specification"
+requirement = "GATES becomes GateSpec contracts with named fields, runs_in_hooks for ci_only, and a timeout per gate"
+
+[[records]]
+id = "R3"
+phase = 2
+title = "executed versus reused, as evidence"
+requirement = "each gate records executed_passed, executed_failed, timed_out or reused, and a reuse carries its provenance"
+
+[[records]]
+id = "R4"
+phase = 1
+title = "a discriminated preflight result"
+requirement = "the preflight returns one tagged union, never str or failure or None"
+
+[[records]]
+id = "R5"
+phase = 1
+title = "the environment proven before judgment"
+requirement = "uv sync --locked --check before any gate, the interpreter is the project venv, gates run --no-sync"
+
+[[records]]
+id = "R6"
+phase = 1
+title = "a bounded runner for every child"
+requirement = "new session, deadline, SIGTERM then grace then SIGKILL to the group, bounded reaping, typed timed_out"
+
+[[records]]
+id = "R7"
+phase = 1
+title = "push failures classified from porcelain"
+requirement = "git push --porcelain, a discriminated push state, signals by name, and an ls-remote readback before any retry"
+
+[[records]]
+id = "R8"
+phase = 2
+title = "evidence, verdict, decision, enforcement on the spine"
+requirement = "publish-evidence/v1, runs.publish rules, decision recorded before the push and the enforcement after"
+
+[[records]]
+id = "R9"
+phase = 5
+title = "boolean traps linted"
+requirement = "enable ruff FBT and fix every finding; push plans are tagged, not flagged"
+
+[[records]]
+id = "R10"
+phase = 1
+title = "object ids of the observed format"
+requirement = "ObjectId validated against git rev-parse --show-object-format; branch names checked; failures typed"
+
+[[records]]
+id = "R11"
+phase = 1
+title = "gate the exact commit, push the exact commit"
+requirement = "capture commit and tree once, gate a detached worktree of it, push that sha, verify the pushed sha in the hook, no replace objects"
+
+[[records]]
+id = "R11a"
+phase = 1
+title = "the remote recheck is the lease"
+requirement = "explicit --force-with-lease expected value captured once, --atomic, refuse when the local branch moved"
+
+[[records]]
+id = "R11b"
+phase = 1
+title = "the snapshot is unchanged by the gate"
+requirement = "recompute the tree manifest after the gate; any difference is observation_failed"
+
+[[records]]
+id = "R12"
+phase = 2
+title = "no trust from the environment; hardware-held signing"
+requirement = "audit forbids trust-bearing environment reads; gate claims SSH-signed in a namespace, Secure Enclave custody recorded"
+
+[[records]]
+id = "R12a"
+phase = 3
+title = "keyless developer certificates evaluated"
+requirement = "keep the enclave key for gate claims; consider gitsign for commit authorship after reading current signing"
+
+[[records]]
+id = "R13"
+phase = 1
+title = "pr never delegates its gate to the hook"
+requirement = "pr gates the snapshot itself; hooks stay defense in depth and their configuration is governed"
+
+[[records]]
+id = "R14"
+phase = 4
+title = "one trace from pr to every child"
+requirement = "run_id as trace-id, TRACEPARENT to every child, signed ledger events for gate, decision and push"
+
+[[records]]
+id = "R15"
+phase = 1
+title = "a per-branch publication lock"
+requirement = "flock in the git common directory across capture to readback, fail fast naming the holder"
+
+[[records]]
+id = "R16"
+phase = 2
+title = "in-toto statements in DSSE"
+requirement = "test-result and decision statements, subject with a sha256 tree manifest, RFC 8785 bytes, fixed verification order"
+
+[[records]]
+id = "R17"
+phase = 3
+title = "SOC 2 operation and retention"
+requirement = "control register, attestations retained as git notes, population reconciliation, compensating review, exception register"
+
+[[records]]
+id = "R18"
+phase = 1
+title = "typed git observations"
+requirement = "GitOutput or GitObservationFailure; tree state clean, dirty or unknown; index.lock detected; never stripped porcelain"
+
+[[records]]
+id = "R19"
+phase = 3
+title = "trustworthy server-side checks"
+requirement = "required check pinned to its app, strict, no bypass, verified as code; pr verifies check sources"
+
+[[records]]
+id = "R20"
+phase = 2
+title = "the canonical verification record"
+requirement = "subject, policy revision, gate digest, environment, execution id, evidence digest, verdict, decision, scope, freshness, nonce"
+
+[[records]]
+id = "R21"
+phase = 2
+title = "declared expectations and computed verdicts"
+requirement = "expectation files per boundary, completeness checked, verdict computed never supplied, exhaustive decide()"
+
+[[records]]
+id = "R22"
+phase = 5
+title = "outside-in tests on a real bare remote"
+requirement = "acceptance first, the A to B scenario, a Hypothesis state model, mutants written last"
+
+[[records]]
+id = "R23"
+phase = 2
+title = "an explicit state machine with governed retries"
+requirement = "typed states and a transition table; retries only from ambiguous states after fresh readback, bounded twice"
+
+[[records]]
+id = "R24"
+phase = 6
+title = "plan graph, durable mutation results, metrics"
+requirement = "validate depends_on as a graph; done_when judged from recorded results; a metrics contract"
+
+[[records]]
+id = "R25"
+phase = 7
+title = "one publication architecture for code and data"
+requirement = "subject as git_commit or table_version; write-audit-publish later"
+
+[[records]]
+id = "R26"
+phase = 5
+title = "schemas for environment and specs"
+requirement = "one settings model per boundary, no raw environment reads, structured spec errors, normalised paths, published schemas"
+
+[[records]]
+id = "R27"
+phase = 3
+title = "CI-issued keyless attestation"
+requirement = "actions/attest after check on the exact sha; pr verifies with pinned signer workflow before merge"
+
+[[records]]
+id = "R28"
+phase = 4
+title = "standard telemetry vocabulary"
+requirement = "OpenTelemetry CI/CD spans and attributes, reused as skip with provenance, named events, pinned semconv"
+
+[[records]]
+id = "R29"
+phase = 4
+title = "published events"
+requirement = "CloudEvents with CDEvents payloads, DSSE-signed, the ledger as outbox, events notify and attestations authorize"
+
+[[records]]
+id = "R30"
+phase = 4
+title = "offline-verifiable evidence packages"
+requirement = "bundles, trusted root at signing, verification policy; evidence:verify; scheduled sample verification"
+
+[[records]]
+id = "R31"
+phase = 6
+title = "structured source edits"
+requirement = "replace_unit, insert_import, toml_set with unit digests; text replace kept where no structure tool exists"
+
+[[records]]
+id = "R32"
+phase = 6
+title = "self-describing specs and an inner loop"
+requirement = "schema directive in every spec, source:apply --plan, an iterate task"
+
+[[records]]
+id = "R33"
+phase = 6
+title = "activities an orchestrator can invoke"
+requirement = "typed request and result per stage, correlated commands and events, idempotent, resumable from the ledger"
+
+[[records]]
+id = "R34"
+phase = 4
+title = "queryable state"
+requirement = "rebuildable SQLite projections of the ledger, declared queries only, never authoritative"
+
+[[records]]
+id = "R35"
+phase = 2
+title = "the structured channel to the hook"
+requirement = "signed record file in the git common directory found by pushed sha, atomic write, O_NOFOLLOW read, consumed once"
+
+[[records]]
+id = "R36"
+phase = 2
+title = "the evidence record's exact shape"
+requirement = "standard test-result fields; passedTests equal to the declared gate set; no decision reads an extension field"
+
+[[records]]
+id = "R37"
+phase = 4
+title = "a generated event catalog"
+requirement = "AsyncAPI 3 from the event models, dataschema on every event, two-way completeness"
+
+[[records]]
+id = "R38"
+phase = 2
+title = "one reuse policy for two enforcement points"
+requirement = "runs.publish with a boundary input, content-addressed revision compared, one input contract, thresholds as data"
+
+[[records]]
+id = "R39"
+phase = 4
+title = "real OpenTelemetry spans"
+requirement = "file exporter by default, flush and close open spans on exit and signals, hook span child of the push span"
+
+[[records]]
+id = "R40"
+phase = 1
+title = "three phases, publishing confined to the last"
+requirement = "observe, decide, enforce; every abort before the push is one machine-readable verdict"
+
+[[records]]
+id = "R41"
+phase = 7
+title = "verdicts into the lakehouse"
+requirement = "bronze, silver, gold for gate and publication events, ingested through write-audit-publish"
+
+[[records]]
+id = "R42"
+phase = 1
+title = "a last-resort outcome that cannot fail"
+requirement = "internal_error, distinct from refusals, cause preserved, traceback kept, installed in the gateway"
+
+[[records]]
+id = "R43"
+phase = 3
+title = "controls classified relied-upon or efficiency-only"
+requirement = "server-side controls carry CC8.1; local gate, hook and preflight are efficiency only"
+
+[[records]]
+id = "R44"
+phase = 5
+title = "mutation testing enforced and unbiased"
+requirement = "curated mutants from expectations plus generated mutants on changed lines, gated in CI, results recorded"
+
+[[records]]
+id = "R44a"
+phase = 5
+title = "mutation results are a declared expectation"
+requirement = "runs.publish requires a passing signed mutation result for the changed scope"
+
+[[records]]
+id = "R45"
+phase = 3
+title = "three tiers stated once"
+requirement = "optimization, local authorization, production authorization; only tier 2 is relied upon"
+
+[[records]]
+id = "R46"
+phase = 6
+title = "the mutation engine's contract"
+requirement = "pre-image sha256 per file, symlink-safe component-wise opening, staged writes with a journal and rollback"
+
+[[records]]
+id = "R47"
+phase = 6
+title = "per-proof evidence and evidenced rationale"
+requirement = "JUnit-derived signed per-test records; plan:status judges proofs; trace separates observed, inferred, grounded"
+
+[[records]]
+id = "R48"
+phase = 1
+title = "a hermetic gate run"
+requirement = "allow-listed environment, empty HOME, no global git config, sockets blocked in tests, scheduled hermeticity check"
+
+[[records]]
+id = "R48a"
+phase = 5
+title = "container isolation in CI"
+requirement = "authoritative gate non-root, no network, read-only snapshot, default seccomp; local limit registered"
+
+[[records]]
+id = "R49"
+phase = 1
+title = "one failure taxonomy and termination type"
+requirement = "seven categories, exited, signaled, timed_out, launch_failed; exit codes from one table; Contract strictness tested"
+
+[[records]]
+id = "R50"
+phase = 5
+title = "domain gateways and verified fakes"
+requirement = "Repository, Remote, GateRunner, Attestations, Signer, Clock protocols; shared contract tests; no global patching"
+
+[[records]]
+id = "R51"
+phase = 2
+title = "the verification record is a capability"
+requirement = "designation and authority bundled and signed; the hook holds no authority of its own"
+
+[[records]]
+id = "R52"
+phase = 2
+title = "verified enforcement and complete policy data"
+requirement = "enforcer recomputes the verdict before acting; policy data schema-checked and referenced both ways"
+
+[[records]]
+id = "R52a"
+phase = 2
+title = "four decisions"
+requirement = "ALLOW_PUSH, DENY_PUSH, REOBSERVE bounded, ESCALATE to a separate signed approval; silence denies"
+
+[[records]]
+id = "R53"
+phase = 3
+title = "the privilege model"
+requirement = "agents propose, a scoped executor applies, CI attests, push and merge held by separate credentials"
+
+[[records]]
+id = "R54"
+phase = 2
+title = "staged rollout of new rules"
+requirement = "record, warn, enforce as policy data; promotion on evidence; softened rules never counted as relied upon"
+
+[[records]]
+id = "R55"
+phase = 5
+title = "the push path, statically and at runtime"
+requirement = "only the runner spawns, only the Remote gateway pushes, AST audits over code and task strings, runtime capability guard"
+
+[[records]]
+id = "R55.4"
+phase = 1
+title = "exemptions as data"
+requirement = "contracts/exemptions.toml with rule, path, reason, owner, expiry; expired fails check; inline suppressions refused"
+
+[[records]]
+id = "R56"
+phase = 4
+title = "a content-addressed chain"
+requirement = "every stage names its predecessors by digest; one in-toto bundle per publication; walking it is verification"
+
+[[records]]
+id = "R57"
+phase = 7
+title = "OpenLineage for the data path"
+requirement = "dataQualityAssertions and a prefixed run facet for data publications; code path keeps CDEvents"
+
+[[records]]
+id = "R57.2a"
+phase = 5
+title = "reuse-table mutants"
+requirement = "one curated mutant per reuse rule, including input digest and trusted signer identity"
+
+[[records]]
+id = "R58"
+phase = 5
+title = "native construction statically checked; halt on environment failure"
+requirement = "pydantic.mypy with strict flags; no model_validate of dict literals; SIGKILL and SIGSEGV halt autonomy"
+
+[[records]]
+id = "R59"
+phase = 6
+title = "declared mutation scope and before-after records"
+requirement = "scope per step read from base, governance surfaces need governance steps, pre-image and post-image per operation"
+
+[[records]]
+id = "R60"
+phase = 2
+title = "one registry of stable problem codes"
+requirement = "contracts/problems.toml, codes constrained to it, never repurposed, RFC 9457 shape, two-way completeness"
+
+[[records]]
+id = "R61"
+phase = 5
+title = "the draft's tests corrected"
+requirement = "invert the marker-skip test, replace the -13 test, strict scripted fakes, ignored-file acceptance case"
+
+[[records]]
+id = "R62"
+phase = 2
+title = "agent-authored content carries no authority"
+requirement = "proposals are requests; agent-written text is never a policy input"
+
+[[records]]
+id = "R63"
+phase = 1
+title = "remove the skip before building verified reuse"
+requirement = "pr gates the snapshot then pushes without the hook as a registered expiring exemption, after the ruleset is verified"
+
+[[records]]
+id = "R64"
+phase = 3
+title = "break-glass as code"
+requirement = "narrow entry, signed emergency record, self-expiring bypass, never-do list, 24-hour reconciliation, drills"
+
+[[records]]
+id = "R65"
+phase = 5
+title = "comment invariants become checks"
+requirement = "inventory requirement-shaped comments; each gets a linked check or becomes rationale"
+
+[[records]]
+id = "R66"
+phase = 6
+title = "delivery as a declared workflow"
+requirement = "deliver-step.toml stages, one parent run, resumable, one bundle per delivery"
+
+[[records]]
+id = "R67"
+phase = 5
+title = "an adversarial harness"
+requirement = "curated bypass catalog as tests, shell-canonicalised string checks, fuzzed sweep, any success is critical"
+
+[[records]]
+id = "R19.2-R19.4"
+phase = 1
+step = "D.168"
+title = "the ruleset verified before any hook is skipped"
+requirement = "pinned to app 15368, strict, no bypass by GraphQL count, on the spine; precedes R63"
+
+# EVERY RECORD TO ITS STEPS, so the review and context/plan.toml read each other both ways.
+[record_steps]
+"R1" = ["D.180"]
+"R2" = ["D.176"]
+"R3" = ["D.176"]
+"R4" = ["D.175"]
+"R5" = ["D.171"]
+"R6" = ["D.169"]
+"R7" = ["D.173"]
+"R8" = ["D.178"]
+"R9" = ["D.202"]
+"R10" = ["D.170"]
+"R11" = ["D.170", "D.171"]
+"R11a" = ["D.173"]
+"R11b" = ["D.171"]
+"R12" = ["D.180", "D.223", "D.224"]
+"R12a" = ["D.189"]
+"R13" = ["D.173"]
+"R14" = ["D.190"]
+"R15" = ["D.172"]
+"R16" = ["D.181"]
+"R17" = ["D.186"]
+"R18" = ["D.170"]
+"R19" = ["D.168", "D.185"]
+"R19.2-R19.4" = ["D.168"]
+"R20" = ["D.181"]
+"R21" = ["D.178"]
+"R22" = ["D.198"]
+"R23" = ["D.179"]
+"R24" = ["D.210"]
+"R25" = ["D.214"]
+"R26" = ["D.204"]
+"R27" = ["D.185"]
+"R28" = ["D.191"]
+"R29" = ["D.193"]
+"R30" = ["D.195"]
+"R31" = ["D.208"]
+"R32" = ["D.209"]
+"R33" = ["D.212"]
+"R34" = ["D.196"]
+"R35" = ["D.182"]
+"R36" = ["D.178"]
+"R37" = ["D.194"]
+"R38" = ["D.178"]
+"R39" = ["D.191"]
+"R40" = ["D.173"]
+"R41" = ["D.216"]
+"R42" = ["D.175"]
+"R43" = ["D.184"]
+"R44" = ["D.199"]
+"R44a" = ["D.199"]
+"R45" = ["D.184"]
+"R46" = ["D.206"]
+"R47" = ["D.211"]
+"R48" = ["D.171"]
+"R48a" = ["D.203"]
+"R49" = ["D.169"]
+"R50" = ["D.197"]
+"R51" = ["D.182"]
+"R52" = ["D.178"]
+"R52a" = ["D.179"]
+"R53" = ["D.187"]
+"R54" = ["D.183"]
+"R55" = ["D.200"]
+"R55.4" = ["D.174"]
+"R56" = ["D.192"]
+"R57" = ["D.215"]
+"R57.2a" = ["D.199"]
+"R58" = ["D.202", "D.203"]
+"R59" = ["D.207"]
+"R60" = ["D.177"]
+"R61" = ["D.198"]
+"R62" = ["D.178"]
+"R63" = ["D.174"]
+"R64" = ["D.188"]
+"R65" = ["D.205"]
+"R66" = ["D.213"]
+"R67" = ["D.201"]
+
+# RECONCILED WITH THE STEPS ALREADY PLANNED: the specific step builds a mechanism once,
+# the general step extends it everywhere. An edge, never a second implementation.
+[reconciled]
+"D.146" = "depends on D.169: the bounded runner is the execution helper"
+"D.170" = "depends on D.39: gitenv enforced before typed observations"
+"D.145" = "depends on D.175 and D.177: the last resort and the code registry are its parts"
+"D.72" = "depends on D.176: the aggregator judges the typed gate list"
+"D.156" = "depends on D.178: the publication verdict is the first sealed with its expectation"
+"D.144" = "depends on D.182: the push capability is the first single-use receipt"
+"D.151" = "depends on D.181: run records reuse the verification statement layout"
+"D.180" = "depends on D.161: the claim key is born with a lifecycle"
+"D.186" = "depends on D.152: retention and anchoring are D.152's"
+"D.195" = "depends on D.152: packages are built from retained evidence"
+"D.90" = "depends on D.168: repo:configure is governed after the contract it applies is verified"
+"D.187" = "depends on D.90"
+"D.134" = "depends on D.190: one trace"
+"D.193" = "retitled to relay only, depends on D.134: one event model"
+"D.194" = "retitled to an AsyncAPI view of D.157's Weaver registry: one event registry"
+"D.154" = "depends on D.173: the push readback is the first reconciler"
+"D.212" = "depends on D.150: activities resume from sealed intents"
+"D.136" = "depends on D.204: spec schemas are published first"
+"D.213" = "depends on D.138: one flow engine"
+"D.160" = "depends on D.171: the snapshot gate applies the hermetic git settings first"
+"D.117" = "related to D.171, not a duplicate: storage of output, not the gated snapshot"
+"D.119" = "related to D.171, not a duplicate: a step's evidence aggregate, not the publication gate"
+"D.140" = "related to D.203, not a duplicate: agent execution, not CI's authoritative gate"
+
+# AN OPEN FACT IS READ BY ITS STEP BEFORE THAT STEP RELIES ON IT.
+[fact_steps]
+"R24.1" = ["D.210"]
+"R27.4" = ["D.185"]
+"R46.1" = ["D.206"]
+"R12a.3" = ["D.189"]

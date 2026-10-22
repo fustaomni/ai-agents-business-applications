@@ -1,0 +1,37 @@
+{
+  "ids": [
+    "task-input/v1"
+  ],
+  "json_schema": {
+    "additionalProperties": false,
+    "description": "task-input/v1: every task's body and description, as the policies read them.",
+    "properties": {
+      "contract": {
+        "const": "task-input/v1",
+        "default": "task-input/v1",
+        "title": "Contract",
+        "type": "string"
+      },
+      "descriptions": {
+        "additionalProperties": {
+          "type": "string"
+        },
+        "title": "Descriptions",
+        "type": "object"
+      },
+      "tasks": {
+        "additionalProperties": {
+          "type": "string"
+        },
+        "title": "Tasks",
+        "type": "object"
+      }
+    },
+    "required": [
+      "tasks",
+      "descriptions"
+    ],
+    "title": "TaskInput",
+    "type": "object"
+  }
+}

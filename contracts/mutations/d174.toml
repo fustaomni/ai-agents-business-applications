@@ -1,0 +1,52 @@
+# contracts/mutations/d174.toml
+# An expired exemption fails and is never active, the hook runs unless an exemption is live, and
+# no inherited variable decides whether it runs (D.174).
+
+[[mutants]]
+id = "expired-accepted"
+file = "policies/runs/exemptions/exemptions.rego"
+before = "exemption.expires < input.exemptions.today"
+after = "false"
+killers = ["tests/test_exemptions.py::test_an_expired_exemption_fails"]
+
+[[mutants]]
+id = "lapsed-still-active"
+file = "scripts/exemptions.py"
+before = "        if exemption.rule == rule and exemption.path == path and lapses >= when:"
+after = "        if exemption.rule == rule and exemption.path == path:"
+killers = ["tests/test_exemptions.py::test_a_lapsed_exemption_is_not_active"]
+
+[[mutants]]
+id = "hook-skipped-without-exemption"
+file = "scripts/publish_push.py"
+before = "    skip_hook = hook_exempt() is not None"
+after = "    skip_hook = True"
+killers = ["tests/test_publish_push.py::test_without_an_exemption_the_hook_runs"]
+
+[[mutants]]
+id = "hook-switches-inherited"
+file = "scripts/publish_push.py"
+before = "    return {key: value for key, value in env.items() if not key.startswith(HOOK_SWITCHES)}"
+after = "    return env"
+killers = ["tests/test_publish_push.py::test_a_forged_marker_never_skips_the_gate"]
+
+[[mutants]]
+id = "snapshot-venv-unlinked"
+file = "scripts/snapshot_gate.py"
+before = '            (snapshot / ".venv").symlink_to(environment, target_is_directory=True)'
+after = "            pass"
+killers = ["tests/test_snapshot_gate.py::test_the_snapshot_runs_on_the_proven_environment"]
+
+[[mutants]]
+id = "failures-unnamed"
+file = "scripts/snapshot_gate.py"
+before = '    failed = _result("failed", commit.hex, tree.hex, _reason(ran), started)'
+after = '    failed = _result("failed", commit.hex, tree.hex, _tail(ran), started)'
+killers = ["tests/test_snapshot_gate.py::test_a_failed_gate_names_what_failed"]
+
+[[mutants]]
+id = "venv-ignored-only-as-a-directory"
+file = ".gitignore"
+before = ".venv\nvenv/"
+after = ".venv/\nvenv/"
+killers = ["tests/test_snapshot_gate.py::test_the_repository_ignores_a_linked_venv"]

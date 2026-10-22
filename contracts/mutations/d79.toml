@@ -1,0 +1,30 @@
+# contracts/mutations/d79.toml
+# commit stages a tracked deletion and still refuses a typo, each shown to bite (D.79).
+
+[[mutants]]
+id = "tracked-ignored"
+file = "scripts/commit.py"
+before = "and name not in tracked]"
+after = "and True]"
+killers = ["tests/test_commit_deletions.py::test_a_tracked_deleted_path_is_committed_as_a_deletion"]
+
+[[mutants]]
+id = "every-absent-accepted"
+file = "scripts/commit.py"
+before = "    missing = [name for name in paths if"
+after = "    missing = [name for name in () if"
+killers = ["tests/test_commit_deletions.py::test_an_absent_untracked_path_is_still_refused"]
+
+[[mutants]]
+id = "tracking-never-observed"
+file = "scripts/commit.py"
+before = "\"--\", name])[0] == 0"
+after = "\"--\", name])[0] == 99"
+killers = ["tests/test_commit_deletions.py::test_a_tracked_deleted_path_is_committed_as_a_deletion"]
+
+[[mutants]]
+id = "double-claims-everything-tracked"
+file = "tests/test_commit_execution.py"
+before = "            if argv[3] in self.tracked:"
+after = "            if True:"
+killers = ["tests/test_commit_execution.py::test_a_missing_path_never_reaches_git"]

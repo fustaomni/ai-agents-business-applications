@@ -1,0 +1,38 @@
+{
+  "ids": [
+    "setup-environment/v1"
+  ],
+  "json_schema": {
+    "additionalProperties": false,
+    "description": "setup-environment/v1: uv's environment-selecting variables, and which are present.",
+    "properties": {
+      "contract": {
+        "const": "setup-environment/v1",
+        "default": "setup-environment/v1",
+        "title": "Contract",
+        "type": "string"
+      },
+      "present": {
+        "items": {
+          "type": "string"
+        },
+        "title": "Present",
+        "type": "array"
+      },
+      "selecting_variables": {
+        "items": {
+          "type": "string"
+        },
+        "minItems": 1,
+        "title": "Selecting Variables",
+        "type": "array"
+      }
+    },
+    "required": [
+      "selecting_variables",
+      "present"
+    ],
+    "title": "SetupEnvironment",
+    "type": "object"
+  }
+}

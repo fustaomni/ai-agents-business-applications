@@ -1,0 +1,58 @@
+{
+  "ids": [
+    "source-outline-evidence/v1"
+  ],
+  "json_schema": {
+    "additionalProperties": false,
+    "description": "source-outline-evidence/v1: what is judged before anything is shown.",
+    "properties": {
+      "contract": {
+        "const": "source-outline-evidence/v1",
+        "default": "source-outline-evidence/v1",
+        "title": "Contract",
+        "type": "string"
+      },
+      "definitions": {
+        "minimum": 0,
+        "title": "Definitions",
+        "type": "integer"
+      },
+      "exists": {
+        "title": "Exists",
+        "type": "boolean"
+      },
+      "inside_repository": {
+        "title": "Inside Repository",
+        "type": "boolean"
+      },
+      "is_python": {
+        "title": "Is Python",
+        "type": "boolean"
+      },
+      "limit": {
+        "exclusiveMinimum": 0,
+        "title": "Limit",
+        "type": "integer"
+      },
+      "parsed": {
+        "title": "Parsed",
+        "type": "boolean"
+      },
+      "path": {
+        "title": "Path",
+        "type": "string"
+      }
+    },
+    "required": [
+      "path",
+      "inside_repository",
+      "exists",
+      "is_python",
+      "parsed",
+      "definitions",
+      "limit"
+    ],
+    "title": "OutlineEvidence",
+    "type": "object"
+  }
+}

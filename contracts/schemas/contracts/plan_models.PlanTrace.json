@@ -1,0 +1,116 @@
+{
+  "ids": [
+    "plan-trace/v1"
+  ],
+  "json_schema": {
+    "$defs": {
+      "Candidate": {
+        "additionalProperties": false,
+        "description": "One thing a source asked for: mapped to plan items, or declared not one.",
+        "properties": {
+          "maps_to": {
+            "default": [],
+            "items": {
+              "type": "string"
+            },
+            "title": "Maps To",
+            "type": "array"
+          },
+          "not_a_plan_item": {
+            "anyOf": [
+              {
+                "minLength": 1,
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Not A Plan Item"
+          },
+          "ref": {
+            "minLength": 1,
+            "title": "Ref",
+            "type": "string"
+          },
+          "source": {
+            "minLength": 1,
+            "title": "Source",
+            "type": "string"
+          },
+          "text": {
+            "minLength": 1,
+            "title": "Text",
+            "type": "string"
+          }
+        },
+        "required": [
+          "source",
+          "ref",
+          "text"
+        ],
+        "title": "Candidate",
+        "type": "object"
+      },
+      "TraceSource": {
+        "additionalProperties": false,
+        "properties": {
+          "id": {
+            "pattern": "^[A-Z][A-Z0-9-]*$",
+            "title": "Id",
+            "type": "string"
+          },
+          "locator": {
+            "minLength": 1,
+            "title": "Locator",
+            "type": "string"
+          },
+          "title": {
+            "minLength": 1,
+            "title": "Title",
+            "type": "string"
+          }
+        },
+        "required": [
+          "id",
+          "title",
+          "locator"
+        ],
+        "title": "TraceSource",
+        "type": "object"
+      }
+    },
+    "additionalProperties": false,
+    "properties": {
+      "candidates": {
+        "items": {
+          "$ref": "#/$defs/Candidate"
+        },
+        "minItems": 1,
+        "title": "Candidates",
+        "type": "array"
+      },
+      "contract": {
+        "const": "plan-trace/v1",
+        "title": "Contract",
+        "type": "string"
+      },
+      "sources": {
+        "items": {
+          "$ref": "#/$defs/TraceSource"
+        },
+        "minItems": 1,
+        "title": "Sources",
+        "type": "array"
+      }
+    },
+    "required": [
+      "contract",
+      "sources",
+      "candidates"
+    ],
+    "title": "PlanTrace",
+    "type": "object"
+  }
+}

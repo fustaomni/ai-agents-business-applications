@@ -1,0 +1,71 @@
+{
+  "ids": [
+    "task-inventory/v1"
+  ],
+  "json_schema": {
+    "$defs": {
+      "ListedTask": {
+        "additionalProperties": false,
+        "properties": {
+          "declares_usage": {
+            "title": "Declares Usage",
+            "type": "boolean"
+          },
+          "description": {
+            "title": "Description",
+            "type": "string"
+          },
+          "name": {
+            "title": "Name",
+            "type": "string"
+          },
+          "source": {
+            "title": "Source",
+            "type": "string"
+          }
+        },
+        "required": [
+          "name",
+          "description",
+          "source",
+          "declares_usage"
+        ],
+        "title": "ListedTask",
+        "type": "object"
+      }
+    },
+    "additionalProperties": false,
+    "description": "task-inventory/v1: every task, sorted, and whether each is described.",
+    "properties": {
+      "contract": {
+        "const": "task-inventory/v1",
+        "default": "task-inventory/v1",
+        "title": "Contract",
+        "type": "string"
+      },
+      "count": {
+        "minimum": 0,
+        "title": "Count",
+        "type": "integer"
+      },
+      "every_task_described": {
+        "title": "Every Task Described",
+        "type": "boolean"
+      },
+      "tasks": {
+        "items": {
+          "$ref": "#/$defs/ListedTask"
+        },
+        "title": "Tasks",
+        "type": "array"
+      }
+    },
+    "required": [
+      "tasks",
+      "count",
+      "every_task_described"
+    ],
+    "title": "TaskInventory",
+    "type": "object"
+  }
+}

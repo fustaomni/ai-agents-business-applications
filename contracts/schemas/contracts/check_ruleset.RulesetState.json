@@ -1,0 +1,128 @@
+{
+  "ids": [
+    "ruleset-state/v1"
+  ],
+  "json_schema": {
+    "$defs": {
+      "RequiredCheck": {
+        "additionalProperties": false,
+        "description": "One required status check, as the ruleset declares it.",
+        "properties": {
+          "context": {
+            "title": "Context",
+            "type": "string"
+          },
+          "integration_id": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Integration Id"
+          }
+        },
+        "required": [
+          "context",
+          "integration_id"
+        ],
+        "title": "RequiredCheck",
+        "type": "object"
+      }
+    },
+    "additionalProperties": false,
+    "description": "ruleset-state/v1: the protection ruleset as GitHub reports it, facts only (D.168).",
+    "properties": {
+      "bypass_actor_count": {
+        "anyOf": [
+          {
+            "type": "integer"
+          },
+          {
+            "type": "null"
+          }
+        ],
+        "title": "Bypass Actor Count"
+      },
+      "contract": {
+        "const": "ruleset-state/v1",
+        "default": "ruleset-state/v1",
+        "title": "Contract",
+        "type": "string"
+      },
+      "enforcement": {
+        "title": "Enforcement",
+        "type": "string"
+      },
+      "found": {
+        "title": "Found",
+        "type": "boolean"
+      },
+      "merge_methods": {
+        "items": {
+          "type": "string"
+        },
+        "title": "Merge Methods",
+        "type": "array"
+      },
+      "producer_app_id": {
+        "anyOf": [
+          {
+            "type": "integer"
+          },
+          {
+            "type": "null"
+          }
+        ],
+        "title": "Producer App Id"
+      },
+      "refs": {
+        "items": {
+          "type": "string"
+        },
+        "title": "Refs",
+        "type": "array"
+      },
+      "required_checks": {
+        "items": {
+          "$ref": "#/$defs/RequiredCheck"
+        },
+        "title": "Required Checks",
+        "type": "array"
+      },
+      "rule_types": {
+        "items": {
+          "type": "string"
+        },
+        "title": "Rule Types",
+        "type": "array"
+      },
+      "strict": {
+        "anyOf": [
+          {
+            "type": "boolean"
+          },
+          {
+            "type": "null"
+          }
+        ],
+        "title": "Strict"
+      }
+    },
+    "required": [
+      "found",
+      "enforcement",
+      "rule_types",
+      "refs",
+      "required_checks",
+      "strict",
+      "merge_methods",
+      "bypass_actor_count",
+      "producer_app_id"
+    ],
+    "title": "RulesetState",
+    "type": "object"
+  }
+}

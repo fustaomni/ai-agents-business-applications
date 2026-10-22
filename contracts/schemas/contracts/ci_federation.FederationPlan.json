@@ -1,0 +1,133 @@
+{
+  "ids": [
+    "ci-federation-plan/v1"
+  ],
+  "json_schema": {
+    "$defs": {
+      "OidcPolicy": {
+        "properties": {
+          "audiences": {
+            "default": [],
+            "items": {
+              "type": "string"
+            },
+            "title": "Audiences",
+            "type": "array"
+          },
+          "issuer": {
+            "title": "Issuer",
+            "type": "string"
+          },
+          "subject": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Subject"
+          }
+        },
+        "required": [
+          "issuer"
+        ],
+        "title": "OidcPolicy",
+        "type": "object"
+      },
+      "Principal": {
+        "description": "A service principal as the account API reports it.",
+        "properties": {
+          "applicationId": {
+            "title": "Applicationid",
+            "type": "string"
+          },
+          "displayName": {
+            "title": "Displayname",
+            "type": "string"
+          },
+          "id": {
+            "title": "Id",
+            "type": "string"
+          }
+        },
+        "required": [
+          "id",
+          "applicationId",
+          "displayName"
+        ],
+        "title": "Principal",
+        "type": "object"
+      }
+    },
+    "additionalProperties": false,
+    "description": "ci-federation-plan/v1: the declared trust, the principal found, and what is to change.",
+    "properties": {
+      "account_id": {
+        "title": "Account Id",
+        "type": "string"
+      },
+      "ci_client_id": {
+        "title": "Ci Client Id",
+        "type": "string"
+      },
+      "ci_principal": {
+        "title": "Ci Principal",
+        "type": "string"
+      },
+      "contract": {
+        "const": "ci-federation-plan/v1",
+        "default": "ci-federation-plan/v1",
+        "title": "Contract",
+        "type": "string"
+      },
+      "create": {
+        "title": "Create",
+        "type": "boolean"
+      },
+      "desired": {
+        "$ref": "#/$defs/OidcPolicy"
+      },
+      "environment": {
+        "title": "Environment",
+        "type": "string"
+      },
+      "existing": {
+        "items": {
+          "$ref": "#/$defs/OidcPolicy"
+        },
+        "title": "Existing",
+        "type": "array"
+      },
+      "principal": {
+        "anyOf": [
+          {
+            "$ref": "#/$defs/Principal"
+          },
+          {
+            "type": "null"
+          }
+        ]
+      },
+      "repository_path": {
+        "title": "Repository Path",
+        "type": "string"
+      }
+    },
+    "required": [
+      "repository_path",
+      "environment",
+      "account_id",
+      "ci_principal",
+      "ci_client_id",
+      "principal",
+      "desired",
+      "existing",
+      "create"
+    ],
+    "title": "FederationPlan",
+    "type": "object"
+  }
+}

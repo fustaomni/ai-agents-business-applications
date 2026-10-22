@@ -1,0 +1,45 @@
+# contracts/mutations/d147.toml
+# Slice 2 of D.147: every versioned contract's schema is committed; a changed schema needs a
+# new snapshot; a change that can break a reader needs a new version.
+
+[[mutants]]
+id = "breaking-read-as-compatible"
+file = "policies/runs/schemas/schemas.rego"
+before = "\tnot change.kind in compatible"
+after = "\tfalse"
+killers = ["tests/test_schema_audit.py::test_a_breaking_change_under_the_same_version_is_refused"]
+
+[[mutants]]
+id = "stale-snapshot-accepted"
+file = "policies/runs/schemas/schemas.rego"
+before = "\tentry.digest != entry.snapshot_digest"
+after = "\tfalse"
+killers = ["tests/test_schema_audit.py::test_a_changed_schema_without_a_new_snapshot_is_refused"]
+
+[[mutants]]
+id = "missing-snapshot-accepted"
+file = "policies/runs/schemas/schemas.rego"
+before = "\tis_null(entry.snapshot_digest)"
+after = "\tfalse"
+killers = ["tests/test_schema_audit.py::test_a_contract_without_a_snapshot_is_refused"]
+
+[[mutants]]
+id = "new-version-still-refused"
+file = "policies/runs/schemas/schemas.rego"
+before = "\tentry.ids == entry.snapshot_ids"
+after = "\ttrue"
+killers = ["tests/test_schema_audit.py::test_a_breaking_change_under_a_new_version_is_accepted"]
+
+[[mutants]]
+id = "orphan-accepted"
+file = "policies/runs/schemas/schemas.rego"
+before = "\tsome orphan in input.schemas.orphans"
+after = "\tsome orphan in []"
+killers = ["tests/test_schema_audit.py::test_an_orphaned_snapshot_is_refused"]
+
+[[mutants]]
+id = "required-addition-read-as-optional"
+file = "scripts/schema_audit.py"
+before = '        kind: Kind = "required_property_added" if name in new_req else "optional_property_added"'
+after = '        kind: Kind = "optional_property_added"'
+killers = ["tests/test_schema_audit.py::test_a_breaking_change_under_the_same_version_is_refused"]

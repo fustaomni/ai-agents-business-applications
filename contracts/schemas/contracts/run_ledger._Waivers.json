@@ -1,0 +1,64 @@
+{
+  "ids": [
+    "ledger-waivers/v1"
+  ],
+  "json_schema": {
+    "$defs": {
+      "Waiver": {
+        "additionalProperties": false,
+        "description": "An unsigned record already written, accounted for by position and run (D.165).",
+        "properties": {
+          "position": {
+            "exclusiveMinimum": 0,
+            "title": "Position",
+            "type": "integer"
+          },
+          "reason": {
+            "minLength": 1,
+            "title": "Reason",
+            "type": "string"
+          },
+          "run_id": {
+            "pattern": "^[0-9a-f]{32}$",
+            "title": "Run Id",
+            "type": "string"
+          },
+          "step": {
+            "minLength": 1,
+            "title": "Step",
+            "type": "string"
+          }
+        },
+        "required": [
+          "position",
+          "run_id",
+          "reason",
+          "step"
+        ],
+        "title": "Waiver",
+        "type": "object"
+      }
+    },
+    "additionalProperties": false,
+    "properties": {
+      "contract": {
+        "const": "ledger-waivers/v1",
+        "title": "Contract",
+        "type": "string"
+      },
+      "waivers": {
+        "default": [],
+        "items": {
+          "$ref": "#/$defs/Waiver"
+        },
+        "title": "Waivers",
+        "type": "array"
+      }
+    },
+    "required": [
+      "contract"
+    ],
+    "title": "_Waivers",
+    "type": "object"
+  }
+}

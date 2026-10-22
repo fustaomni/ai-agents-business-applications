@@ -1,0 +1,71 @@
+{
+  "ids": [
+    "assertion-inventory/v1"
+  ],
+  "json_schema": {
+    "$defs": {
+      "VacuityFinding": {
+        "additionalProperties": false,
+        "description": "One claim over a collection never proven to hold anything.",
+        "properties": {
+          "kind": {
+            "enum": [
+              "all",
+              "not_any",
+              "loop"
+            ],
+            "title": "Kind",
+            "type": "string"
+          },
+          "line": {
+            "title": "Line",
+            "type": "integer"
+          },
+          "path": {
+            "title": "Path",
+            "type": "string"
+          },
+          "subject": {
+            "title": "Subject",
+            "type": "string"
+          }
+        },
+        "required": [
+          "path",
+          "line",
+          "kind",
+          "subject"
+        ],
+        "title": "VacuityFinding",
+        "type": "object"
+      }
+    },
+    "additionalProperties": false,
+    "description": "assertion-inventory/v1: how many test files were scanned, and every vacuous claim.",
+    "properties": {
+      "contract": {
+        "const": "assertion-inventory/v1",
+        "default": "assertion-inventory/v1",
+        "title": "Contract",
+        "type": "string"
+      },
+      "files_scanned": {
+        "title": "Files Scanned",
+        "type": "integer"
+      },
+      "findings": {
+        "items": {
+          "$ref": "#/$defs/VacuityFinding"
+        },
+        "title": "Findings",
+        "type": "array"
+      }
+    },
+    "required": [
+      "files_scanned",
+      "findings"
+    ],
+    "title": "AssertionInventory",
+    "type": "object"
+  }
+}

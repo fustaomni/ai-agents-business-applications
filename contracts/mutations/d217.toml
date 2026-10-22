@@ -1,0 +1,24 @@
+# contracts/mutations/d217.toml
+# Only a suite awaiting a run is re-requested, the policy refuses when none awaits, and a
+# re-request counts only once the missing check is seen on the head (D.217).
+
+[[mutants]]
+id = "every-suite-rerequested"
+file = "scripts/pr_checks.py"
+before = "    awaiting = [suite for suite in request.suites if suite.check_runs == 0 and suite.app in owning]"
+after = "    awaiting = list(request.suites)"
+killers = ["tests/test_pr_checks.py::test_a_missing_check_with_an_awaiting_suite_is_rerequested"]
+
+[[mutants]]
+id = "policy-counts-any-suite"
+file = "policies/runs/pr_checks/pr_checks.rego"
+before = "suite.check_runs == 0"
+after = "suite.check_runs >= 0"
+killers = ["tests/test_pr_checks.py::test_no_suite_awaiting_a_run_is_refused"]
+
+[[mutants]]
+id = "acceptance-taken-as-running"
+file = "scripts/pr_checks.py"
+before = "        if all(name in now for name in missing):"
+after = "        if True:"
+killers = ["tests/test_pr_checks.py::test_an_unobserved_rerequest_halts"]

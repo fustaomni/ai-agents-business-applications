@@ -1,0 +1,45 @@
+# contracts/mutations/d78.toml
+# Each template policy refuses an absent request, and none is queried by the gate (D.78).
+# Anchors are whole lines: `not input.<key>` alone prefixes `not input.<key>.<field>`.
+
+[[mutants]]
+id = "new-absent-passes"
+file = "policies/runs/template/new/new.rego"
+before = "\tnot input.template_request\n"
+after = "\tinput.never_supplied\n"
+killers = ["tests/test_run_template_policies.py::test_every_template_policy_refuses_an_absent_request"]
+
+[[mutants]]
+id = "init-absent-passes"
+file = "policies/runs/template/init/init.rego"
+before = "\tnot input.template_init\n"
+after = "\tinput.never_supplied\n"
+killers = ["tests/test_run_template_policies.py::test_every_template_policy_refuses_an_absent_request"]
+
+[[mutants]]
+id = "publish-absent-passes"
+file = "policies/runs/template/publish/publish.rego"
+before = "\tnot input.template_publish\n"
+after = "\tinput.never_supplied\n"
+killers = ["tests/test_run_template_policies.py::test_every_template_policy_refuses_an_absent_request"]
+
+[[mutants]]
+id = "discard-absent-passes"
+file = "policies/runs/template/discard/discard.rego"
+before = "\tnot input.template_discard\n"
+after = "\tinput.never_supplied\n"
+killers = ["tests/test_run_template_policies.py::test_every_template_policy_refuses_an_absent_request"]
+
+[[mutants]]
+id = "identity-absent-passes"
+file = "policies/runs/template/identity/identity.rego"
+before = "\tnot input.template_identity\n"
+after = "\tinput.never_supplied\n"
+killers = ["tests/test_run_template_policies.py::test_every_template_policy_refuses_an_absent_request"]
+
+[[mutants]]
+id = "new-back-in-the-gate"
+file = "policies/runs/template/new/new.rego"
+before = "\npackage runs.template.new\n"
+after = "\npackage template.new\n"
+killers = ["tests/test_run_template_policies.py::test_no_template_policy_is_queried_by_the_repository_gate"]

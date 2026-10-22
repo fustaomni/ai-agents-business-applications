@@ -1,0 +1,131 @@
+{
+  "ids": [
+    "conflict-report/v1"
+  ],
+  "json_schema": {
+    "$defs": {
+      "Block": {
+        "additionalProperties": false,
+        "properties": {
+          "base": {
+            "anyOf": [
+              {
+                "items": {
+                  "type": "string"
+                },
+                "type": "array"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Base"
+          },
+          "context_after": {
+            "items": {
+              "type": "string"
+            },
+            "title": "Context After",
+            "type": "array"
+          },
+          "context_before": {
+            "items": {
+              "type": "string"
+            },
+            "title": "Context Before",
+            "type": "array"
+          },
+          "first_line": {
+            "exclusiveMinimum": 0,
+            "title": "First Line",
+            "type": "integer"
+          },
+          "last_line": {
+            "exclusiveMinimum": 0,
+            "title": "Last Line",
+            "type": "integer"
+          },
+          "ours": {
+            "items": {
+              "type": "string"
+            },
+            "title": "Ours",
+            "type": "array"
+          },
+          "theirs": {
+            "items": {
+              "type": "string"
+            },
+            "title": "Theirs",
+            "type": "array"
+          }
+        },
+        "required": [
+          "first_line",
+          "last_line",
+          "ours",
+          "base",
+          "theirs",
+          "context_before",
+          "context_after"
+        ],
+        "title": "Block",
+        "type": "object"
+      },
+      "ConflictFile": {
+        "additionalProperties": false,
+        "properties": {
+          "blocks": {
+            "items": {
+              "$ref": "#/$defs/Block"
+            },
+            "title": "Blocks",
+            "type": "array"
+          },
+          "path": {
+            "title": "Path",
+            "type": "string"
+          }
+        },
+        "required": [
+          "path",
+          "blocks"
+        ],
+        "title": "ConflictFile",
+        "type": "object"
+      }
+    },
+    "additionalProperties": false,
+    "description": "conflict-report/v1: the operation in progress and every conflict block.",
+    "properties": {
+      "contract": {
+        "const": "conflict-report/v1",
+        "default": "conflict-report/v1",
+        "title": "Contract",
+        "type": "string"
+      },
+      "files": {
+        "items": {
+          "$ref": "#/$defs/ConflictFile"
+        },
+        "title": "Files",
+        "type": "array"
+      },
+      "operation": {
+        "enum": [
+          "rebase",
+          "merge",
+          "none"
+        ],
+        "title": "Operation",
+        "type": "string"
+      }
+    },
+    "required": [
+      "operation",
+      "files"
+    ],
+    "title": "ConflictReport",
+    "type": "object"
+  }
+}

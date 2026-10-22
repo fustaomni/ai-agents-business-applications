@@ -1,0 +1,30 @@
+# contracts/mutations/d82.toml
+# pr:logs explains a failed run even when no step failed, or halts (D.82).
+
+[[mutants]]
+id = "cancelled-not-counted"
+file = "scripts/pr_logs.py"
+before = "\"cancelled\", \"timed_out\""
+after = "\"timed_out\""
+killers = ["tests/test_pr_logs.py::test_a_cancelled_step_is_read_from_its_jobs_full_log"]
+
+[[mutants]]
+id = "full-log-never-read"
+file = "scripts/pr_logs.py"
+before = "        if unread:"
+after = "        if False:"
+killers = ["tests/test_pr_logs.py::test_a_cancelled_step_is_read_from_its_jobs_full_log"]
+
+[[mutants]]
+id = "unrun-job-unnamed"
+file = "scripts/pr_logs.py"
+before = "        if not job.steps and job.conclusion in NOT_SUCCESSFUL:"
+after = "        if False:"
+killers = ["tests/test_pr_logs.py::test_a_job_no_runner_acquired_is_reported"]
+
+[[mutants]]
+id = "unexplained-read-as-success"
+file = "scripts/pr_logs.py"
+before = "        if steps or not_successful:"
+after = "        if True:"
+killers = ["tests/test_pr_logs.py::test_a_failed_run_with_nothing_to_explain_it_halts"]

@@ -1,0 +1,30 @@
+# contracts/mutations/d240.toml
+# data:stage copies a declared data file by its contents only, never its protections (D.240).
+
+[[mutants]]
+id = "undeclared-allowed"
+file = "policies/runs/data_stage/data_stage.rego"
+before = "\tinput.data_stage.name_declared == false"
+after = "\tfalse"
+killers = ["tests/test_data_stage.py::test_an_undeclared_name_is_refused"]
+
+[[mutants]]
+id = "overwrite-allowed"
+file = "policies/runs/data_stage/data_stage.rego"
+before = "\tinput.data_stage.destination_identical == false"
+after = "\tfalse"
+killers = ["tests/test_data_stage.py::test_a_different_existing_file_is_never_overwritten"]
+
+[[mutants]]
+id = "metadata-copied"
+file = "scripts/data_stage.py"
+before = "        shutil.copyfile(source, destination)"
+after = "        shutil.copy2(source, destination)"
+killers = ["tests/test_data_stage.py::test_a_declared_file_is_staged_by_contents_only"]
+
+[[mutants]]
+id = "identical-rewritten"
+file = "scripts/data_stage.py"
+before = "    if request.destination_identical:"
+after = "    if False:"
+killers = ["tests/test_data_stage.py::test_an_identical_existing_file_is_left_alone"]

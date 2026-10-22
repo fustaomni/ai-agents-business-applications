@@ -1,0 +1,19 @@
+# contracts/mutations/d263.toml
+# A project that takes its identity re-resolves its lock, so its first setup passes.
+#
+# KILLED IN THE FAST TIER (D.75): the integration proofs that template:identity and
+# identity:set call relocked cannot be judged by mutation, and stay proven by check.
+
+[[mutants]]
+id = "lock-never-resolved"
+file = "scripts/project_identity.py"
+before = '    if "pyproject.toml" not in changed or not lock.is_file():'
+after = "    if True:"
+killers = ["tests/test_project_identity.py::test_a_rename_re_resolves_the_lock_and_reports_it"]
+
+[[mutants]]
+id = "lock-not-reported"
+file = "scripts/project_identity.py"
+before = "    return (*changed, str(LOCK)) if lock.read_bytes() != before else changed"
+after = "    return changed"
+killers = ["tests/test_project_identity.py::test_a_rename_re_resolves_the_lock_and_reports_it"]

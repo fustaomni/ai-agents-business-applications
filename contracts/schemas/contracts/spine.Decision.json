@@ -1,0 +1,41 @@
+{
+  "ids": [
+    "decision/v1"
+  ],
+  "json_schema": {
+    "additionalProperties": false,
+    "description": "decision/v1: what may happen next, and the verdict it was decided from.",
+    "properties": {
+      "action": {
+        "enum": [
+          "proceed",
+          "refuse",
+          "halt"
+        ],
+        "title": "Action",
+        "type": "string"
+      },
+      "contract": {
+        "const": "decision/v1",
+        "default": "decision/v1",
+        "title": "Contract",
+        "type": "string"
+      },
+      "reason_code": {
+        "title": "Reason Code",
+        "type": "string"
+      },
+      "verdict_digest": {
+        "title": "Verdict Digest",
+        "type": "string"
+      }
+    },
+    "required": [
+      "action",
+      "reason_code",
+      "verdict_digest"
+    ],
+    "title": "Decision",
+    "type": "object"
+  }
+}

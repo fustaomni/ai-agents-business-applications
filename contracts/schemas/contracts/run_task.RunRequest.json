@@ -1,0 +1,42 @@
+{
+  "ids": [
+    "run-request/v1"
+  ],
+  "json_schema": {
+    "additionalProperties": false,
+    "description": "run-request/v1: what the gateway is asked to run, judged before anything starts.",
+    "properties": {
+      "contract": {
+        "const": "run-request/v1",
+        "default": "run-request/v1",
+        "title": "Contract",
+        "type": "string"
+      },
+      "declared": {
+        "title": "Declared",
+        "type": "boolean"
+      },
+      "exclusive": {
+        "default": true,
+        "title": "Exclusive",
+        "type": "boolean"
+      },
+      "mutating": {
+        "default": false,
+        "title": "Mutating",
+        "type": "boolean"
+      },
+      "task": {
+        "minLength": 1,
+        "title": "Task",
+        "type": "string"
+      }
+    },
+    "required": [
+      "task",
+      "declared"
+    ],
+    "title": "RunRequest",
+    "type": "object"
+  }
+}

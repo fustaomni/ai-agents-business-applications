@@ -1,0 +1,53 @@
+# contracts/mutations/e6.toml
+# data:load loads only a declared assignment, into its own declared volume, judged first (E.6).
+
+[[mutants]]
+id = "absent-input-passes"
+file = "policies/runs/data_load/data_load.rego"
+before = "\tnot input.data_load\n"
+after = "\tfalse\n"
+killers = ["tests/test_load_assignment_data.py::test_an_absent_request_is_refused_by_the_policy"]
+
+[[mutants]]
+id = "undeclared-assignment-passes"
+file = "policies/runs/data_load/data_load.rego"
+before = "\tinput.data_load.manifest_declared == false\n"
+after = "\tfalse\n"
+killers = ["tests/test_load_assignment_data.py::test_an_undeclared_assignment_is_refused_before_any_upload"]
+
+[[mutants]]
+id = "undeclared-volume-passes"
+file = "policies/runs/data_load/data_load.rego"
+before = "_undeclared contains \"volume\" if input.data_load.volume_declared == false"
+after = "_undeclared contains \"volume\" if false"
+killers = ["tests/test_load_assignment_data.py::test_a_volume_the_bundle_does_not_declare_is_refused"]
+
+[[mutants]]
+id = "refusal-still-proceeds"
+file = "scripts/load_assignment_data.py"
+before = "    if decision.action != \"proceed\":"
+after = "    if False:"
+killers = ["tests/test_load_assignment_data.py::test_an_undeclared_assignment_is_refused_before_any_upload"]
+
+[[mutants]]
+id = "volume-key-as-path"
+file = "scripts/load_assignment_data.py"
+before = "{schema.name}/{volume.name}\""
+after = "{schema.name}/{data.volume}\""
+killers = [
+  "tests/test_load_assignment_data.py::test_the_named_assignments_declared_volume_is_chosen",
+]
+
+[[mutants]]
+id = "parent-never-made"
+file = "scripts/load_assignment_data.py"
+before = "        if parent != upload.root:"
+after = "        if False:"
+killers = ["tests/test_load_assignment_data.py::test_the_named_assignments_declared_volume_is_chosen"]
+
+[[mutants]]
+id = "library-exits"
+file = "scripts/load_assignment_data.py"
+before = "    return landed\n"
+after = "    raise SystemExit(0)\n"
+killers = ["tests/test_load_assignment_data.py::test_the_loader_passes_the_layer_audit"]

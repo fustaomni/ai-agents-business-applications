@@ -1,0 +1,30 @@
+# contracts/mutations/d232.toml
+# source:apply deletes a tracked file, so a rename is one spec (D.232).
+
+[[mutants]]
+id = "tracking-assumed"
+file = "scripts/source_apply.py"
+before = "            tracked = inside and current is not None and _tracked(base, target)"
+after = "            tracked = True"
+killers = ["tests/test_source_apply.py::test_an_untracked_file_is_never_deleted"]
+
+[[mutants]]
+id = "unlink-skipped"
+file = "scripts/source_apply.py"
+before = "            target.unlink()"
+after = "            pass"
+killers = ["tests/test_source_apply.py::test_a_delete_removes_a_tracked_file_and_nothing_else"]
+
+[[mutants]]
+id = "untracked-allowed"
+file = "policies/runs/source_apply/source_apply.rego"
+before = "\tnot operation.tracked"
+after = "\tfalse"
+killers = ["tests/test_source_apply.py::test_an_untracked_file_is_never_deleted"]
+
+[[mutants]]
+id = "v1-deletes"
+file = "scripts/source_apply.py"
+before = '        if self.contract == "source-apply/v1" and any('
+after = "        if False and any("
+killers = ["tests/test_source_apply.py::test_a_v1_spec_never_deletes"]

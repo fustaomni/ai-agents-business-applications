@@ -1,0 +1,179 @@
+{
+  "ids": [
+    "repository-state/v1"
+  ],
+  "json_schema": {
+    "$defs": {
+      "BranchPosition": {
+        "additionalProperties": false,
+        "properties": {
+          "name": {
+            "title": "Name",
+            "type": "string"
+          },
+          "position": {
+            "enum": [
+              "in_sync",
+              "behind",
+              "ahead",
+              "diverged",
+              "gone",
+              "untracked"
+            ],
+            "title": "Position",
+            "type": "string"
+          }
+        },
+        "required": [
+          "name",
+          "position"
+        ],
+        "title": "BranchPosition",
+        "type": "object"
+      },
+      "Change": {
+        "additionalProperties": false,
+        "properties": {
+          "original_path": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Original Path"
+          },
+          "path": {
+            "minLength": 1,
+            "title": "Path",
+            "type": "string"
+          },
+          "status": {
+            "maxLength": 2,
+            "minLength": 2,
+            "title": "Status",
+            "type": "string"
+          }
+        },
+        "required": [
+          "status",
+          "path"
+        ],
+        "title": "Change",
+        "type": "object"
+      },
+      "ReportVerdicts": {
+        "additionalProperties": false,
+        "properties": {
+          "every_worktree_clean": {
+            "title": "Every Worktree Clean",
+            "type": "boolean"
+          },
+          "long_lived_branches_in_sync": {
+            "title": "Long Lived Branches In Sync",
+            "type": "boolean"
+          },
+          "no_worktree_behind_develop": {
+            "title": "No Worktree Behind Develop",
+            "type": "boolean"
+          }
+        },
+        "required": [
+          "every_worktree_clean",
+          "no_worktree_behind_develop",
+          "long_lived_branches_in_sync"
+        ],
+        "title": "ReportVerdicts",
+        "type": "object"
+      },
+      "WorktreeReport": {
+        "additionalProperties": false,
+        "properties": {
+          "ahead_of_develop": {
+            "minimum": 0,
+            "title": "Ahead Of Develop",
+            "type": "integer"
+          },
+          "behind_develop": {
+            "minimum": 0,
+            "title": "Behind Develop",
+            "type": "integer"
+          },
+          "branch": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Branch"
+          },
+          "changes": {
+            "items": {
+              "$ref": "#/$defs/Change"
+            },
+            "title": "Changes",
+            "type": "array"
+          },
+          "is_main": {
+            "title": "Is Main",
+            "type": "boolean"
+          },
+          "path": {
+            "title": "Path",
+            "type": "string"
+          }
+        },
+        "required": [
+          "path",
+          "branch",
+          "is_main",
+          "ahead_of_develop",
+          "behind_develop",
+          "changes"
+        ],
+        "title": "WorktreeReport",
+        "type": "object"
+      }
+    },
+    "additionalProperties": false,
+    "description": "repository-state/v1.",
+    "properties": {
+      "contract": {
+        "const": "repository-state/v1",
+        "default": "repository-state/v1",
+        "title": "Contract",
+        "type": "string"
+      },
+      "long_lived": {
+        "items": {
+          "$ref": "#/$defs/BranchPosition"
+        },
+        "title": "Long Lived",
+        "type": "array"
+      },
+      "verdicts": {
+        "$ref": "#/$defs/ReportVerdicts"
+      },
+      "worktrees": {
+        "items": {
+          "$ref": "#/$defs/WorktreeReport"
+        },
+        "title": "Worktrees",
+        "type": "array"
+      }
+    },
+    "required": [
+      "worktrees",
+      "long_lived",
+      "verdicts"
+    ],
+    "title": "RepositoryReport",
+    "type": "object"
+  }
+}

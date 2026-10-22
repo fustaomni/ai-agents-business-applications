@@ -1,0 +1,24 @@
+# contracts/mutations/d131.toml
+# An unrecorded candidate and a removal that untraces a step are refused, and plan:retract runs
+# the retract verb (D.131).
+
+[[mutants]]
+id = "unknown-allowed"
+file = "scripts/plan_edit.py"
+before = '    if unknown:'
+after = '    if False:'
+killers = ["tests/test_plan_retract.py::test_an_unknown_candidate_writes_nothing"]
+
+[[mutants]]
+id = "untrace-allowed"
+file = "scripts/plan_edit.py"
+before = '    if broken:'
+after = '    if False:'
+killers = ["tests/test_plan_retract.py::test_a_retraction_that_untraces_a_step_writes_nothing"]
+
+[[mutants]]
+id = "verb-unwired"
+file = "mise.toml"
+before = "run = 'uv run --no-sync python scripts/plan_edit.py retract \"${usage_spec?}\"'"
+after = "run = 'uv run --no-sync python scripts/plan_edit.py record \"${usage_spec?}\"'"
+killers = ["tests/test_plan_retract.py::test_plan_retract_runs_the_retract_verb"]

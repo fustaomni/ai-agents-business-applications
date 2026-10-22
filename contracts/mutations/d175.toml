@@ -1,0 +1,38 @@
+# contracts/mutations/d175.toml
+# A failed outcome becomes internal_error and a halt with its cause kept, the gateway does the
+# same for a crashed task, and the preflight answers in tagged unions (D.175: R42, R4).
+
+[[mutants]]
+id = "last-resort-not-a-halt"
+file = "scripts/command_outcome.py"
+before = '        return decision.model_copy(update={"action": "halt"})'
+after = "        return decision"
+killers = ["tests/test_last_resort.py::test_an_outcome_that_fails_validation_ends_as_internal_error"]
+
+[[mutants]]
+id = "cause-dropped"
+file = "scripts/command_outcome.py"
+before = '            "cause": {"type": type(invalid).__name__, "message": str(invalid)},'
+after = '            "cause": {},'
+killers = ["tests/test_last_resort.py::test_the_cause_survives_the_last_resort"]
+
+[[mutants]]
+id = "gateway-classification-off"
+file = "scripts/run_task.py"
+before = "    if run.exit_code != 0 and TRACEBACK in run.tail:"
+after = "    if False:"
+killers = ["tests/test_last_resort.py::test_a_crashed_task_ends_as_internal_error_with_its_cause"]
+
+[[mutants]]
+id = "absence-as-a-sentinel"
+file = "scripts/publish_push.py"
+before = "    return At(sha=fields[0]) if fields else Absent()"
+after = '    return At(sha=fields[0] if fields else "")'
+killers = ["tests/test_publish_push.py::test_an_absent_branch_reads_as_absent_not_an_empty_string"]
+
+[[mutants]]
+id = "preflight-stop-ignored"
+file = "scripts/publish_push.py"
+before = "    if isinstance(checked, Stopped):"
+after = "    if False:"
+killers = ["tests/test_publish_push.py::test_a_failed_gate_never_pushes"]

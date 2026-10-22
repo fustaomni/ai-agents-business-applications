@@ -1,0 +1,113 @@
+{
+  "ids": [
+    "run-summary/v2"
+  ],
+  "json_schema": {
+    "$defs": {
+      "Decision": {
+        "additionalProperties": false,
+        "description": "decision/v1: what may happen next, and the verdict it was decided from.",
+        "properties": {
+          "action": {
+            "enum": [
+              "proceed",
+              "refuse",
+              "halt"
+            ],
+            "title": "Action",
+            "type": "string"
+          },
+          "contract": {
+            "const": "decision/v1",
+            "default": "decision/v1",
+            "title": "Contract",
+            "type": "string"
+          },
+          "reason_code": {
+            "title": "Reason Code",
+            "type": "string"
+          },
+          "verdict_digest": {
+            "title": "Verdict Digest",
+            "type": "string"
+          }
+        },
+        "required": [
+          "action",
+          "reason_code",
+          "verdict_digest"
+        ],
+        "title": "Decision",
+        "type": "object"
+      }
+    },
+    "additionalProperties": false,
+    "description": "run-summary/v2: every run's closing line, typed, carrying its evidence (D.108, M44).",
+    "properties": {
+      "contract": {
+        "const": "run-summary/v2",
+        "default": "run-summary/v2",
+        "title": "Contract",
+        "type": "string"
+      },
+      "decision": {
+        "$ref": "#/$defs/Decision"
+      },
+      "duration_seconds": {
+        "minimum": 0,
+        "title": "Duration Seconds",
+        "type": "number"
+      },
+      "exit_code": {
+        "title": "Exit Code",
+        "type": "integer"
+      },
+      "output_lines": {
+        "minimum": 0,
+        "title": "Output Lines",
+        "type": "integer"
+      },
+      "output_sha256": {
+        "pattern": "^[0-9a-f]{64}$",
+        "title": "Output Sha256",
+        "type": "string"
+      },
+      "previous_sha256": {
+        "pattern": "^[0-9a-f]{64}$",
+        "title": "Previous Sha256",
+        "type": "string"
+      },
+      "record_sha256": {
+        "pattern": "^[0-9a-f]{64}$",
+        "title": "Record Sha256",
+        "type": "string"
+      },
+      "run_id": {
+        "title": "Run Id",
+        "type": "string"
+      },
+      "task": {
+        "title": "Task",
+        "type": "string"
+      },
+      "verdict": {
+        "title": "Verdict",
+        "type": "string"
+      }
+    },
+    "required": [
+      "task",
+      "exit_code",
+      "verdict",
+      "run_id",
+      "duration_seconds",
+      "output_lines",
+      "output_sha256",
+      "record_sha256",
+      "previous_sha256",
+      "decision"
+    ],
+    "title": "RunSummary",
+    "type": "object"
+  }
+}

@@ -1,0 +1,37 @@
+# contracts/mutations/d235.toml
+# main is back-merged into develop by task, and release refuses to promote while develop lacks main (D.235).
+
+[[mutants]]
+id = "squash-not-merge"
+file = "scripts/back_merge.py"
+before = '"merge", "--no-ff", MAIN'
+after = '"merge", MAIN'
+killers = ["tests/test_back_merge.py::test_main_is_merged_into_the_branch_with_a_merge_commit"]
+
+[[mutants]]
+id = "trailer-dropped"
+file = "scripts/back_merge.py"
+before = 'f"Plan-Step: {step}"'
+after = 'f"Step: {step}"'
+killers = ["tests/test_back_merge.py::test_main_is_merged_into_the_branch_with_a_merge_commit"]
+
+[[mutants]]
+id = "contained-still-merges"
+file = "scripts/back_merge.py"
+before = '    if request.contained:'
+after = '    if False:'
+killers = ["tests/test_back_merge.py::test_nothing_is_merged_when_the_branch_contains_main"]
+
+[[mutants]]
+id = "protected-allowed"
+file = "policies/runs/back_merge/back_merge.rego"
+before = "\tinput.back_merge.branch in input.back_merge.protected"
+after = "\tfalse"
+killers = ["tests/test_back_merge.py::test_develop_and_main_are_refused"]
+
+[[mutants]]
+id = "release-names-no-remedy"
+file = "scripts/release.py"
+before = '            "`mise run run branches:back-merge <step>`, publish it with `mise run run pr`, "'
+after = '            "publish it with `mise run run pr`, "'
+killers = ["tests/test_back_merge.py::test_a_release_is_refused_while_develop_lacks_main"]

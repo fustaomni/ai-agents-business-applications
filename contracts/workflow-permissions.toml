@@ -1,0 +1,11 @@
+# contracts/workflow-permissions.toml
+# The closed allow-list of workflow token grants (D.95, M38). Every grant at every level, in
+# every workflow, is named here exactly -- workflow, job (absent at workflow level), scope,
+# access and environment -- with the reason it is needed, or audit:workflows refuses it.
+# Nothing is allowed by omission, and no zizmor suppression is honoured.
+
+[[allowed]]
+workflow = ".github/workflows/ci.yml"
+scope = "contents"
+access = "read"
+reason = "actions/checkout reads the repository; the gate publishes, comments and writes nothing"

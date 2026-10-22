@@ -1,0 +1,74 @@
+{
+  "ids": [
+    "source-lines/v1"
+  ],
+  "json_schema": {
+    "$defs": {
+      "Line": {
+        "additionalProperties": false,
+        "properties": {
+          "number": {
+            "exclusiveMinimum": 0,
+            "title": "Number",
+            "type": "integer"
+          },
+          "text": {
+            "title": "Text",
+            "type": "string"
+          }
+        },
+        "required": [
+          "number",
+          "text"
+        ],
+        "title": "Line",
+        "type": "object"
+      }
+    },
+    "additionalProperties": false,
+    "description": "source-lines/v1: a file's lines in a range, numbered.",
+    "properties": {
+      "contract": {
+        "const": "source-lines/v1",
+        "default": "source-lines/v1",
+        "title": "Contract",
+        "type": "string"
+      },
+      "file": {
+        "title": "File",
+        "type": "string"
+      },
+      "first_line": {
+        "minimum": 0,
+        "title": "First Line",
+        "type": "integer"
+      },
+      "last_line": {
+        "minimum": 0,
+        "title": "Last Line",
+        "type": "integer"
+      },
+      "lines": {
+        "items": {
+          "$ref": "#/$defs/Line"
+        },
+        "title": "Lines",
+        "type": "array"
+      },
+      "total_lines": {
+        "minimum": 0,
+        "title": "Total Lines",
+        "type": "integer"
+      }
+    },
+    "required": [
+      "file",
+      "first_line",
+      "last_line",
+      "total_lines",
+      "lines"
+    ],
+    "title": "SourceLines",
+    "type": "object"
+  }
+}

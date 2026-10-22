@@ -1,0 +1,38 @@
+# contracts/mutations/d168.toml
+# runs.check_ruleset refuses an unpinned, non-strict or bypassable gate, an unreadable bypass
+# count, and a pin that is not the gate's producer (D.168).
+
+[[mutants]]
+id = "unpinned-allowed"
+file = "policies/runs/check_ruleset/check_ruleset.rego"
+before = "\tcheck.integration_id != pinned_app"
+after = "\tfalse"
+killers = ["tests/test_check_ruleset.py::test_a_check_required_by_name_only_is_refused"]
+
+[[mutants]]
+id = "strict-ignored"
+file = "policies/runs/check_ruleset/check_ruleset.rego"
+before = "\tnot state.strict"
+after = "\tfalse"
+killers = ["tests/test_check_ruleset.py::test_a_ruleset_that_is_not_strict_is_refused"]
+
+[[mutants]]
+id = "bypass-ignored"
+file = "policies/runs/check_ruleset/check_ruleset.rego"
+before = "\tstate.bypass_actor_count > 0"
+after = "\tfalse"
+killers = ["tests/test_check_ruleset.py::test_a_bypass_actor_is_refused"]
+
+[[mutants]]
+id = "unreadable-bypass-read-as-zero"
+file = "policies/runs/check_ruleset/check_ruleset.rego"
+before = "\tis_null(state.bypass_actor_count)"
+after = "\tfalse"
+killers = ["tests/test_check_ruleset.py::test_an_unreadable_bypass_count_is_refused"]
+
+[[mutants]]
+id = "producer-ignored"
+file = "policies/runs/check_ruleset/check_ruleset.rego"
+before = "\tstate.producer_app_id != pinned_app"
+after = "\tfalse"
+killers = ["tests/test_check_ruleset.py::test_a_gate_from_another_app_is_refused"]

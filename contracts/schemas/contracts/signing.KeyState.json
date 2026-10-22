@@ -1,0 +1,65 @@
+{
+  "ids": [
+    "signing-key-state/v1"
+  ],
+  "json_schema": {
+    "additionalProperties": false,
+    "description": "signing-key-state/v1: where the private key is, how it is protected, whether it is listed.",
+    "properties": {
+      "contract": {
+        "const": "signing-key-state/v1",
+        "default": "signing-key-state/v1",
+        "title": "Contract",
+        "type": "string"
+      },
+      "inside_repository": {
+        "title": "Inside Repository",
+        "type": "boolean"
+      },
+      "keyid": {
+        "anyOf": [
+          {
+            "type": "string"
+          },
+          {
+            "type": "null"
+          }
+        ],
+        "title": "Keyid"
+      },
+      "listed": {
+        "title": "Listed",
+        "type": "boolean"
+      },
+      "mode": {
+        "anyOf": [
+          {
+            "type": "string"
+          },
+          {
+            "type": "null"
+          }
+        ],
+        "title": "Mode"
+      },
+      "private_exists": {
+        "title": "Private Exists",
+        "type": "boolean"
+      },
+      "private_path": {
+        "title": "Private Path",
+        "type": "string"
+      }
+    },
+    "required": [
+      "private_path",
+      "private_exists",
+      "inside_repository",
+      "mode",
+      "keyid",
+      "listed"
+    ],
+    "title": "KeyState",
+    "type": "object"
+  }
+}

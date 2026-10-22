@@ -1,0 +1,99 @@
+{
+  "ids": [
+    "verdict/v2"
+  ],
+  "json_schema": {
+    "$defs": {
+      "RuleVerdict": {
+        "additionalProperties": false,
+        "description": "One declared rule's outcome, with every finding it produced (SARIF: rules vs results).",
+        "properties": {
+          "code": {
+            "title": "Code",
+            "type": "string"
+          },
+          "findings": {
+            "default": [],
+            "items": {
+              "type": "string"
+            },
+            "title": "Findings",
+            "type": "array"
+          },
+          "outcome": {
+            "enum": [
+              "pass",
+              "fail",
+              "unknown"
+            ],
+            "title": "Outcome",
+            "type": "string"
+          }
+        },
+        "required": [
+          "code",
+          "outcome"
+        ],
+        "title": "RuleVerdict",
+        "type": "object"
+      }
+    },
+    "additionalProperties": false,
+    "description": "verdict/v2: what the policy said of one piece of evidence, rule by rule.\n\nv2 keeps every finding of a rule. v1 kept one message per code, so a second denial of\nthe same rule overwrote the first, and the layer audit saw three of its findings.",
+    "properties": {
+      "contract": {
+        "const": "verdict/v2",
+        "default": "verdict/v2",
+        "title": "Contract",
+        "type": "string"
+      },
+      "entrypoint": {
+        "title": "Entrypoint",
+        "type": "string"
+      },
+      "evidence_digest": {
+        "title": "Evidence Digest",
+        "type": "string"
+      },
+      "outcome": {
+        "enum": [
+          "pass",
+          "fail",
+          "unknown"
+        ],
+        "title": "Outcome",
+        "type": "string"
+      },
+      "policy_revision": {
+        "title": "Policy Revision",
+        "type": "string"
+      },
+      "reason": {
+        "default": "",
+        "title": "Reason",
+        "type": "string"
+      },
+      "rules": {
+        "items": {
+          "$ref": "#/$defs/RuleVerdict"
+        },
+        "title": "Rules",
+        "type": "array"
+      },
+      "subject": {
+        "title": "Subject",
+        "type": "string"
+      }
+    },
+    "required": [
+      "subject",
+      "entrypoint",
+      "policy_revision",
+      "evidence_digest",
+      "outcome",
+      "rules"
+    ],
+    "title": "Verdict",
+    "type": "object"
+  }
+}

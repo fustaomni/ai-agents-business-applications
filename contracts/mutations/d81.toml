@@ -1,0 +1,30 @@
+# contracts/mutations/d81.toml
+# Finished work keeps its evidence: each part of the measure is shown necessary (D.81).
+
+[[mutants]]
+id = "difference-reversed"
+file = "scripts/plan_status.py"
+before = "done(fork_ref) - done(head)"
+after = "done(head) - done(fork_ref)"
+killers = ["tests/test_plan_evidence.py::test_a_step_done_on_the_base_but_not_the_head_is_lost"]
+
+[[mutants]]
+id = "done-read-as-ready"
+file = "scripts/plan_status.py"
+before = "status.state == \"done\""
+after = "status.state == \"ready\""
+killers = ["tests/test_plan_evidence.py::test_a_step_done_on_the_base_but_not_the_head_is_lost"]
+
+[[mutants]]
+id = "measured-from-the-base"
+file = "scripts/plan_status.py"
+before = "fork_ref = fork(root, base, head)"
+after = "fork_ref = base"
+killers = ["tests/test_plan_evidence.py::test_a_branch_behind_its_base_has_lost_nothing"]
+
+[[mutants]]
+id = "head-is-the-base"
+file = "scripts/plan_status.py"
+before = "head: str = \"HEAD\","
+after = "head: str = \"origin/develop\","
+killers = ["tests/test_plan_evidence.py::test_the_guard_compares_the_head_against_the_base"]

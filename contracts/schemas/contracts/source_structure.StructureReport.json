@@ -1,0 +1,113 @@
+{
+  "ids": [
+    "structure-report/v1"
+  ],
+  "json_schema": {
+    "$defs": {
+      "JsonValue": {},
+      "KeyShape": {
+        "additionalProperties": false,
+        "properties": {
+          "entries": {
+            "anyOf": [
+              {
+                "minimum": 0,
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Entries"
+          },
+          "key": {
+            "title": "Key",
+            "type": "string"
+          },
+          "kind": {
+            "enum": [
+              "table",
+              "array",
+              "string",
+              "number",
+              "boolean",
+              "null"
+            ],
+            "title": "Kind",
+            "type": "string"
+          },
+          "sample": {
+            "$ref": "#/$defs/JsonValue"
+          }
+        },
+        "required": [
+          "key",
+          "kind",
+          "entries",
+          "sample"
+        ],
+        "title": "KeyShape",
+        "type": "object"
+      }
+    },
+    "additionalProperties": false,
+    "description": "structure-report/v1: a file's top-level shape, or a model's schema.",
+    "properties": {
+      "contract": {
+        "const": "structure-report/v1",
+        "default": "structure-report/v1",
+        "title": "Contract",
+        "type": "string"
+      },
+      "form": {
+        "enum": [
+          "toml",
+          "json",
+          "model"
+        ],
+        "title": "Form",
+        "type": "string"
+      },
+      "keys": {
+        "anyOf": [
+          {
+            "items": {
+              "$ref": "#/$defs/KeyShape"
+            },
+            "type": "array"
+          },
+          {
+            "type": "null"
+          }
+        ],
+        "default": null,
+        "title": "Keys"
+      },
+      "schema_": {
+        "anyOf": [
+          {
+            "additionalProperties": {
+              "$ref": "#/$defs/JsonValue"
+            },
+            "type": "object"
+          },
+          {
+            "type": "null"
+          }
+        ],
+        "default": null,
+        "title": "Schema"
+      },
+      "source": {
+        "title": "Source",
+        "type": "string"
+      }
+    },
+    "required": [
+      "source",
+      "form"
+    ],
+    "title": "StructureReport",
+    "type": "object"
+  }
+}

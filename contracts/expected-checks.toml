@@ -1,0 +1,13 @@
+# contracts/expected-checks.toml
+# Every check a pull request must show, registered and concluded, before pr merges it (D.77).
+#
+# GitHub's ruleset requires only the quality gate: a required check that never reports
+# blocks a merge forever, with nothing to re-run. The rest are expected HERE, where a missing
+# one makes merge.readiness wait, and a wait that outlasts the deadline halts with its name.
+checks = ["quality gate", "GitGuardian Security Checks"]
+
+# EACH CHECK'S GITHUB APP, BY SLUG (D.218): pr:checks re-requests only the suite of the app that
+# owns a missing check. Railway and Vercel open a suite on every commit and never post one here.
+[owners]
+"quality gate" = "github-actions"
+"GitGuardian Security Checks" = "gitguardian"

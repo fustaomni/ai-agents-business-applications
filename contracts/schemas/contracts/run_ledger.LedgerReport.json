@@ -1,0 +1,106 @@
+{
+  "ids": [
+    "run-ledger-report/v2"
+  ],
+  "json_schema": {
+    "additionalProperties": false,
+    "description": "run-ledger-report/v1: whether the chain holds, and where it breaks if not.",
+    "properties": {
+      "broken_at": {
+        "anyOf": [
+          {
+            "exclusiveMinimum": 0,
+            "type": "integer"
+          },
+          {
+            "type": "null"
+          }
+        ],
+        "title": "Broken At"
+      },
+      "contract": {
+        "const": "run-ledger-report/v2",
+        "default": "run-ledger-report/v2",
+        "title": "Contract",
+        "type": "string"
+      },
+      "intact": {
+        "title": "Intact",
+        "type": "boolean"
+      },
+      "invalid_signatures": {
+        "default": [],
+        "items": {
+          "exclusiveMinimum": 0,
+          "type": "integer"
+        },
+        "title": "Invalid Signatures",
+        "type": "array"
+      },
+      "ledger": {
+        "title": "Ledger",
+        "type": "string"
+      },
+      "legacy_unsigned": {
+        "default": 0,
+        "minimum": 0,
+        "title": "Legacy Unsigned",
+        "type": "integer"
+      },
+      "records": {
+        "minimum": 0,
+        "title": "Records",
+        "type": "integer"
+      },
+      "signed": {
+        "default": 0,
+        "minimum": 0,
+        "title": "Signed",
+        "type": "integer"
+      },
+      "tasks": {
+        "items": {
+          "type": "string"
+        },
+        "title": "Tasks",
+        "type": "array"
+      },
+      "unsigned_after_signing": {
+        "default": [],
+        "items": {
+          "exclusiveMinimum": 0,
+          "type": "integer"
+        },
+        "title": "Unsigned After Signing",
+        "type": "array"
+      },
+      "waived": {
+        "default": [],
+        "items": {
+          "exclusiveMinimum": 0,
+          "type": "integer"
+        },
+        "title": "Waived",
+        "type": "array"
+      },
+      "waivers_unmatched": {
+        "default": [],
+        "items": {
+          "exclusiveMinimum": 0,
+          "type": "integer"
+        },
+        "title": "Waivers Unmatched",
+        "type": "array"
+      }
+    },
+    "required": [
+      "ledger",
+      "records",
+      "intact",
+      "broken_at",
+      "tasks"
+    ],
+    "title": "LedgerReport",
+    "type": "object"
+  }
+}

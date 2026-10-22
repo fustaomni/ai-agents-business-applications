@@ -1,0 +1,326 @@
+{
+  "ids": [
+    "plan-facts/v1"
+  ],
+  "json_schema": {
+    "$defs": {
+      "Facts": {
+        "additionalProperties": false,
+        "description": "What was observed on one ref, and which kinds of evidence could not be seen.",
+        "properties": {
+          "blind": {
+            "default": [],
+            "items": {
+              "enum": [
+                "pr",
+                "release",
+                "path",
+                "task",
+                "proof"
+              ],
+              "type": "string"
+            },
+            "title": "Blind",
+            "type": "array"
+          },
+          "branches_with_work": {
+            "items": {
+              "type": "string"
+            },
+            "title": "Branches With Work",
+            "type": "array"
+          },
+          "merged_prs": {
+            "items": {
+              "type": "integer"
+            },
+            "title": "Merged Prs",
+            "type": "array"
+          },
+          "paths": {
+            "items": {
+              "type": "string"
+            },
+            "title": "Paths",
+            "type": "array"
+          },
+          "proofs": {
+            "items": {
+              "type": "string"
+            },
+            "title": "Proofs",
+            "type": "array"
+          },
+          "ref": {
+            "minLength": 1,
+            "title": "Ref",
+            "type": "string"
+          },
+          "tags": {
+            "items": {
+              "type": "string"
+            },
+            "title": "Tags",
+            "type": "array"
+          },
+          "tasks": {
+            "items": {
+              "type": "string"
+            },
+            "title": "Tasks",
+            "type": "array"
+          }
+        },
+        "required": [
+          "ref",
+          "paths",
+          "tasks",
+          "merged_prs",
+          "tags",
+          "proofs",
+          "branches_with_work"
+        ],
+        "title": "Facts",
+        "type": "object"
+      },
+      "PathEvidence": {
+        "additionalProperties": false,
+        "description": "Done when this file exists on the integration branch, and names the step.",
+        "properties": {
+          "kind": {
+            "const": "path",
+            "title": "Kind",
+            "type": "string"
+          },
+          "path": {
+            "minLength": 1,
+            "title": "Path",
+            "type": "string"
+          }
+        },
+        "required": [
+          "kind",
+          "path"
+        ],
+        "title": "PathEvidence",
+        "type": "object"
+      },
+      "PrEvidence": {
+        "additionalProperties": false,
+        "description": "Done when this pull request is merged.",
+        "properties": {
+          "kind": {
+            "const": "pr",
+            "title": "Kind",
+            "type": "string"
+          },
+          "number": {
+            "exclusiveMinimum": 0,
+            "title": "Number",
+            "type": "integer"
+          }
+        },
+        "required": [
+          "kind",
+          "number"
+        ],
+        "title": "PrEvidence",
+        "type": "object"
+      },
+      "ProofEvidence": {
+        "additionalProperties": false,
+        "description": "Done when this named test passes -- and it fails when the rule is broken.\n\nTHE ONLY KIND THAT IS NOT INSPECTION. A file, a task, a merge and a tag each\nshow that something exists; none shows that a rule refuses anything.\n\npath::name, BECAUSE A FILE CANNOT SAY WHICH TEST.",
+        "properties": {
+          "kind": {
+            "const": "proof",
+            "title": "Kind",
+            "type": "string"
+          },
+          "test": {
+            "pattern": "^[^:]+\\.py::[A-Za-z_][A-Za-z0-9_]*$",
+            "title": "Test",
+            "type": "string"
+          }
+        },
+        "required": [
+          "kind",
+          "test"
+        ],
+        "title": "ProofEvidence",
+        "type": "object"
+      },
+      "ReleaseEvidence": {
+        "additionalProperties": false,
+        "description": "Done when this release tag exists, in this repository's own convention.",
+        "properties": {
+          "kind": {
+            "const": "release",
+            "title": "Kind",
+            "type": "string"
+          },
+          "tag": {
+            "pattern": "^[a-z][a-z0-9-]*-v[0-9]+$",
+            "title": "Tag",
+            "type": "string"
+          }
+        },
+        "required": [
+          "kind",
+          "tag"
+        ],
+        "title": "ReleaseEvidence",
+        "type": "object"
+      },
+      "Step": {
+        "additionalProperties": false,
+        "properties": {
+          "because": {
+            "additionalProperties": {
+              "type": "string"
+            },
+            "title": "Because",
+            "type": "object"
+          },
+          "branch": {
+            "anyOf": [
+              {
+                "pattern": "^(feature|release|hotfix)/[a-z0-9-]+$",
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Branch"
+          },
+          "depends_on": {
+            "default": [],
+            "items": {
+              "type": "string"
+            },
+            "title": "Depends On",
+            "type": "array"
+          },
+          "done_when": {
+            "items": {
+              "discriminator": {
+                "mapping": {
+                  "path": "#/$defs/PathEvidence",
+                  "pr": "#/$defs/PrEvidence",
+                  "proof": "#/$defs/ProofEvidence",
+                  "release": "#/$defs/ReleaseEvidence",
+                  "task": "#/$defs/TaskEvidence"
+                },
+                "propertyName": "kind"
+              },
+              "oneOf": [
+                {
+                  "$ref": "#/$defs/PrEvidence"
+                },
+                {
+                  "$ref": "#/$defs/ReleaseEvidence"
+                },
+                {
+                  "$ref": "#/$defs/PathEvidence"
+                },
+                {
+                  "$ref": "#/$defs/TaskEvidence"
+                },
+                {
+                  "$ref": "#/$defs/ProofEvidence"
+                }
+              ]
+            },
+            "minItems": 1,
+            "title": "Done When",
+            "type": "array"
+          },
+          "id": {
+            "pattern": "^[0-9A-Z]+\\.[0-9A-Z]+$",
+            "title": "Id",
+            "type": "string"
+          },
+          "source": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Source"
+          },
+          "thread": {
+            "title": "Thread",
+            "type": "string"
+          },
+          "title": {
+            "minLength": 1,
+            "title": "Title",
+            "type": "string"
+          }
+        },
+        "required": [
+          "id",
+          "title",
+          "thread",
+          "done_when"
+        ],
+        "title": "Step",
+        "type": "object"
+      },
+      "TaskEvidence": {
+        "additionalProperties": false,
+        "description": "Done when mise.toml declares this task.",
+        "properties": {
+          "kind": {
+            "const": "task",
+            "title": "Kind",
+            "type": "string"
+          },
+          "name": {
+            "minLength": 1,
+            "title": "Name",
+            "type": "string"
+          }
+        },
+        "required": [
+          "kind",
+          "name"
+        ],
+        "title": "TaskEvidence",
+        "type": "object"
+      }
+    },
+    "additionalProperties": false,
+    "description": "plan-facts/v1: the plan's own steps, and what was observed about their evidence.",
+    "properties": {
+      "contract": {
+        "const": "plan-facts/v1",
+        "default": "plan-facts/v1",
+        "title": "Contract",
+        "type": "string"
+      },
+      "facts": {
+        "$ref": "#/$defs/Facts"
+      },
+      "steps": {
+        "items": {
+          "$ref": "#/$defs/Step"
+        },
+        "minItems": 1,
+        "title": "Steps",
+        "type": "array"
+      }
+    },
+    "required": [
+      "facts",
+      "steps"
+    ],
+    "title": "PlanFacts",
+    "type": "object"
+  }
+}

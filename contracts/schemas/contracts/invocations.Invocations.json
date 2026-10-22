@@ -1,0 +1,54 @@
+{
+  "ids": [
+    "invocations/v1"
+  ],
+  "json_schema": {
+    "$defs": {
+      "Invocation": {
+        "additionalProperties": false,
+        "description": "One command, and where it runs: task:<name> or gate:<name>.",
+        "properties": {
+          "argv": {
+            "items": {
+              "type": "string"
+            },
+            "title": "Argv",
+            "type": "array"
+          },
+          "source": {
+            "minLength": 1,
+            "title": "Source",
+            "type": "string"
+          }
+        },
+        "required": [
+          "source",
+          "argv"
+        ],
+        "title": "Invocation",
+        "type": "object"
+      }
+    },
+    "additionalProperties": false,
+    "properties": {
+      "contract": {
+        "const": "invocations/v1",
+        "default": "invocations/v1",
+        "title": "Contract",
+        "type": "string"
+      },
+      "invocations": {
+        "items": {
+          "$ref": "#/$defs/Invocation"
+        },
+        "title": "Invocations",
+        "type": "array"
+      }
+    },
+    "required": [
+      "invocations"
+    ],
+    "title": "Invocations",
+    "type": "object"
+  }
+}

@@ -1,0 +1,44 @@
+# contracts/mutations/d75.toml
+# The harness checking its own proofs: each mutant must be killed by its named test (D.75).
+
+[[mutants]]
+id = "no-bytecode-guard"
+file = "scripts/mutation_check.py"
+before = "\"PYTHONDONTWRITEBYTECODE\": \"1\""
+after = "\"PYTHONDONTWRITEBYTECODE\": \"\""
+killers = ["tests/test_mutation_check.py::test_every_killer_runs_without_writing_bytecode"]
+
+[[mutants]]
+id = "survival-never-seen"
+file = "policies/runs/mutation/mutation.rego"
+before = "run.exit_code == 0"
+after = "run.exit_code == 99"
+killers = ["tests/test_mutation_check.py::test_a_mutant_its_named_killer_misses_is_refused_even_if_another_test_kills_it"]
+
+[[mutants]]
+id = "baseline-never-fails"
+file = "policies/runs/mutation/mutation.rego"
+before = "run.exit_code != 0"
+after = "run.exit_code == 99"
+killers = ["tests/test_mutation_check.py::test_a_failing_baseline_halts_instead_of_counting_every_mutant_killed"]
+
+[[mutants]]
+id = "anchor-always-once"
+file = "scripts/mutation_check.py"
+before = "original.count(mutant.before) == 1"
+after = "original.count(mutant.before) >= 0"
+killers = ["tests/test_mutation_check.py::test_an_anchor_not_found_once_is_unknown_not_survived"]
+
+[[mutants]]
+id = "mutated-in-place"
+file = "scripts/mutation_check.py"
+before = "target = copy / mutant.file"
+after = "target = root / mutant.file"
+killers = ["tests/test_mutation_check.py::test_the_tree_is_never_mutated_in_place"]
+
+[[mutants]]
+id = "run-policies-queried"
+file = "scripts/evaluate_policies.py"
+before = "(\"machine.\", \"runs.\")"
+after = "(\"machine.\",)"
+killers = ["tests/test_mutation_check.py::test_a_run_policy_is_not_queried_by_the_repository_gate"]

@@ -1,0 +1,38 @@
+# contracts/mutations/d98.toml
+# The trust names only the declared principal and this repository's environment, is created only
+# when absent, and is observed after creation (D.98). Rego anchors use \t escapes.
+
+[[mutants]]
+id = "foreign-allowed"
+file = "policies/runs/ci_federation/ci_federation.rego"
+before = "\t_foreign(federation)"
+after = "\tfalse"
+killers = ["tests/test_ci_federation.py::test_a_principal_that_is_not_the_declared_ci_principal_is_refused"]
+
+[[mutants]]
+id = "subject-unchecked"
+file = "policies/runs/ci_federation/ci_federation.rego"
+before = "\tfederation.desired.subject != expected"
+after = "\tfalse"
+killers = ["tests/test_ci_federation.py::test_a_foreign_subject_is_refused_by_the_policy"]
+
+[[mutants]]
+id = "missing-allowed"
+file = "policies/runs/ci_federation/ci_federation.rego"
+before = "\tinput.ci_federation.principal == null"
+after = "\tfalse"
+killers = ["tests/test_ci_federation.py::test_a_missing_principal_is_refused"]
+
+[[mutants]]
+id = "always-create"
+file = "scripts/ci_federation.py"
+before = '        create=wanted not in existing,'
+after = '        create=True,'
+killers = ["tests/test_ci_federation.py::test_an_identical_policy_is_left_alone"]
+
+[[mutants]]
+id = "created-unverified"
+file = "scripts/ci_federation.py"
+before = '    if after is None or wanted not in after:'
+after = '    if False:'
+killers = ["tests/test_ci_federation.py::test_a_create_that_does_not_appear_halts"]

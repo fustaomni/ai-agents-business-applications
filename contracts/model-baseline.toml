@@ -1,0 +1,9 @@
+# contracts/model-baseline.toml
+# Classes deriving from pydantic.BaseModel directly, as measured when D.147 began. A RATCHET:
+# this list may only shrink. audit:models refuses any direct subclass not listed here, and any
+# entry listed here that is no longer one; migrating a module to Contract or Reading removes
+# its entries in the same change.
+
+contract = "model-baseline/v1"
+direct = [
+]

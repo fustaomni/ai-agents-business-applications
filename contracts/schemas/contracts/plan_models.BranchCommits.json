@@ -1,0 +1,87 @@
+{
+  "ids": [
+    "branch-commits/v1"
+  ],
+  "json_schema": {
+    "$defs": {
+      "CommitSteps": {
+        "additionalProperties": false,
+        "description": "One commit, and the plan steps its Plan-Step trailers name, as git parsed them.",
+        "properties": {
+          "merge": {
+            "title": "Merge",
+            "type": "boolean"
+          },
+          "sha": {
+            "minLength": 1,
+            "title": "Sha",
+            "type": "string"
+          },
+          "steps": {
+            "items": {
+              "type": "string"
+            },
+            "title": "Steps",
+            "type": "array"
+          },
+          "subject": {
+            "title": "Subject",
+            "type": "string"
+          }
+        },
+        "required": [
+          "sha",
+          "subject",
+          "merge",
+          "steps"
+        ],
+        "title": "CommitSteps",
+        "type": "object"
+      }
+    },
+    "additionalProperties": false,
+    "description": "branch-commits/v1: a branch's commits, and the ids the ledger issued and retired.",
+    "properties": {
+      "base": {
+        "minLength": 1,
+        "title": "Base",
+        "type": "string"
+      },
+      "commits": {
+        "items": {
+          "$ref": "#/$defs/CommitSteps"
+        },
+        "title": "Commits",
+        "type": "array"
+      },
+      "contract": {
+        "const": "branch-commits/v1",
+        "default": "branch-commits/v1",
+        "title": "Contract",
+        "type": "string"
+      },
+      "issued": {
+        "items": {
+          "type": "string"
+        },
+        "title": "Issued",
+        "type": "array"
+      },
+      "retired": {
+        "items": {
+          "type": "string"
+        },
+        "title": "Retired",
+        "type": "array"
+      }
+    },
+    "required": [
+      "base",
+      "commits",
+      "issued",
+      "retired"
+    ],
+    "title": "BranchCommits",
+    "type": "object"
+  }
+}

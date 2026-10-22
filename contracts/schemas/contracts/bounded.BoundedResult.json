@@ -1,0 +1,172 @@
+{
+  "ids": [
+    "bounded-result/v1"
+  ],
+  "json_schema": {
+    "$defs": {
+      "Exited": {
+        "additionalProperties": false,
+        "description": "The child ended by itself, with an exit code.",
+        "properties": {
+          "code": {
+            "title": "Code",
+            "type": "integer"
+          },
+          "kind": {
+            "const": "exited",
+            "default": "exited",
+            "title": "Kind",
+            "type": "string"
+          }
+        },
+        "required": [
+          "code"
+        ],
+        "title": "Exited",
+        "type": "object"
+      },
+      "LaunchFailed": {
+        "additionalProperties": false,
+        "description": "The program could not be started at all, so nothing ran.",
+        "properties": {
+          "kind": {
+            "const": "launch_failed",
+            "default": "launch_failed",
+            "title": "Kind",
+            "type": "string"
+          },
+          "program": {
+            "title": "Program",
+            "type": "string"
+          },
+          "reason": {
+            "title": "Reason",
+            "type": "string"
+          }
+        },
+        "required": [
+          "program",
+          "reason"
+        ],
+        "title": "LaunchFailed",
+        "type": "object"
+      },
+      "Signaled": {
+        "additionalProperties": false,
+        "description": "The child was ended by a signal, named so no reader decodes a negative number.",
+        "properties": {
+          "kind": {
+            "const": "signaled",
+            "default": "signaled",
+            "title": "Kind",
+            "type": "string"
+          },
+          "name": {
+            "title": "Name",
+            "type": "string"
+          },
+          "number": {
+            "title": "Number",
+            "type": "integer"
+          }
+        },
+        "required": [
+          "name",
+          "number"
+        ],
+        "title": "Signaled",
+        "type": "object"
+      },
+      "TimedOut": {
+        "additionalProperties": false,
+        "description": "The deadline passed; escalated is whether SIGTERM was not enough and SIGKILL was sent.",
+        "properties": {
+          "deadline_seconds": {
+            "title": "Deadline Seconds",
+            "type": "number"
+          },
+          "escalated": {
+            "title": "Escalated",
+            "type": "boolean"
+          },
+          "kind": {
+            "const": "timed_out",
+            "default": "timed_out",
+            "title": "Kind",
+            "type": "string"
+          }
+        },
+        "required": [
+          "deadline_seconds",
+          "escalated"
+        ],
+        "title": "TimedOut",
+        "type": "object"
+      }
+    },
+    "additionalProperties": false,
+    "description": "bounded-result/v1: what ran, how it ended, what it printed, and how long it took.",
+    "properties": {
+      "argv": {
+        "items": {
+          "type": "string"
+        },
+        "title": "Argv",
+        "type": "array"
+      },
+      "contract": {
+        "const": "bounded-result/v1",
+        "default": "bounded-result/v1",
+        "title": "Contract",
+        "type": "string"
+      },
+      "duration_seconds": {
+        "title": "Duration Seconds",
+        "type": "number"
+      },
+      "stderr": {
+        "title": "Stderr",
+        "type": "string"
+      },
+      "stdout": {
+        "title": "Stdout",
+        "type": "string"
+      },
+      "termination": {
+        "discriminator": {
+          "mapping": {
+            "exited": "#/$defs/Exited",
+            "launch_failed": "#/$defs/LaunchFailed",
+            "signaled": "#/$defs/Signaled",
+            "timed_out": "#/$defs/TimedOut"
+          },
+          "propertyName": "kind"
+        },
+        "oneOf": [
+          {
+            "$ref": "#/$defs/Exited"
+          },
+          {
+            "$ref": "#/$defs/Signaled"
+          },
+          {
+            "$ref": "#/$defs/TimedOut"
+          },
+          {
+            "$ref": "#/$defs/LaunchFailed"
+          }
+        ],
+        "title": "Termination"
+      }
+    },
+    "required": [
+      "argv",
+      "termination",
+      "stdout",
+      "stderr",
+      "duration_seconds"
+    ],
+    "title": "BoundedResult",
+    "type": "object"
+  }
+}

@@ -1,0 +1,69 @@
+{
+  "ids": [
+    "identity-inventory/v1"
+  ],
+  "json_schema": {
+    "$defs": {
+      "Occurrence": {
+        "additionalProperties": false,
+        "properties": {
+          "number": {
+            "exclusiveMinimum": 0,
+            "title": "Number",
+            "type": "integer"
+          },
+          "path": {
+            "title": "Path",
+            "type": "string"
+          },
+          "slot": {
+            "title": "Slot",
+            "type": "boolean"
+          },
+          "value": {
+            "title": "Value",
+            "type": "string"
+          }
+        },
+        "required": [
+          "path",
+          "number",
+          "value",
+          "slot"
+        ],
+        "title": "Occurrence",
+        "type": "object"
+      }
+    },
+    "additionalProperties": false,
+    "description": "identity-inventory/v1: every identity value found, and whether a slot holds it.",
+    "properties": {
+      "contract": {
+        "const": "identity-inventory/v1",
+        "default": "identity-inventory/v1",
+        "title": "Contract",
+        "type": "string"
+      },
+      "exempt": {
+        "items": {
+          "type": "string"
+        },
+        "title": "Exempt",
+        "type": "array"
+      },
+      "occurrences": {
+        "items": {
+          "$ref": "#/$defs/Occurrence"
+        },
+        "title": "Occurrences",
+        "type": "array"
+      }
+    },
+    "required": [
+      "exempt",
+      "occurrences"
+    ],
+    "title": "IdentityInventory",
+    "type": "object"
+  }
+}

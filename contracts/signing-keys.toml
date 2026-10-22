@@ -1,0 +1,13 @@
+# contracts/signing-keys.toml
+# The public halves of the keys that sign this project's claims (D.109). The private halves
+# never enter a repository: each lives under its owner's ~/.config, mode 0600. A key not
+# listed here signs nothing in this project, so every signature has a verifier.
+
+[[keys]]
+keyid = "db993ff862d80b4339803ef5f0c354e35417a58b69e775f4f839f4c2852a0c83"
+scheme = "ed25519"
+public_pem = """
+-----BEGIN PUBLIC KEY-----
+MCowBQYDK2VwAyEA4e1u/+5GsrBtmvtbGjuaC3z1e/ggDkrQI2rkgkEnH78=
+-----END PUBLIC KEY-----
+"""

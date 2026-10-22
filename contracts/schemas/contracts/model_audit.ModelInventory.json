@@ -1,0 +1,68 @@
+{
+  "ids": [
+    "model-inventory/v1"
+  ],
+  "json_schema": {
+    "$defs": {
+      "ModelFinding": {
+        "additionalProperties": false,
+        "description": "A direct subclass the baseline does not list, or a listed one that no longer is.",
+        "properties": {
+          "entry": {
+            "title": "Entry",
+            "type": "string"
+          },
+          "kind": {
+            "enum": [
+              "unbaselined",
+              "stale"
+            ],
+            "title": "Kind",
+            "type": "string"
+          }
+        },
+        "required": [
+          "entry",
+          "kind"
+        ],
+        "title": "ModelFinding",
+        "type": "object"
+      }
+    },
+    "additionalProperties": false,
+    "description": "model-inventory/v1: files scanned, every direct subclass, and every finding.",
+    "properties": {
+      "contract": {
+        "const": "model-inventory/v1",
+        "default": "model-inventory/v1",
+        "title": "Contract",
+        "type": "string"
+      },
+      "direct": {
+        "items": {
+          "type": "string"
+        },
+        "title": "Direct",
+        "type": "array"
+      },
+      "files_scanned": {
+        "title": "Files Scanned",
+        "type": "integer"
+      },
+      "findings": {
+        "items": {
+          "$ref": "#/$defs/ModelFinding"
+        },
+        "title": "Findings",
+        "type": "array"
+      }
+    },
+    "required": [
+      "files_scanned",
+      "direct",
+      "findings"
+    ],
+    "title": "ModelInventory",
+    "type": "object"
+  }
+}

@@ -1,0 +1,79 @@
+{
+  "ids": [
+    "source-units/v1"
+  ],
+  "json_schema": {
+    "$defs": {
+      "SourceUnit": {
+        "additionalProperties": false,
+        "properties": {
+          "first_line": {
+            "exclusiveMinimum": 0,
+            "title": "First Line",
+            "type": "integer"
+          },
+          "kind": {
+            "enum": [
+              "function",
+              "class"
+            ],
+            "title": "Kind",
+            "type": "string"
+          },
+          "last_line": {
+            "exclusiveMinimum": 0,
+            "title": "Last Line",
+            "type": "integer"
+          },
+          "name": {
+            "title": "Name",
+            "type": "string"
+          },
+          "source": {
+            "items": {
+              "type": "string"
+            },
+            "title": "Source",
+            "type": "array"
+          }
+        },
+        "required": [
+          "name",
+          "kind",
+          "first_line",
+          "last_line",
+          "source"
+        ],
+        "title": "SourceUnit",
+        "type": "object"
+      }
+    },
+    "additionalProperties": false,
+    "description": "source-units/v1: the named units of one file, as written.",
+    "properties": {
+      "contract": {
+        "const": "source-units/v1",
+        "default": "source-units/v1",
+        "title": "Contract",
+        "type": "string"
+      },
+      "file": {
+        "title": "File",
+        "type": "string"
+      },
+      "units": {
+        "items": {
+          "$ref": "#/$defs/SourceUnit"
+        },
+        "title": "Units",
+        "type": "array"
+      }
+    },
+    "required": [
+      "file",
+      "units"
+    ],
+    "title": "UnitsReport",
+    "type": "object"
+  }
+}

@@ -1,0 +1,38 @@
+# contracts/mutations/d222.toml
+# A stale, ambiguous or unreadable spec fails, an empty inventory proves nothing, and the gate
+# runs in every mode (D.222).
+
+[[mutants]]
+id = "stale-accepted"
+file = "policies/runs/mutation_anchors/mutation_anchors.rego"
+before = "anchor.count == 0"
+after = "anchor.count == -1"
+killers = ["tests/test_mutation_anchors.py::test_a_stale_anchor_fails_the_gate"]
+
+[[mutants]]
+id = "ambiguity-accepted"
+file = "policies/runs/mutation_anchors/mutation_anchors.rego"
+before = "anchor.count > 1"
+after = "anchor.count > 2"
+killers = ["tests/test_mutation_anchors.py::test_an_anchor_found_twice_fails_the_gate"]
+
+[[mutants]]
+id = "unreadable-skipped"
+file = "policies/runs/mutation_anchors/mutation_anchors.rego"
+before = "some unread in input.mutation_anchors.unreadable"
+after = "some unread in []"
+killers = ["tests/test_mutation_anchors.py::test_an_unreadable_spec_fails_the_gate"]
+
+[[mutants]]
+id = "nothing-accepted"
+file = "policies/runs/mutation_anchors/mutation_anchors.rego"
+before = "input.mutation_anchors.specs_scanned == 0"
+after = "input.mutation_anchors.specs_scanned == -1"
+killers = ["tests/test_mutation_anchors.py::test_an_empty_inventory_proves_nothing"]
+
+[[mutants]]
+id = "gate-unwired"
+file = "scripts/check_all.py"
+before = 'command=("uv", "run", "python", "scripts/mutation_anchors.py"),'
+after = 'command=("true",),'
+killers = ["tests/test_mutation_anchors.py::test_the_gate_runs_the_anchor_audit_in_every_mode"]

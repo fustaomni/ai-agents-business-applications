@@ -1,0 +1,59 @@
+# contracts/mutations/d107.toml
+# Every vacuous form is seen, every rule fires, and nonempty() refuses nothing (D.107, M40).
+# Rego anchors use \t escapes.
+
+[[mutants]]
+id = "vacuous-allowed"
+file = "policies/runs/assertions/assertions.rego"
+before = "\tsome finding in input.assertions.findings"
+after = "\tsome finding in []"
+killers = ["tests/test_assertion_audit.py::test_an_unpinned_all_is_refused"]
+
+[[mutants]]
+id = "nothing-scanned-allowed"
+file = "policies/runs/assertions/assertions.rego"
+before = "\tinput.assertions.files_scanned == 0"
+after = "\tfalse"
+killers = ["tests/test_assertion_audit.py::test_an_audit_that_scanned_nothing_is_refused"]
+
+[[mutants]]
+id = "loops-unseen"
+file = "scripts/assertion_audit.py"
+before = '        elif isinstance(node, ast.For) and not _pinned(node.iter):'
+after = '        elif False:'
+killers = ["tests/test_assertion_audit.py::test_a_loop_asserting_over_an_unpinned_collection_is_refused"]
+
+[[mutants]]
+id = "negation-unseen"
+file = "scripts/assertion_audit.py"
+before = '    if isinstance(test, ast.UnaryOp) and isinstance(test.op, ast.Not):'
+after = '    if False:'
+killers = ["tests/test_assertion_audit.py::test_an_unpinned_not_any_is_refused"]
+
+[[mutants]]
+id = "literal-unpinned"
+file = "scripts/assertion_audit.py"
+before = '        return len(collection.elts) > 0'
+after = '        return False'
+killers = ["tests/test_assertion_audit.py::test_a_literal_or_nonempty_subject_passes"]
+
+[[mutants]]
+id = "ambiguity-ignored"
+file = "scripts/assertion_audit.py"
+before = '        if occurrences != counts[original]:'
+after = '        if False:'
+killers = ["tests/test_assertion_audit.py::test_an_ambiguous_line_is_left_for_a_person"]
+
+[[mutants]]
+id = "overflow-ignored"
+file = "scripts/assertion_audit.py"
+before = '        if len(replacement.rstrip("\n")) > LINE_LIMIT:'
+after = '        if False:'
+killers = ["tests/test_assertion_audit.py::test_a_pin_that_would_overflow_a_line_is_left_for_a_person"]
+
+[[mutants]]
+id = "nonempty-accepts-empty"
+file = "scripts/nonvacuous.py"
+before = '    if not pinned:'
+after = '    if False:'
+killers = ["tests/test_assertion_audit.py::test_nonempty_refuses_an_empty_subject"]

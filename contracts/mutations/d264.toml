@@ -1,0 +1,30 @@
+# contracts/mutations/d264.toml
+# template:discard removes a project holding only its birth: generated, then its identity.
+
+[[mutants]]
+id = "birth-not-supplied"
+file = "scripts/template_discard.py"
+before = '            "birth_subjects": BIRTH,'
+after = '            "birth_subjects": (),'
+killers = ["tests/test_template_discard.py::test_a_project_holding_only_its_birth_is_discarded"]
+
+[[mutants]]
+id = "subjects-not-observed"
+file = "scripts/template_discard.py"
+before = '            "subjects": subjects,'
+after = '            "subjects": (),'
+killers = ["tests/test_template_discard.py::test_a_project_holding_only_its_birth_is_discarded"]
+
+[[mutants]]
+id = "birth-is-any-prefix"
+file = "policies/runs/template/discard/discard.rego"
+before = "\tinput.template_discard.commits == 2\n\tinput.template_discard.subjects == input.template_discard.birth_subjects"
+after = "\tinput.template_discard.commits >= 2\n\tarray.slice(input.template_discard.subjects, 0, 2) == input.template_discard.birth_subjects"
+killers = ["tests/test_template_discard.py::test_a_birth_followed_by_authored_work_is_refused"]
+
+[[mutants]]
+id = "any-second-commit"
+file = "policies/runs/template/discard/discard.rego"
+before = "\tinput.template_discard.subjects == input.template_discard.birth_subjects"
+after = "\ttrue"
+killers = ["tests/test_template_discard.py::test_a_project_with_authored_commits_is_refused"]

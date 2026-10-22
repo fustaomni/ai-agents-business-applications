@@ -1,0 +1,72 @@
+{
+  "ids": [
+    "template-publish/v1"
+  ],
+  "json_schema": {
+    "additionalProperties": false,
+    "description": "template-publish/v1: a generated project about to be published, as observed.",
+    "properties": {
+      "answers_present": {
+        "title": "Answers Present",
+        "type": "boolean"
+      },
+      "clean": {
+        "title": "Clean",
+        "type": "boolean"
+      },
+      "contract": {
+        "const": "template-publish/v1",
+        "default": "template-publish/v1",
+        "title": "Contract",
+        "type": "string"
+      },
+      "destination": {
+        "title": "Destination",
+        "type": "string"
+      },
+      "has_remote": {
+        "title": "Has Remote",
+        "type": "boolean"
+      },
+      "hooks_installed": {
+        "title": "Hooks Installed",
+        "type": "boolean"
+      },
+      "remote": {
+        "enum": [
+          "absent",
+          "empty",
+          "populated",
+          "unknown"
+        ],
+        "title": "Remote",
+        "type": "string"
+      },
+      "repository": {
+        "pattern": "^[\\w.-]+/[\\w.-]+$",
+        "title": "Repository",
+        "type": "string"
+      },
+      "visibility": {
+        "enum": [
+          "public",
+          "private"
+        ],
+        "title": "Visibility",
+        "type": "string"
+      }
+    },
+    "required": [
+      "destination",
+      "repository",
+      "visibility",
+      "answers_present",
+      "clean",
+      "has_remote",
+      "hooks_installed",
+      "remote"
+    ],
+    "title": "PublishRequest",
+    "type": "object"
+  }
+}

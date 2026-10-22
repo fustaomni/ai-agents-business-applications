@@ -1,0 +1,132 @@
+{
+  "ids": [
+    "auth-login-plan/v1"
+  ],
+  "json_schema": {
+    "$defs": {
+      "Desired": {
+        "additionalProperties": false,
+        "description": "One profile this repository needs, derived from identity.",
+        "properties": {
+          "account_id": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Account Id"
+          },
+          "host": {
+            "title": "Host",
+            "type": "string"
+          },
+          "level": {
+            "enum": [
+              "workspace",
+              "account"
+            ],
+            "title": "Level",
+            "type": "string"
+          },
+          "name": {
+            "title": "Name",
+            "type": "string"
+          }
+        },
+        "required": [
+          "name",
+          "level",
+          "host"
+        ],
+        "title": "Desired",
+        "type": "object"
+      },
+      "Profile": {
+        "description": "One profile as `databricks auth profiles --output json` reports it.",
+        "properties": {
+          "account_id": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Account Id"
+          },
+          "host": {
+            "default": "",
+            "title": "Host",
+            "type": "string"
+          },
+          "name": {
+            "title": "Name",
+            "type": "string"
+          },
+          "valid": {
+            "title": "Valid",
+            "type": "boolean"
+          }
+        },
+        "required": [
+          "name",
+          "valid"
+        ],
+        "title": "Profile",
+        "type": "object"
+      }
+    },
+    "additionalProperties": false,
+    "description": "auth-login-plan/v1: the declared profiles, those observed, and what is to change.",
+    "properties": {
+      "contract": {
+        "const": "auth-login-plan/v1",
+        "default": "auth-login-plan/v1",
+        "title": "Contract",
+        "type": "string"
+      },
+      "desired": {
+        "items": {
+          "$ref": "#/$defs/Desired"
+        },
+        "title": "Desired",
+        "type": "array"
+      },
+      "login": {
+        "items": {
+          "type": "string"
+        },
+        "title": "Login",
+        "type": "array"
+      },
+      "observed": {
+        "items": {
+          "$ref": "#/$defs/Profile"
+        },
+        "title": "Observed",
+        "type": "array"
+      },
+      "stale": {
+        "items": {
+          "type": "string"
+        },
+        "title": "Stale",
+        "type": "array"
+      }
+    },
+    "required": [
+      "desired",
+      "observed",
+      "login",
+      "stale"
+    ],
+    "title": "LoginPlan",
+    "type": "object"
+  }
+}

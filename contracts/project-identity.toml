@@ -1,0 +1,47 @@
+# contracts/project-identity.toml
+# Project identity, declared once (D.52).
+#
+# Code reads these values through scripts/project_identity.py and derives every relation
+# from them. Files that cannot read this file hold the SLOTS below, and identity:set
+# rewrites exactly those lines, so a generated project takes its own identity in one
+# recorded operation -- and policies/identity refuses any copy that lives anywhere else.
+contract = "project-identity/v1"
+name = "cscie103-data-engineering"
+catalog = "cscie103_catalog"
+reader_group = "cscie103_readers"
+ci_principal = "cscie103-ci"
+default_schema = "assignment_01"
+repository = "https://github.com/fustaomni/cscie103-data-engineering"
+workspace_host = "https://dbc-c7e8aa56-e393.cloud.databricks.com"
+account_id = "a0144c7d-8847-4012-b4c2-3880901a4a1c"
+ci_client_id = "223db154-8528-4bdb-b579-866010b8fc1c"
+
+# Paths whose identity is derived, quoted verbatim, or coursework rather than declared.
+exempt = [
+  "contracts/project-identity.toml",
+  "uv.lock",
+  "tests/",
+  "context/",
+  "assignments/",
+  "resources/assignment_",
+  "resources/unity_catalog.yml",
+  # derived provenance: _src_path names the template a project was generated from (D.61)
+  ".copier-answers.yml",
+  # quoted verbatim: the mutants of D.248 change the declared repository line itself
+  "contracts/mutations/d248.toml",
+]
+
+# Lines that cannot read this file. Each renders exactly as the file holds it.
+slots = [
+  { path = "pyproject.toml", line = 'name = "{name}"' },
+  { path = "databricks.yml", line = "  name: {name}" },
+  { path = "databricks.yml", line = "    default: {catalog}" },
+  { path = "databricks.yml", line = "    default: {reader_group}" },
+  { path = "databricks.yml", line = "    default: {default_schema}" },
+  { path = "flake.nix", line = '  description = "{name} toolchain";' },
+  { path = "contracts/environment-versions.json", line = '  "$id": "{repository}/contracts/environment-versions.json",' },
+  { path = "mise.toml", line = "    if r.get('displayName') == '{ci_principal}':" },
+  { path = "mise.toml", line = '''  echo "{ci_principal} not found; run 'mise run bootstrap:identity' first" >&2''' },
+  { path = ".github/workflows/ci.yml", line = "          DATABRICKS_HOST: {workspace_host}" },
+  { path = ".github/workflows/ci.yml", line = "          DATABRICKS_CLIENT_ID: {ci_client_id}" },
+]

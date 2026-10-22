@@ -1,0 +1,31 @@
+# contracts/mutations/d110.toml
+# A seal is checked, continuity is enforced, the seal stays outside the digest, and the gateway
+# seals what it records (D.110). Rego anchors use \t escapes.
+
+[[mutants]]
+id = "seal-unchecked"
+file = "scripts/run_ledger.py"
+before = '        elif _seal_holds(record, keys):'
+after = '        elif True:'
+killers = ["tests/test_ledger_signing.py::test_a_forged_signature_is_refused"]
+
+[[mutants]]
+id = "continuity-ignored"
+file = "policies/runs/ledger/ledger.rego"
+before = "\tsome position in input.ledger.unsigned_after_signing"
+after = "\tsome position in []"
+killers = ["tests/test_ledger_signing.py::test_an_unsigned_record_after_signing_began_is_refused"]
+
+[[mutants]]
+id = "seal-in-digest"
+file = "scripts/run_ledger.py"
+before = '    excluded = {"sha256", "seal"} if record.seq is not None else {"sha256", "seal", "seq"}'
+after = '    excluded = {"sha256"} if record.seq is not None else {"sha256", "seq"}'
+killers = ["tests/test_ledger_signing.py::test_signed_records_verify_and_are_classified_as_signed"]
+
+[[mutants]]
+id = "gateway-unsigned"
+file = "scripts/run_task.py"
+before = '    _summarise(run, append(outcome, ledger=ledger, signer=active), decision)'
+after = '    _summarise(run, append(outcome, ledger=ledger, signer=None), decision)'
+killers = ["tests/test_ledger_signing.py::test_the_gateway_signs_its_records"]

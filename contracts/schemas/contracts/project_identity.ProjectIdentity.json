@@ -1,0 +1,115 @@
+{
+  "ids": [
+    "project-identity/v1"
+  ],
+  "json_schema": {
+    "$defs": {
+      "Slot": {
+        "additionalProperties": false,
+        "properties": {
+          "line": {
+            "minLength": 1,
+            "title": "Line",
+            "type": "string"
+          },
+          "path": {
+            "minLength": 1,
+            "title": "Path",
+            "type": "string"
+          }
+        },
+        "required": [
+          "path",
+          "line"
+        ],
+        "title": "Slot",
+        "type": "object"
+      }
+    },
+    "additionalProperties": false,
+    "description": "project-identity/v1: who this project is, and where files hold it.",
+    "properties": {
+      "account_id": {
+        "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$",
+        "title": "Account Id",
+        "type": "string"
+      },
+      "catalog": {
+        "pattern": "^[a-z][a-z0-9_]*$",
+        "title": "Catalog",
+        "type": "string"
+      },
+      "ci_client_id": {
+        "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$",
+        "title": "Ci Client Id",
+        "type": "string"
+      },
+      "ci_principal": {
+        "pattern": "^[a-z][a-z0-9-]*$",
+        "title": "Ci Principal",
+        "type": "string"
+      },
+      "contract": {
+        "const": "project-identity/v1",
+        "default": "project-identity/v1",
+        "title": "Contract",
+        "type": "string"
+      },
+      "default_schema": {
+        "pattern": "^[a-z][a-z0-9_]*$",
+        "title": "Default Schema",
+        "type": "string"
+      },
+      "exempt": {
+        "items": {
+          "type": "string"
+        },
+        "title": "Exempt",
+        "type": "array"
+      },
+      "name": {
+        "pattern": "^[a-z][a-z0-9-]*$",
+        "title": "Name",
+        "type": "string"
+      },
+      "reader_group": {
+        "pattern": "^[a-z][a-z0-9_]*$",
+        "title": "Reader Group",
+        "type": "string"
+      },
+      "repository": {
+        "pattern": "^https://github\\.com/[\\w.-]+/[\\w.-]+$",
+        "title": "Repository",
+        "type": "string"
+      },
+      "slots": {
+        "items": {
+          "$ref": "#/$defs/Slot"
+        },
+        "minItems": 1,
+        "title": "Slots",
+        "type": "array"
+      },
+      "workspace_host": {
+        "pattern": "^https://[a-z0-9.-]+$",
+        "title": "Workspace Host",
+        "type": "string"
+      }
+    },
+    "required": [
+      "name",
+      "catalog",
+      "reader_group",
+      "ci_principal",
+      "default_schema",
+      "repository",
+      "workspace_host",
+      "account_id",
+      "ci_client_id",
+      "exempt",
+      "slots"
+    ],
+    "title": "ProjectIdentity",
+    "type": "object"
+  }
+}

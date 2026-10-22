@@ -1,0 +1,44 @@
+# contracts/mutations/d25.toml
+# source:apply judges every operation and writes all or nothing (D.25).
+
+[[mutants]]
+id = "refusal-still-writes"
+file = "scripts/source_apply.py"
+before = "    if decision.action != \"proceed\":"
+after = "    if False:"
+killers = ["tests/test_source_apply.py::test_a_spec_with_one_failing_file_writes_nothing"]
+
+[[mutants]]
+id = "anchor-count-ignored"
+file = "policies/runs/source_apply/source_apply.rego"
+before = "\toperation.anchor_count != operation.expected_count\n"
+after = "\tfalse\n"
+killers = ["tests/test_source_apply.py::test_an_anchor_found_twice_is_refused"]
+
+[[mutants]]
+id = "outside-allowed"
+file = "policies/runs/source_apply/source_apply.rego"
+before = "\tnot operation.inside\n"
+after = "\tfalse\n"
+killers = ["tests/test_source_apply.py::test_a_path_outside_the_repository_is_refused"]
+
+[[mutants]]
+id = "line-limit-ignored"
+file = "policies/runs/source_apply/source_apply.rego"
+before = "\toperation.longest_written_python_line > input.source_apply.line_limit\n"
+after = "\tfalse\n"
+killers = ["tests/test_source_apply.py::test_a_written_python_line_over_100_is_refused"]
+
+[[mutants]]
+id = "absent-input-passes"
+file = "policies/runs/source_apply/source_apply.rego"
+before = "\tnot input.source_apply\n"
+after = "\tfalse\n"
+killers = ["tests/test_source_apply.py::test_an_absent_request_is_refused_by_the_policy"]
+
+[[mutants]]
+id = "stdin-ignored"
+file = "scripts/source_apply.py"
+before = "    if args[0] == \"-\":"
+after = "    if False:"
+killers = ["tests/test_source_apply.py::test_a_spec_read_from_stdin_applies"]

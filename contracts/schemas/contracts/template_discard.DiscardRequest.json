@@ -1,0 +1,82 @@
+{
+  "ids": [
+    "template-discard/v1"
+  ],
+  "json_schema": {
+    "additionalProperties": false,
+    "description": "template-discard/v1: a project about to be removed, as observed.",
+    "properties": {
+      "answers_present": {
+        "title": "Answers Present",
+        "type": "boolean"
+      },
+      "birth_subjects": {
+        "default": [],
+        "items": {
+          "type": "string"
+        },
+        "title": "Birth Subjects",
+        "type": "array"
+      },
+      "clean": {
+        "title": "Clean",
+        "type": "boolean"
+      },
+      "commits": {
+        "title": "Commits",
+        "type": "integer"
+      },
+      "contract": {
+        "const": "template-discard/v1",
+        "default": "template-discard/v1",
+        "title": "Contract",
+        "type": "string"
+      },
+      "destination": {
+        "title": "Destination",
+        "type": "string"
+      },
+      "has_remote": {
+        "title": "Has Remote",
+        "type": "boolean"
+      },
+      "is_symlink": {
+        "title": "Is Symlink",
+        "type": "boolean"
+      },
+      "protected": {
+        "title": "Protected",
+        "type": "boolean"
+      },
+      "resolved": {
+        "title": "Resolved",
+        "type": "string"
+      },
+      "safe_removal": {
+        "title": "Safe Removal",
+        "type": "boolean"
+      },
+      "subjects": {
+        "default": [],
+        "items": {
+          "type": "string"
+        },
+        "title": "Subjects",
+        "type": "array"
+      }
+    },
+    "required": [
+      "destination",
+      "resolved",
+      "is_symlink",
+      "answers_present",
+      "has_remote",
+      "commits",
+      "clean",
+      "protected",
+      "safe_removal"
+    ],
+    "title": "DiscardRequest",
+    "type": "object"
+  }
+}

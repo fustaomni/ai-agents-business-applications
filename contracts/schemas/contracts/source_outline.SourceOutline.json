@@ -1,0 +1,88 @@
+{
+  "ids": [
+    "source-outline/v1"
+  ],
+  "json_schema": {
+    "$defs": {
+      "Definition": {
+        "additionalProperties": false,
+        "description": "One definition, as the syntax tree records it.",
+        "properties": {
+          "decorators": {
+            "items": {
+              "type": "string"
+            },
+            "title": "Decorators",
+            "type": "array"
+          },
+          "first_line": {
+            "exclusiveMinimum": 0,
+            "title": "First Line",
+            "type": "integer"
+          },
+          "kind": {
+            "enum": [
+              "function",
+              "async_function",
+              "class",
+              "method",
+              "async_method"
+            ],
+            "title": "Kind",
+            "type": "string"
+          },
+          "last_line": {
+            "exclusiveMinimum": 0,
+            "title": "Last Line",
+            "type": "integer"
+          },
+          "qualified_name": {
+            "title": "Qualified Name",
+            "type": "string"
+          },
+          "signature": {
+            "title": "Signature",
+            "type": "string"
+          }
+        },
+        "required": [
+          "qualified_name",
+          "kind",
+          "signature",
+          "first_line",
+          "last_line",
+          "decorators"
+        ],
+        "title": "Definition",
+        "type": "object"
+      }
+    },
+    "additionalProperties": false,
+    "description": "source-outline/v1: every definition in one file, in file order.",
+    "properties": {
+      "contract": {
+        "const": "source-outline/v1",
+        "default": "source-outline/v1",
+        "title": "Contract",
+        "type": "string"
+      },
+      "definitions": {
+        "items": {
+          "$ref": "#/$defs/Definition"
+        },
+        "title": "Definitions",
+        "type": "array"
+      },
+      "file": {
+        "title": "File",
+        "type": "string"
+      }
+    },
+    "required": [
+      "file",
+      "definitions"
+    ],
+    "title": "SourceOutline",
+    "type": "object"
+  }
+}

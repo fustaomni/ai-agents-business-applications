@@ -1,0 +1,26 @@
+# contracts/publish-expectations.toml
+# THE GATES A PUBLICATION REQUIRES (D.178, R21). Every one must have passed on the gated
+# snapshot, none more and none less. They are the gates the hooks run, which is what the
+# snapshot runs offline; tests/test_publish_policy.py proves the two lists are the same.
+contract = "publish-expectations/v1"
+gates = [
+  "lint",
+  "format",
+  "types (darwin)",
+  "types (linux)",
+  "test",
+  "policy",
+  "policy decisions",
+  "repo hygiene",
+  "secrets (history)",
+  "workflows",
+  "assertions",
+  "evidence",
+  "models",
+  "exemptions",
+  "suppressions",
+  "problems",
+  "mutation anchors",
+  "schemas",
+  "nix contract",
+]

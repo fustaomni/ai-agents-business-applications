@@ -1,0 +1,38 @@
+# contracts/mutations/d180.toml
+# A claim binds its commit, verifies only in its namespace and from a pinned signer, and its
+# custody is read from the key and checked (D.180).
+
+[[mutants]]
+id = "commit-unbound"
+file = "scripts/claim_signing.py"
+before = "    if signed.claim.commit != commit:"
+after = "    if False:"
+killers = ["tests/test_claim_signing.py::test_a_claim_for_another_commit_is_refused"]
+
+[[mutants]]
+id = "namespace-ignored"
+file = "scripts/claim_signing.py"
+before = '        argv = ("ssh-keygen", "-Y", "verify", "-n", NAMESPACE, "-I", principal)'
+after = '        argv = ("ssh-keygen", "-Y", "verify", "-n", "git", "-I", principal)'
+killers = ["tests/test_claim_signing.py::test_a_signature_from_another_namespace_is_refused"]
+
+[[mutants]]
+id = "custody-unchecked"
+file = "scripts/claim_signing.py"
+before = "    if signed.claim.custody != custody_of(signer):"
+after = "    if False:"
+killers = ["tests/test_claim_signing.py::test_a_claim_records_its_key_custody"]
+
+[[mutants]]
+id = "signature-unchecked"
+file = "scripts/claim_signing.py"
+before = "    if not _succeeded(checked):"
+after = "    if False:"
+killers = ["tests/test_claim_signing.py::test_a_signer_outside_the_allowed_signers_is_refused"]
+
+[[mutants]]
+id = "custody-always-software"
+file = "scripts/claim_signing.py"
+before = '    return "security-key" if kind.startswith(SECURITY_KEY_PREFIX) else "software"'
+after = '    return "software"'
+killers = ["tests/test_claim_signing.py::test_a_claim_records_its_key_custody"]

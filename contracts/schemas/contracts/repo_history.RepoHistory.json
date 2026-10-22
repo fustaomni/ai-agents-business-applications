@@ -1,0 +1,107 @@
+{
+  "ids": [
+    "repo-history/v1"
+  ],
+  "json_schema": {
+    "$defs": {
+      "Commit": {
+        "additionalProperties": false,
+        "properties": {
+          "authored_at": {
+            "title": "Authored At",
+            "type": "string"
+          },
+          "files": {
+            "items": {
+              "type": "string"
+            },
+            "title": "Files",
+            "type": "array"
+          },
+          "sha": {
+            "title": "Sha",
+            "type": "string"
+          },
+          "subject": {
+            "title": "Subject",
+            "type": "string"
+          },
+          "trailers": {
+            "items": {
+              "$ref": "#/$defs/Trailer"
+            },
+            "title": "Trailers",
+            "type": "array"
+          }
+        },
+        "required": [
+          "sha",
+          "subject",
+          "authored_at",
+          "trailers",
+          "files"
+        ],
+        "title": "Commit",
+        "type": "object"
+      },
+      "Trailer": {
+        "additionalProperties": false,
+        "properties": {
+          "key": {
+            "title": "Key",
+            "type": "string"
+          },
+          "value": {
+            "title": "Value",
+            "type": "string"
+          }
+        },
+        "required": [
+          "key",
+          "value"
+        ],
+        "title": "Trailer",
+        "type": "object"
+      }
+    },
+    "additionalProperties": false,
+    "description": "repo-history/v1: commits, newest first, with trailers and files.",
+    "properties": {
+      "commits": {
+        "items": {
+          "$ref": "#/$defs/Commit"
+        },
+        "title": "Commits",
+        "type": "array"
+      },
+      "contract": {
+        "const": "repo-history/v1",
+        "default": "repo-history/v1",
+        "title": "Contract",
+        "type": "string"
+      },
+      "count": {
+        "minimum": 0,
+        "title": "Count",
+        "type": "integer"
+      },
+      "limit": {
+        "exclusiveMinimum": 0,
+        "title": "Limit",
+        "type": "integer"
+      },
+      "revision": {
+        "title": "Revision",
+        "type": "string"
+      }
+    },
+    "required": [
+      "revision",
+      "limit",
+      "commits",
+      "count"
+    ],
+    "title": "RepoHistory",
+    "type": "object"
+  }
+}

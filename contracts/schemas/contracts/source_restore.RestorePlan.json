@@ -1,0 +1,60 @@
+{
+  "ids": [
+    "restore-plan/v1"
+  ],
+  "json_schema": {
+    "$defs": {
+      "PathState": {
+        "additionalProperties": false,
+        "properties": {
+          "changed": {
+            "title": "Changed",
+            "type": "boolean"
+          },
+          "in_head": {
+            "title": "In Head",
+            "type": "boolean"
+          },
+          "path": {
+            "title": "Path",
+            "type": "string"
+          }
+        },
+        "required": [
+          "path",
+          "in_head",
+          "changed"
+        ],
+        "title": "PathState",
+        "type": "object"
+      }
+    },
+    "additionalProperties": false,
+    "description": "restore-plan/v1: what a restore would touch, observed before it acts.",
+    "properties": {
+      "apply": {
+        "title": "Apply",
+        "type": "boolean"
+      },
+      "contract": {
+        "const": "restore-plan/v1",
+        "default": "restore-plan/v1",
+        "title": "Contract",
+        "type": "string"
+      },
+      "paths": {
+        "items": {
+          "$ref": "#/$defs/PathState"
+        },
+        "title": "Paths",
+        "type": "array"
+      }
+    },
+    "required": [
+      "paths",
+      "apply"
+    ],
+    "title": "RestorePlan",
+    "type": "object"
+  }
+}

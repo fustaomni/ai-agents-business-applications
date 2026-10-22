@@ -1,0 +1,132 @@
+{
+  "ids": [
+    "source-apply/v1",
+    "source-apply/v2"
+  ],
+  "json_schema": {
+    "$defs": {
+      "Create": {
+        "additionalProperties": false,
+        "properties": {
+          "content": {
+            "title": "Content",
+            "type": "string"
+          },
+          "op": {
+            "const": "create",
+            "title": "Op",
+            "type": "string"
+          },
+          "path": {
+            "minLength": 1,
+            "title": "Path",
+            "type": "string"
+          }
+        },
+        "required": [
+          "op",
+          "path",
+          "content"
+        ],
+        "title": "Create",
+        "type": "object"
+      },
+      "Delete": {
+        "additionalProperties": false,
+        "description": "Remove a file git tracks, so its history still holds what it held (D.232).",
+        "properties": {
+          "op": {
+            "const": "delete",
+            "title": "Op",
+            "type": "string"
+          },
+          "path": {
+            "minLength": 1,
+            "title": "Path",
+            "type": "string"
+          }
+        },
+        "required": [
+          "op",
+          "path"
+        ],
+        "title": "Delete",
+        "type": "object"
+      },
+      "Replace": {
+        "additionalProperties": false,
+        "properties": {
+          "anchor": {
+            "minLength": 1,
+            "title": "Anchor",
+            "type": "string"
+          },
+          "expected_count": {
+            "default": 1,
+            "minimum": 1,
+            "title": "Expected Count",
+            "type": "integer"
+          },
+          "op": {
+            "const": "replace",
+            "title": "Op",
+            "type": "string"
+          },
+          "path": {
+            "minLength": 1,
+            "title": "Path",
+            "type": "string"
+          },
+          "replacement": {
+            "title": "Replacement",
+            "type": "string"
+          }
+        },
+        "required": [
+          "op",
+          "path",
+          "anchor",
+          "replacement"
+        ],
+        "title": "Replace",
+        "type": "object"
+      }
+    },
+    "additionalProperties": false,
+    "description": "source-apply/v2: the operations, applied in order, all or nothing.\n\nv2 ADDED delete (D.232). A union gaining a variant is backward compatible, not forward:\nevery v1 spec still applies, and a v1 spec never deletes, so nothing reading v1 is ever\nhanded an operation it cannot know.",
+    "properties": {
+      "contract": {
+        "enum": [
+          "source-apply/v1",
+          "source-apply/v2"
+        ],
+        "title": "Contract",
+        "type": "string"
+      },
+      "operations": {
+        "items": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/Create"
+            },
+            {
+              "$ref": "#/$defs/Replace"
+            },
+            {
+              "$ref": "#/$defs/Delete"
+            }
+          ]
+        },
+        "minItems": 1,
+        "title": "Operations",
+        "type": "array"
+      }
+    },
+    "required": [
+      "contract",
+      "operations"
+    ],
+    "title": "ApplySpec",
+    "type": "object"
+  }
+}

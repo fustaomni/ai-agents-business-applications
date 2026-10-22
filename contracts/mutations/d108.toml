@@ -1,0 +1,31 @@
+# contracts/mutations/d108.toml
+# A request is judged before anything starts, only a declared task runs, and the summary
+# carries its own ledger record's digest (D.108, M44). Rego anchors use \t escapes.
+
+[[mutants]]
+id = "undeclared-allowed"
+file = "policies/runs/run_request/run_request.rego"
+before = "\tnot request.declared"
+after = "\tfalse"
+killers = ["tests/test_run_gateway.py::test_an_undeclared_task_is_refused_before_it_runs"]
+
+[[mutants]]
+id = "act-before-decide"
+file = "scripts/run_task.py"
+before = '    if decision.action != "proceed":'
+after = '    if False:'
+killers = ["tests/test_run_gateway.py::test_an_undeclared_task_is_refused_before_it_runs"]
+
+[[mutants]]
+id = "summary-unlinked"
+file = "scripts/run_task.py"
+before = '        record_sha256=record.sha256,'
+after = '        record_sha256=record.previous_sha256,'
+killers = ["tests/test_run_gateway.py::test_the_summary_is_a_typed_contract_carrying_its_evidence"]
+
+[[mutants]]
+id = "registry-ignored"
+file = "scripts/run_task.py"
+before = '    known = declared_tasks() if declared is None else declared'
+after = '    known: frozenset[str] = frozenset()'
+killers = ["tests/test_run_gateway.py::test_the_summary_is_a_typed_contract_carrying_its_evidence"]

@@ -1,0 +1,60 @@
+{
+  "ids": [
+    "gate-claim/v1"
+  ],
+  "json_schema": {
+    "additionalProperties": false,
+    "description": "gate-claim/v1: what was gated, under which definition and policy, by which run (R1).",
+    "properties": {
+      "commit": {
+        "minLength": 1,
+        "title": "Commit",
+        "type": "string"
+      },
+      "contract": {
+        "const": "gate-claim/v1",
+        "default": "gate-claim/v1",
+        "title": "Contract",
+        "type": "string"
+      },
+      "custody": {
+        "enum": [
+          "security-key",
+          "software"
+        ],
+        "title": "Custody",
+        "type": "string"
+      },
+      "gates_sha256": {
+        "pattern": "^[0-9a-f]{64}$",
+        "title": "Gates Sha256",
+        "type": "string"
+      },
+      "policy_revision": {
+        "minLength": 1,
+        "title": "Policy Revision",
+        "type": "string"
+      },
+      "run_id": {
+        "minLength": 1,
+        "title": "Run Id",
+        "type": "string"
+      },
+      "tree": {
+        "minLength": 1,
+        "title": "Tree",
+        "type": "string"
+      }
+    },
+    "required": [
+      "commit",
+      "tree",
+      "gates_sha256",
+      "policy_revision",
+      "run_id",
+      "custody"
+    ],
+    "title": "GateClaim",
+    "type": "object"
+  }
+}

@@ -1,0 +1,31 @@
+# contracts/mutations/d113.toml
+# Nested and async definitions are seen, the boundary holds, and a parse failure is evidence
+# rather than a traceback (D.113). Rego anchors use \t escapes.
+
+[[mutants]]
+id = "nested-unseen"
+file = "scripts/source_outline.py"
+before = '        inner = ast.iter_child_nodes(node)'
+after = '        inner = iter(())'
+killers = ["tests/test_source_outline.py::test_every_definition_is_found_with_its_kind_and_span"]
+
+[[mutants]]
+id = "async-collapsed"
+file = "scripts/source_outline.py"
+before = '    if isinstance(node, ast.AsyncFunctionDef):'
+after = '    if False:'
+killers = ["tests/test_source_outline.py::test_every_definition_is_found_with_its_kind_and_span"]
+
+[[mutants]]
+id = "outside-allowed"
+file = "policies/runs/source_outline/source_outline.rego"
+before = "\tnot evidence.inside_repository"
+after = "\tfalse"
+killers = ["tests/test_source_outline.py::test_a_file_outside_the_repository_is_refused"]
+
+[[mutants]]
+id = "unparseable-raised"
+file = "scripts/source_outline.py"
+before = '        except (SyntaxError, UnicodeDecodeError, ValueError):'
+after = '        except UnicodeDecodeError:'
+killers = ["tests/test_source_outline.py::test_an_unparseable_file_is_refused_not_raised"]

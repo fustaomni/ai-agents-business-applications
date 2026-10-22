@@ -1,0 +1,24 @@
+# contracts/mutations/d114.toml
+# An unplanned step and a repeated candidate are refused, and plan:record runs the record verb
+# (D.114).
+
+[[mutants]]
+id = "unplanned-allowed"
+file = "scripts/plan_edit.py"
+before = '    if unplanned:'
+after = '    if False:'
+killers = ["tests/test_plan_trace.py::test_a_candidate_mapped_to_an_unplanned_step_writes_nothing"]
+
+[[mutants]]
+id = "duplicate-allowed"
+file = "scripts/plan_edit.py"
+before = '    if repeated:'
+after = '    if False:'
+killers = ["tests/test_plan_trace.py::test_a_duplicate_candidate_writes_nothing"]
+
+[[mutants]]
+id = "verb-unwired"
+file = "mise.toml"
+before = "run = 'uv run --no-sync python scripts/plan_edit.py record \"${usage_spec?}\"'"
+after = "run = 'uv run --no-sync python scripts/plan_edit.py amend \"${usage_spec?}\"'"
+killers = ["tests/test_plan_trace.py::test_plan_record_is_declared_to_run_the_record_verb"]

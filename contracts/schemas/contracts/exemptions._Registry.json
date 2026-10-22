@@ -1,0 +1,70 @@
+{
+  "ids": [
+    "exemptions/v1"
+  ],
+  "json_schema": {
+    "$defs": {
+      "Exemption": {
+        "additionalProperties": false,
+        "description": "One permission to depart from a rule at one path, until its ISO-8601 expiry date.",
+        "properties": {
+          "expires": {
+            "pattern": "^[0-9]{4}-[0-9]{2}-[0-9]{2}$",
+            "title": "Expires",
+            "type": "string"
+          },
+          "owner": {
+            "minLength": 1,
+            "title": "Owner",
+            "type": "string"
+          },
+          "path": {
+            "minLength": 1,
+            "title": "Path",
+            "type": "string"
+          },
+          "reason": {
+            "minLength": 1,
+            "title": "Reason",
+            "type": "string"
+          },
+          "rule": {
+            "minLength": 1,
+            "title": "Rule",
+            "type": "string"
+          }
+        },
+        "required": [
+          "rule",
+          "path",
+          "reason",
+          "owner",
+          "expires"
+        ],
+        "title": "Exemption",
+        "type": "object"
+      }
+    },
+    "additionalProperties": false,
+    "properties": {
+      "contract": {
+        "const": "exemptions/v1",
+        "title": "Contract",
+        "type": "string"
+      },
+      "exemptions": {
+        "default": [],
+        "items": {
+          "$ref": "#/$defs/Exemption"
+        },
+        "title": "Exemptions",
+        "type": "array"
+      }
+    },
+    "required": [
+      "contract"
+    ],
+    "title": "_Registry",
+    "type": "object"
+  }
+}

@@ -1,0 +1,19 @@
+# contracts/mutations/d87.toml
+# A branch is published against an explicit lease, never forced, and a protected branch never
+# reaches the publication (D.87). The push arguments it first proved are publish_push's now
+# (D.173, D.174). Its --force-if-includes check is retired: an explicit lease read from the
+# remote never consults a remote-tracking ref, which is what that check guarded.
+
+[[mutants]]
+id = "lease-dropped"
+file = "scripts/publish_push.py"
+before = '        f"--force-with-lease=refs/heads/{branch}:{expected}",'
+after = '        "--force",'
+killers = ["tests/test_publish_push.py::test_a_moved_remote_is_refused_by_the_lease"]
+
+[[mutants]]
+id = "protected-published"
+file = "scripts/pr.py"
+before = "    if branch in PROTECTED:"
+after = "    if False:"
+killers = ["tests/test_pr_push.py::test_a_protected_branch_is_never_published"]

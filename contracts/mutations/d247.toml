@@ -1,0 +1,23 @@
+# contracts/mutations/d247.toml
+# template:new's git reaches GitHub over SSH and never prompts, proven through Copier's own git channel.
+
+[[mutants]]
+id = "plumbum-env-skipped"
+file = "scripts/template_new.py"
+before = "        with local.env(**wanted):"
+after = "        with local.env():"
+killers = ["tests/test_template_new.py::test_copiers_git_never_prompts"]
+
+[[mutants]]
+id = "rewrite-reversed"
+file = "scripts/template_new.py"
+before = '        wanted[f"GIT_CONFIG_KEY_{index}"] = f"url.{replacement}.insteadOf"'
+after = '        wanted[f"GIT_CONFIG_KEY_{index}"] = f"url.{original}.insteadOf"'
+killers = ["tests/test_template_new.py::test_copiers_git_sees_the_ssh_rewrite"]
+
+[[mutants]]
+id = "prompt-guard-off"
+file = "scripts/template_new.py"
+before = '        "GIT_TERMINAL_PROMPT": "0",'
+after = '        "GIT_TERMINAL_PROMPT": "1",'
+killers = ["tests/test_template_new.py::test_copiers_git_never_prompts"]

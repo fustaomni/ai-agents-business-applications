@@ -1,0 +1,63 @@
+{
+  "ids": [
+    "raw-parse-inventory/v1"
+  ],
+  "json_schema": {
+    "$defs": {
+      "RawParse": {
+        "additionalProperties": false,
+        "properties": {
+          "call": {
+            "minLength": 1,
+            "title": "Call",
+            "type": "string"
+          },
+          "line": {
+            "exclusiveMinimum": 0,
+            "title": "Line",
+            "type": "integer"
+          },
+          "path": {
+            "minLength": 1,
+            "title": "Path",
+            "type": "string"
+          }
+        },
+        "required": [
+          "path",
+          "line",
+          "call"
+        ],
+        "title": "RawParse",
+        "type": "object"
+      }
+    },
+    "additionalProperties": false,
+    "properties": {
+      "contract": {
+        "const": "raw-parse-inventory/v1",
+        "default": "raw-parse-inventory/v1",
+        "title": "Contract",
+        "type": "string"
+      },
+      "files_scanned": {
+        "exclusiveMinimum": 0,
+        "title": "Files Scanned",
+        "type": "integer"
+      },
+      "uses": {
+        "items": {
+          "$ref": "#/$defs/RawParse"
+        },
+        "title": "Uses",
+        "type": "array"
+      }
+    },
+    "required": [
+      "files_scanned",
+      "uses"
+    ],
+    "title": "ParseInventory",
+    "type": "object"
+  }
+}

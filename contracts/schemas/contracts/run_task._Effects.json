@@ -1,0 +1,28 @@
+{
+  "ids": [
+    "task-effects/v1"
+  ],
+  "json_schema": {
+    "additionalProperties": false,
+    "properties": {
+      "contract": {
+        "const": "task-effects/v1",
+        "title": "Contract",
+        "type": "string"
+      },
+      "read_only": {
+        "items": {
+          "type": "string"
+        },
+        "title": "Read Only",
+        "type": "array"
+      }
+    },
+    "required": [
+      "contract",
+      "read_only"
+    ],
+    "title": "_Effects",
+    "type": "object"
+  }
+}

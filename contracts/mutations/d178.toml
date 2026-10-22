@@ -1,0 +1,38 @@
+# contracts/mutations/d178.toml
+# Every declared gate must run and pass, exactly; the runs decide, not the snapshot's claim;
+# and the decision is recorded before anything is pushed (D.178).
+
+[[mutants]]
+id = "unobserved-accepted"
+file = "policies/runs/publish/publish.rego"
+before = "not name in _ran"
+after = "false"
+killers = ["tests/test_publish_policy.py::test_a_missing_declared_gate_is_unknown"]
+
+[[mutants]]
+id = "failure-counted-as-pass"
+file = "scripts/publish_policy.py"
+before = 'PASSING = frozenset({"executed_passed", "reused"})'
+after = 'PASSING = frozenset({"executed_passed", "reused", "executed_failed"})'
+killers = ["tests/test_publish_policy.py::test_a_supplied_verdict_is_recomputed"]
+
+[[mutants]]
+id = "decision-unrecorded"
+file = "scripts/publish_push.py"
+before = "    record(_decision_outcome(found, verdict, decision))"
+after = "    pass"
+killers = ["tests/test_publish_policy.py::test_the_decision_is_recorded_before_the_push"]
+
+[[mutants]]
+id = "decision-unenforced"
+file = "scripts/publish_push.py"
+before = '    if decision.action != "proceed":'
+after = "    if False:"
+killers = ["tests/test_publish_policy.py::test_a_supplied_verdict_is_recomputed"]
+
+[[mutants]]
+id = "passed-set-unchecked"
+file = "policies/runs/publish/publish.rego"
+before = "_passed != _expected"
+after = "false"
+killers = ["tests/test_publish_policy.py::test_the_passed_set_must_equal_the_declared_gates"]

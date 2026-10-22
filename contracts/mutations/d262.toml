@@ -1,0 +1,23 @@
+# contracts/mutations/d262.toml
+# deps:remove takes one package out of the lock and changes nothing else (D.262).
+
+[[mutants]]
+id = "undeclared-allowed"
+file = "policies/runs/deps_remove/deps_remove.rego"
+before = "\tinput.deps_remove.declared_before == false"
+after = "\tfalse"
+killers = ["tests/test_deps_remove.py::test_a_package_not_in_the_project_is_refused"]
+
+[[mutants]]
+id = "beyond-allowed"
+file = "policies/runs/deps_remove/deps_remove.rego"
+before = "\tnot name in input.deps_remove.exclusive"
+after = "\tfalse"
+killers = ["tests/test_deps_remove.py::test_any_other_locked_change_is_refused"]
+
+[[mutants]]
+id = "shared-counted-exclusive"
+file = "scripts/deps_remove.py"
+before = "    exclusive = _reach([package], needs) - _reach(declared - {package}, needs)"
+after = "    exclusive = _reach([package], needs)"
+killers = ["tests/test_deps_remove.py::test_any_other_locked_change_is_refused"]

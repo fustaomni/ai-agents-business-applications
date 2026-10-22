@@ -1,0 +1,42 @@
+# contracts/mutations/d142.toml
+# Evidence contracts hold observations only (D.142). Each mutant is a way the audit could
+# pass while no longer seeing what it exists to see.
+
+[[mutants]]
+id = "conclusion-unseen"
+file = "scripts/evidence_audit.py"
+before = '            if _concludes(field):'
+after = '            if False:'
+killers = ["tests/test_evidence_audit.py::test_a_conclusion_field_in_evidence_is_found"]
+
+[[mutants]]
+id = "nested-unfollowed"
+file = "scripts/evidence_audit.py"
+before = '                    yield from self.audit(inner.id, file, seen)'
+after = '                    pass'
+killers = ["tests/test_evidence_audit.py::test_a_nested_model_is_audited_too"]
+
+[[mutants]]
+id = "unresolved-ignored"
+file = "scripts/evidence_audit.py"
+before = '            if name is None:'
+after = '            if False:'
+killers = ["tests/test_evidence_audit.py::test_an_unresolved_argument_is_refused"]
+
+[[mutants]]
+id = "tuple-unpacking-dropped"
+file = "scripts/evidence_audit.py"
+before = '                    if name in names:'
+after = '                    if False:'
+killers = [
+  "tests/test_evidence_audit.py::test_a_contract_unpacked_from_an_annotated_tuple_is_resolved",
+]
+
+[[mutants]]
+id = "policy-ignores-conclusions"
+file = "policies/runs/evidence/evidence.rego"
+before = "\tfinding.kind == \"conclusion\""
+after = "\tfalse"
+killers = [
+  "tests/test_evidence_audit.py::test_the_audit_refuses_a_conclusion_through_its_policy",
+]

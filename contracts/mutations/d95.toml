@@ -1,0 +1,31 @@
+# contracts/mutations/d95.toml
+# Every grant is matched exactly against the closed allow-list, environment included; no
+# suppression is honoured; write-all is always seen (D.95). Rego anchors use \t escapes.
+
+[[mutants]]
+id = "unlisted-allowed"
+file = "policies/runs/workflows/workflows.rego"
+before = "\tnot _listed(grant)"
+after = "\tfalse"
+killers = ["tests/test_workflow_governance.py::test_a_job_level_id_token_not_in_the_allow_list_is_refused"]
+
+[[mutants]]
+id = "environment-ignored"
+file = "policies/runs/workflows/workflows.rego"
+before = "\tallowance.environment == grant.environment"
+after = "\ttrue"
+killers = ["tests/test_workflow_governance.py::test_an_allowed_id_token_without_its_environment_is_refused"]
+
+[[mutants]]
+id = "suppression-ignored"
+file = "scripts/workflow_audit.py"
+before = '            if SUPPRESSION.search(line):'
+after = '            if False:'
+killers = ["tests/test_workflow_governance.py::test_an_inline_zizmor_ignore_is_refused"]
+
+[[mutants]]
+id = "write-all-dropped"
+file = "scripts/workflow_audit.py"
+before = '        scope, access = "*", value.removesuffix("-all")'
+after = '        return []'
+killers = ["tests/test_workflow_governance.py::test_a_write_all_workflow_is_refused"]

@@ -1,0 +1,23 @@
+# contracts/mutations/d101.toml
+# A published or undeterminable HEAD is never amended, and an allowed amend really amends (D.101).
+
+[[mutants]]
+id = "published-allowed"
+file = "scripts/commit.py"
+before = '    if amend and published is not False:'
+after = '    if False:'
+killers = ["tests/test_commit_amend.py::test_a_published_commit_is_refused_before_git_stages"]
+
+[[mutants]]
+id = "amend-dropped"
+file = "scripts/commit.py"
+before = '        code, err = git(["commit", "--file", draft.name, *(["--amend"] if amend else [])])'
+after = '        code, err = git(["commit", "--file", draft.name])'
+killers = ["tests/test_commit_amend.py::test_an_unpushed_commit_is_amended"]
+
+[[mutants]]
+id = "unknown-treated-as-local"
+file = "scripts/commit.py"
+before = '    return {0: True, 1: False}.get(code)'
+after = '    return {0: True}.get(code, False)'
+killers = ["tests/test_commit_amend.py::test_an_undeterminable_publication_is_refused"]

@@ -1,0 +1,23 @@
+# contracts/mutations/d249.toml
+# identity:set reports only the files whose bytes it changed, and its usage names every field its spec takes.
+
+[[mutants]]
+id = "identical-rewritten"
+file = "scripts/project_identity.py"
+before = '        path: text for path, text in planned.items() if path.read_text(encoding="utf-8") != text'
+after = "        path: text for path, text in planned.items() if True"
+killers = ["tests/test_project_identity.py::test_identity_set_reports_only_the_files_it_changed"]
+
+[[mutants]]
+id = "planned-reported"
+file = "scripts/project_identity.py"
+before = "    return tuple(sorted(str(path.relative_to(root)) for path in changed))"
+after = "    return tuple(sorted(str(path.relative_to(root)) for path in planned))"
+killers = ["tests/test_project_identity.py::test_identity_set_reports_only_the_files_it_changed"]
+
+[[mutants]]
+id = "usage-six-fields"
+file = "mise.toml"
+before = "usage = 'arg \"<spec>\" help=\"TOML spec: name, catalog, reader_group, ci_principal, default_schema, repository, workspace_host, account_id, ci_client_id\"'"
+after = "usage = 'arg \"<spec>\" help=\"TOML spec: name, catalog, reader_group, ci_principal, default_schema, repository\"'"
+killers = ["tests/test_project_identity.py::test_identity_set_usage_names_every_spec_field"]

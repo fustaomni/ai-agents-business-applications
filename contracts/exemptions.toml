@@ -1,0 +1,15 @@
+# contracts/exemptions.toml
+# EVERY EXEMPTION FROM A PROJECT RULE, AS DATA (D.174, R55.4): the rule, the path it applies to,
+# why, who owns it, and when it lapses. Code consults this file by rule and path; audit:exemptions
+# fails the gate on one that has expired or names a path that no longer exists.
+#
+# EXPIRY IS AN ISO-8601 STRING, NOT A TOML DATE: this repository's TOML stays JSON-shaped, which
+# source:apply enforces, and every value here crosses a JSON boundary into evidence and policy.
+contract = "exemptions/v1"
+
+[[exemptions]]
+rule = "hook:pre-push"
+path = "scripts/publish_push.py"
+reason = "pr gates the exact snapshot itself before it connects (D.171); the pre-push hook would run the same offline gates again on the same commit"
+owner = "D.174"
+expires = "2027-01-13"

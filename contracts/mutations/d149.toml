@@ -1,0 +1,33 @@
+# contracts/mutations/d149.toml
+# A mutating task never runs twice at once in one worktree (D.149). The append lock and seq
+# are proven by d149-lock.toml; these are the ways the refusal could pass while refusing nothing.
+
+[[mutants]]
+id = "duplicate-not-refused"
+file = "policies/runs/run_request/run_request.rego"
+before = "\tnot request.exclusive"
+after = "\tfalse"
+killers = ["tests/test_duplicate_execution.py::test_the_policy_refuses_a_mutating_task_it_cannot_hold"]
+
+[[mutants]]
+id = "lock-never-taken"
+file = "scripts/run_task.py"
+before = '        fcntl.flock(handle, fcntl.LOCK_EX | fcntl.LOCK_NB)'
+after = '        pass'
+killers = [
+  "tests/test_duplicate_execution.py::test_a_mutating_task_already_running_is_refused_before_it_starts",
+]
+
+[[mutants]]
+id = "read-only-ignored"
+file = "scripts/run_task.py"
+before = '    mutating = task not in reads'
+after = '    mutating = True'
+killers = ["tests/test_duplicate_execution.py::test_a_read_only_task_runs_while_the_lock_is_held"]
+
+[[mutants]]
+id = "worktree-not-in-key"
+file = "scripts/run_task.py"
+before = '    key = hashlib.sha256(f"{root.resolve()}\0{task}".encode()).hexdigest()[:24]'
+after = '    key = hashlib.sha256(f"{task}".encode()).hexdigest()[:24]'
+killers = ["tests/test_duplicate_execution.py::test_each_worktree_has_its_own_lock"]

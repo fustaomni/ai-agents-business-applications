@@ -1,0 +1,65 @@
+# contracts/mutations/d228.toml
+# A superseded unmerged branch is retired only by a task that archives its tip first (D.228).
+
+[[mutants]]
+id = "absent-input-passes"
+file = "policies/runs/branches_retire/branches_retire.rego"
+before = "\tnot input.branches_retire\n"
+after = "\tfalse\n"
+killers = ["tests/test_branches_retire.py::test_an_absent_request_is_refused_by_the_policy"]
+
+[[mutants]]
+id = "protected-passes"
+file = "policies/runs/branches_retire/branches_retire.rego"
+before = "\tinput.branches_retire.branch in input.branches_retire.protected\n"
+after = "\tfalse\n"
+killers = ["tests/test_branches_retire.py::test_a_protected_branch_is_never_retired"]
+
+[[mutants]]
+id = "held-passes"
+file = "policies/runs/branches_retire/branches_retire.rego"
+before = "\tinput.branches_retire.held_by != null\n"
+after = "\tfalse\n"
+killers = ["tests/test_branches_retire.py::test_a_branch_a_worktree_holds_is_never_retired"]
+
+[[mutants]]
+id = "step-unknown-passes"
+file = "policies/runs/branches_retire/branches_retire.rego"
+before = "\tinput.branches_retire.step_known == false\n"
+after = "\tfalse\n"
+killers = ["tests/test_branches_retire.py::test_a_step_the_plan_does_not_know_is_refused"]
+
+[[mutants]]
+id = "archive-overwritten"
+file = "policies/runs/branches_retire/branches_retire.rego"
+before = "\tinput.branches_retire.archived == true\n"
+after = "\tfalse\n"
+killers = ["tests/test_branches_retire.py::test_an_existing_archive_is_never_overwritten"]
+
+[[mutants]]
+id = "dry-run-retires"
+file = "scripts/branches_retire.py"
+before = "    if not execute:\n"
+after = "    if False:\n"
+killers = ["tests/test_branches_retire.py::test_a_dry_run_retires_nothing"]
+
+[[mutants]]
+id = "deleted-before-archived"
+file = "scripts/branches_retire.py"
+before = "        (\"tag the tip\", lambda: target.tag(archive, observed.tip, why)),\n        (\"push the tag\", lambda: target.push_tag(archive)),\n        (\"delete the local branch\", lambda: target.delete_local(branch)),\n"
+after = "        (\"delete the local branch\", lambda: target.delete_local(branch)),\n        (\"tag the tip\", lambda: target.tag(archive, observed.tip, why)),\n        (\"push the tag\", lambda: target.push_tag(archive)),\n"
+killers = ["tests/test_branches_retire.py::test_a_retired_branch_is_archived_before_it_is_deleted"]
+
+[[mutants]]
+id = "origin-branch-kept"
+file = "scripts/branches_retire.py"
+before = "    if observed.on_origin:\n"
+after = "    if False:\n"
+killers = ["tests/test_branches_retire.py::test_a_retired_branch_is_archived_before_it_is_deleted"]
+
+[[mutants]]
+id = "advice-reverted"
+file = "scripts/worktree.py"
+before = "        f\"mise run run branches:retire {branch} <step>\",\n"
+after = "        \"deliberately with `git branch -D`.\",\n"
+killers = ["tests/test_branches_retire.py::test_the_unmerged_refusal_names_branches_retire"]

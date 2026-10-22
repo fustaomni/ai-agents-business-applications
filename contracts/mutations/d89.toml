@@ -1,0 +1,31 @@
+# contracts/mutations/d89.toml
+# A raw tool task is never governed, every task off the spine is refused owned or not (M37),
+# and a script task follows its module's layer verdict (D.89). Rego anchors use \t escapes.
+
+[[mutants]]
+id = "tool-counted-governed"
+file = "scripts/capability_audit.py"
+before = '                governed=module is not None and _on_spine(module),'
+after = '                governed=True,'
+killers = ["tests/test_capability_audit.py::test_a_raw_tool_task_is_refused_off_the_spine"]
+
+[[mutants]]
+id = "off-spine-allowed"
+file = "policies/runs/capabilities/capabilities.rego"
+before = "\tnot task.governed"
+after = "\tfalse"
+killers = ["tests/test_capability_audit.py::test_a_raw_tool_task_is_refused_off_the_spine"]
+
+[[mutants]]
+id = "ownership-admits"
+file = "policies/runs/capabilities/capabilities.rego"
+before = "\tnot task.governed"
+after = "\tnot task.governed\n\ttask.owner == null"
+killers = ["tests/test_capability_audit.py::test_an_owned_task_is_still_refused_until_it_is_governed"]
+
+[[mutants]]
+id = "layer-verdict-ignored"
+file = "scripts/capability_audit.py"
+before = '    return module.imports_spine and module.returns_enforce and not module.exits'
+after = '    return True'
+killers = ["tests/test_capability_audit.py::test_a_script_task_follows_its_modules_layer_verdict"]

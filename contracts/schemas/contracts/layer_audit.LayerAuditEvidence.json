@@ -1,0 +1,95 @@
+{
+  "ids": [
+    "layer-audit-evidence/v1"
+  ],
+  "json_schema": {
+    "$defs": {
+      "ModuleLayers": {
+        "additionalProperties": false,
+        "description": "What one module is observed to do. Facts only; the policy judges them.",
+        "properties": {
+          "entry_point": {
+            "title": "Entry Point",
+            "type": "boolean"
+          },
+          "exits": {
+            "items": {
+              "type": "integer"
+            },
+            "title": "Exits",
+            "type": "array"
+          },
+          "imports_spine": {
+            "title": "Imports Spine",
+            "type": "boolean"
+          },
+          "owner": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Owner"
+          },
+          "owner_committed": {
+            "default": false,
+            "title": "Owner Committed",
+            "type": "boolean"
+          },
+          "owner_planned": {
+            "default": false,
+            "title": "Owner Planned",
+            "type": "boolean"
+          },
+          "owner_upstream": {
+            "default": false,
+            "title": "Owner Upstream",
+            "type": "boolean"
+          },
+          "path": {
+            "title": "Path",
+            "type": "string"
+          },
+          "returns_enforce": {
+            "title": "Returns Enforce",
+            "type": "boolean"
+          }
+        },
+        "required": [
+          "path",
+          "entry_point",
+          "imports_spine",
+          "returns_enforce",
+          "exits"
+        ],
+        "title": "ModuleLayers",
+        "type": "object"
+      }
+    },
+    "additionalProperties": false,
+    "properties": {
+      "contract": {
+        "const": "layer-audit-evidence/v1",
+        "default": "layer-audit-evidence/v1",
+        "title": "Contract",
+        "type": "string"
+      },
+      "modules": {
+        "items": {
+          "$ref": "#/$defs/ModuleLayers"
+        },
+        "title": "Modules",
+        "type": "array"
+      }
+    },
+    "required": [
+      "modules"
+    ],
+    "title": "LayerAuditEvidence",
+    "type": "object"
+  }
+}

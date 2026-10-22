@@ -1,0 +1,9 @@
+# contracts/mutations/d231.toml
+# The plan's ordering rule is judged at the head, the state a merge will produce (D.231).
+
+[[mutants]]
+id = "plan-judged-on-develop"
+file = "scripts/evaluate_policies.py"
+before = "PLAN_REF = \"HEAD\"\n"
+after = "PLAN_REF = \"origin/develop\"\n"
+killers = ["tests/test_evaluate_policies.py::test_the_plan_is_judged_at_the_head"]

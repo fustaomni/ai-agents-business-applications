@@ -1,0 +1,38 @@
+# contracts/mutations/d161.toml
+# Custody, status and window are checked at use; seals verify only while their key was valid;
+# and at most one key is active (D.161).
+
+[[mutants]]
+id = "custody-unchecked"
+file = "scripts/signing.py"
+before = "    if not _in_custody(root, home):"
+after = "    if False:"
+killers = ["tests/test_key_lifecycle.py::test_an_exposed_key_never_signs"]
+
+[[mutants]]
+id = "status-ignored"
+file = "scripts/signing.py"
+before = "    return key.status == \"active\" and valid_at(key, at)"
+after = "    return valid_at(key, at)"
+killers = ["tests/test_key_lifecycle.py::test_a_revoked_or_retired_key_never_signs"]
+
+[[mutants]]
+id = "expiry-ignored"
+file = "scripts/signing.py"
+before = "    if key.not_after is not None and at >= key.not_after:"
+after = "    if False:"
+killers = ["tests/test_key_lifecycle.py::test_a_key_outside_its_window_never_signs"]
+
+[[mutants]]
+id = "revocation-unseen-by-verify"
+file = "scripts/run_ledger.py"
+before = "            if _sealed_while_valid(record, lifecycle or {}):"
+after = "            if True:"
+killers = ["tests/test_key_lifecycle.py::test_a_seal_made_after_revocation_does_not_verify"]
+
+[[mutants]]
+id = "two-active-accepted"
+file = "scripts/signing.py"
+before = "        if sum(key.status == \"active\" for key in self.keys) > 1:"
+after = "        if False:"
+killers = ["tests/test_key_lifecycle.py::test_two_active_keys_are_refused"]

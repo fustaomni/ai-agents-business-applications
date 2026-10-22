@@ -1,0 +1,66 @@
+{
+  "ids": [
+    "task-run/v1"
+  ],
+  "json_schema": {
+    "additionalProperties": false,
+    "description": "task-run/v1: one task run through the wrapper.",
+    "properties": {
+      "arguments": {
+        "items": {
+          "type": "string"
+        },
+        "title": "Arguments",
+        "type": "array"
+      },
+      "contract": {
+        "const": "task-run/v1",
+        "default": "task-run/v1",
+        "title": "Contract",
+        "type": "string"
+      },
+      "duration_seconds": {
+        "minimum": 0,
+        "title": "Duration Seconds",
+        "type": "number"
+      },
+      "exit_code": {
+        "title": "Exit Code",
+        "type": "integer"
+      },
+      "output_lines": {
+        "minimum": 0,
+        "title": "Output Lines",
+        "type": "integer"
+      },
+      "output_sha256": {
+        "pattern": "^[0-9a-f]{64}$",
+        "title": "Output Sha256",
+        "type": "string"
+      },
+      "tail": {
+        "items": {
+          "type": "string"
+        },
+        "title": "Tail",
+        "type": "array"
+      },
+      "task": {
+        "minLength": 1,
+        "title": "Task",
+        "type": "string"
+      }
+    },
+    "required": [
+      "task",
+      "arguments",
+      "exit_code",
+      "duration_seconds",
+      "output_lines",
+      "output_sha256",
+      "tail"
+    ],
+    "title": "TaskRun",
+    "type": "object"
+  }
+}

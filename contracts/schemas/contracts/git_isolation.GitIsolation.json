@@ -1,0 +1,38 @@
+{
+  "ids": [
+    "git-isolation/v1"
+  ],
+  "json_schema": {
+    "additionalProperties": false,
+    "description": "git-isolation/v1: git's repository-local variables, and which are present.",
+    "properties": {
+      "contract": {
+        "const": "git-isolation/v1",
+        "default": "git-isolation/v1",
+        "title": "Contract",
+        "type": "string"
+      },
+      "local_variables": {
+        "items": {
+          "type": "string"
+        },
+        "minItems": 1,
+        "title": "Local Variables",
+        "type": "array"
+      },
+      "present": {
+        "items": {
+          "type": "string"
+        },
+        "title": "Present",
+        "type": "array"
+      }
+    },
+    "required": [
+      "local_variables",
+      "present"
+    ],
+    "title": "GitIsolation",
+    "type": "object"
+  }
+}

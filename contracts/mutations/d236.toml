@@ -1,0 +1,9 @@
+# contracts/mutations/d236.toml
+# pr names its pull request from the branch's head commit, so a branch of merges can be published.
+
+[[mutants]]
+id = "fill-restored"
+file = "scripts/pr.py"
+before = '"--title", title, "--body", body'
+after = '"--fill"'
+killers = ["tests/test_pr_title.py::test_a_pull_request_is_named_from_its_head_commit"]

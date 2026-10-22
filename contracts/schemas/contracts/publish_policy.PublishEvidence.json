@@ -1,0 +1,63 @@
+{
+  "ids": [
+    "publish-evidence/v1"
+  ],
+  "json_schema": {
+    "additionalProperties": false,
+    "description": "publish-evidence/v1: what was gated, and how each gate ended, as a test result (R36).",
+    "properties": {
+      "commit": {
+        "title": "Commit",
+        "type": "string"
+      },
+      "contract": {
+        "const": "publish-evidence/v1",
+        "default": "publish-evidence/v1",
+        "title": "Contract",
+        "type": "string"
+      },
+      "expected": {
+        "items": {
+          "type": "string"
+        },
+        "title": "Expected",
+        "type": "array"
+      },
+      "failed_tests": {
+        "items": {
+          "type": "string"
+        },
+        "title": "Failed Tests",
+        "type": "array"
+      },
+      "passed_tests": {
+        "items": {
+          "type": "string"
+        },
+        "title": "Passed Tests",
+        "type": "array"
+      },
+      "tree": {
+        "title": "Tree",
+        "type": "string"
+      },
+      "warned_tests": {
+        "default": [],
+        "items": {
+          "type": "string"
+        },
+        "title": "Warned Tests",
+        "type": "array"
+      }
+    },
+    "required": [
+      "commit",
+      "tree",
+      "expected",
+      "passed_tests",
+      "failed_tests"
+    ],
+    "title": "PublishEvidence",
+    "type": "object"
+  }
+}

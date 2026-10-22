@@ -1,0 +1,16 @@
+# contracts/mutations/d103.toml
+# A finished refresh follows its lock, and a lock that will not install fails it (D.103).
+
+[[mutants]]
+id = "lock-not-followed"
+file = "scripts/worktree.py"
+before = '    _settle_environment(path, before)'
+after = '    pass'
+killers = ["tests/test_worktree_refresh.py::test_a_finished_refresh_follows_the_lock"]
+
+[[mutants]]
+id = "broken-install-accepted"
+file = "scripts/worktree.py"
+before = '    if synced.lock_changed and not synced.installed:'
+after = '    if False:'
+killers = ["tests/test_worktree_refresh.py::test_a_lock_that_will_not_install_fails_the_refresh"]

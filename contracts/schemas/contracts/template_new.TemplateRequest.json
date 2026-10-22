@@ -1,0 +1,56 @@
+{
+  "ids": [
+    "template-request/v1"
+  ],
+  "json_schema": {
+    "additionalProperties": false,
+    "description": "template-request/v1: what would be generated, from where, and what is there.",
+    "properties": {
+      "contract": {
+        "const": "template-request/v1",
+        "default": "template-request/v1",
+        "title": "Contract",
+        "type": "string"
+      },
+      "destination": {
+        "title": "Destination",
+        "type": "string"
+      },
+      "destination_empty": {
+        "title": "Destination Empty",
+        "type": "boolean"
+      },
+      "destination_exists": {
+        "title": "Destination Exists",
+        "type": "boolean"
+      },
+      "inside_source": {
+        "title": "Inside Source",
+        "type": "boolean"
+      },
+      "ref": {
+        "title": "Ref",
+        "type": "string"
+      },
+      "source": {
+        "title": "Source",
+        "type": "string"
+      },
+      "transport": {
+        "title": "Transport",
+        "type": "string"
+      }
+    },
+    "required": [
+      "source",
+      "transport",
+      "ref",
+      "destination",
+      "destination_exists",
+      "destination_empty",
+      "inside_source"
+    ],
+    "title": "TemplateRequest",
+    "type": "object"
+  }
+}

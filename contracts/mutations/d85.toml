@@ -1,0 +1,31 @@
+# contracts/mutations/d85.toml
+# A claim verifies only when signed, untampered, and bound to unchanged bytes; every applied
+# spec stores one (D.85). Literal strings: nothing in an anchor is escaped.
+
+[[mutants]]
+id = "digest-unchecked"
+file = "scripts/claim.py"
+before = '        if actual != subject.digest.get("sha256"):'
+after = '        if False:'
+killers = ["tests/test_claim.py::test_a_changed_artifact_fails_its_subject_digest"]
+
+[[mutants]]
+id = "signature-unchecked"
+file = "scripts/claim.py"
+before = '        envelope.verify(list(keys), 1)'
+after = '        pass'
+killers = ["tests/test_claim.py::test_a_tampered_payload_is_refused"]
+
+[[mutants]]
+id = "unsigned-reads-signed"
+file = "scripts/claim.py"
+before = '        return bool(self.signatures)'
+after = '        return True'
+killers = ["tests/test_claim.py::test_an_unsigned_claim_is_never_verified_as_signed"]
+
+[[mutants]]
+id = "claim-not-stored"
+file = "scripts/source_apply.py"
+before = '    stored = store(sealed, base / ATTESTATIONS, f"{SUBJECT}-{decision.verdict_digest[:12]}")'
+after = '    stored = base / ATTESTATIONS'
+killers = ["tests/test_claim.py::test_an_applied_spec_leaves_a_claim_on_what_it_wrote"]

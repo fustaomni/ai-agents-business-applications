@@ -1,0 +1,9 @@
+# contracts/mutations/d76.toml
+# D.76's proof must kill its own mutant: a guard that no longer makes the file read-only.
+
+[[mutants]]
+id = "not-read-only"
+file = "tests/test_mutation_check.py"
+before = "target.chmod(0o444)"
+after = "target.chmod(0o644)"
+killers = ["tests/test_mutation_check.py::test_a_read_only_file_is_unwritable_to_this_process"]

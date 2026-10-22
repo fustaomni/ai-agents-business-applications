@@ -1,0 +1,38 @@
+# contracts/mutations/d80.toml
+# Each measure that keeps a killer from a terminal is shown necessary (D.80). stdin is
+# proven at the boundary: pytest's fd capture empties fd 0 inside every test.
+
+[[mutants]]
+id = "prompt-allowed"
+file = "scripts/mutation_check.py"
+before = "\"GIT_TERMINAL_PROMPT\": \"0\","
+after = "\"GIT_TERMINAL_PROMPT_OFF\": \"0\","
+killers = ["tests/test_mutation_check.py::test_every_killer_runs_without_a_terminal"]
+
+[[mutants]]
+id = "credential-manager-allowed"
+file = "scripts/mutation_check.py"
+before = "\"GCM_INTERACTIVE\": \"never\","
+after = "\"GCM_INTERACTIVE_OFF\": \"never\","
+killers = ["tests/test_mutation_check.py::test_every_killer_runs_without_a_terminal"]
+
+[[mutants]]
+id = "ssh-may-ask"
+file = "scripts/mutation_check.py"
+before = "-oBatchMode=yes"
+after = "-oBatchMode=no"
+killers = ["tests/test_mutation_check.py::test_every_killer_runs_without_a_terminal"]
+
+[[mutants]]
+id = "stdin-inherited"
+file = "scripts/mutation_check.py"
+before = "            stdin=subprocess.DEVNULL,\n"
+after = ""
+killers = ["tests/test_mutation_check.py::test_every_killer_is_given_an_empty_stdin_and_its_own_session"]
+
+[[mutants]]
+id = "terminal-shared"
+file = "scripts/mutation_check.py"
+before = "start_new_session=True"
+after = "start_new_session=False"
+killers = ["tests/test_mutation_check.py::test_every_killer_runs_without_a_terminal", "tests/test_mutation_check.py::test_every_killer_is_given_an_empty_stdin_and_its_own_session"]

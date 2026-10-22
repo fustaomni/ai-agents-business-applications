@@ -1,0 +1,79 @@
+{
+  "ids": [
+    "gate-report/v1"
+  ],
+  "json_schema": {
+    "$defs": {
+      "GateRun": {
+        "additionalProperties": false,
+        "description": "How one gate ended (R3): executed and passed or failed, timed out, or reused.",
+        "properties": {
+          "duration_seconds": {
+            "title": "Duration Seconds",
+            "type": "number"
+          },
+          "name": {
+            "title": "Name",
+            "type": "string"
+          },
+          "output": {
+            "title": "Output",
+            "type": "string"
+          },
+          "provenance": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Provenance"
+          },
+          "state": {
+            "enum": [
+              "executed_passed",
+              "executed_failed",
+              "timed_out",
+              "reused"
+            ],
+            "title": "State",
+            "type": "string"
+          }
+        },
+        "required": [
+          "name",
+          "state",
+          "duration_seconds",
+          "output"
+        ],
+        "title": "GateRun",
+        "type": "object"
+      }
+    },
+    "additionalProperties": false,
+    "description": "gate-report/v1: every gate run of one check, written with --report for a caller (D.178).",
+    "properties": {
+      "contract": {
+        "const": "gate-report/v1",
+        "default": "gate-report/v1",
+        "title": "Contract",
+        "type": "string"
+      },
+      "gates": {
+        "items": {
+          "$ref": "#/$defs/GateRun"
+        },
+        "title": "Gates",
+        "type": "array"
+      }
+    },
+    "required": [
+      "gates"
+    ],
+    "title": "GateReport",
+    "type": "object"
+  }
+}

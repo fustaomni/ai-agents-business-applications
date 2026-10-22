@@ -1,0 +1,83 @@
+{
+  "ids": [
+    "evidence-inventory/v1"
+  ],
+  "json_schema": {
+    "$defs": {
+      "EvidenceFinding": {
+        "additionalProperties": false,
+        "description": "A field named for a conclusion, or an evaluate() argument that could not be resolved.",
+        "properties": {
+          "contract": {
+            "title": "Contract",
+            "type": "string"
+          },
+          "field": {
+            "title": "Field",
+            "type": "string"
+          },
+          "kind": {
+            "enum": [
+              "conclusion",
+              "unresolved"
+            ],
+            "title": "Kind",
+            "type": "string"
+          },
+          "line": {
+            "title": "Line",
+            "type": "integer"
+          },
+          "path": {
+            "title": "Path",
+            "type": "string"
+          }
+        },
+        "required": [
+          "path",
+          "line",
+          "contract",
+          "field",
+          "kind"
+        ],
+        "title": "EvidenceFinding",
+        "type": "object"
+      }
+    },
+    "additionalProperties": false,
+    "description": "evidence-inventory/v1: files scanned, evidence contracts found, and every finding.",
+    "properties": {
+      "contract": {
+        "const": "evidence-inventory/v1",
+        "default": "evidence-inventory/v1",
+        "title": "Contract",
+        "type": "string"
+      },
+      "contracts": {
+        "items": {
+          "type": "string"
+        },
+        "title": "Contracts",
+        "type": "array"
+      },
+      "files_scanned": {
+        "title": "Files Scanned",
+        "type": "integer"
+      },
+      "findings": {
+        "items": {
+          "$ref": "#/$defs/EvidenceFinding"
+        },
+        "title": "Findings",
+        "type": "array"
+      }
+    },
+    "required": [
+      "files_scanned",
+      "contracts",
+      "findings"
+    ],
+    "title": "EvidenceInventory",
+    "type": "object"
+  }
+}

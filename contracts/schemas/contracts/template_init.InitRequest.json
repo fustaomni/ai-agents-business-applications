@@ -1,0 +1,41 @@
+{
+  "ids": [
+    "template-init/v1"
+  ],
+  "json_schema": {
+    "additionalProperties": false,
+    "description": "template-init/v1: where a generated project would become a repository, as observed.",
+    "properties": {
+      "already_repository": {
+        "title": "Already Repository",
+        "type": "boolean"
+      },
+      "answers_present": {
+        "title": "Answers Present",
+        "type": "boolean"
+      },
+      "contract": {
+        "const": "template-init/v1",
+        "default": "template-init/v1",
+        "title": "Contract",
+        "type": "string"
+      },
+      "destination": {
+        "title": "Destination",
+        "type": "string"
+      },
+      "inside_source": {
+        "title": "Inside Source",
+        "type": "boolean"
+      }
+    },
+    "required": [
+      "destination",
+      "answers_present",
+      "already_repository",
+      "inside_source"
+    ],
+    "title": "InitRequest",
+    "type": "object"
+  }
+}

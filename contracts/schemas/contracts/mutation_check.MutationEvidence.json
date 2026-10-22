@@ -1,0 +1,117 @@
+{
+  "ids": [
+    "mutation-evidence/v2"
+  ],
+  "json_schema": {
+    "$defs": {
+      "KillerRun": {
+        "additionalProperties": false,
+        "properties": {
+          "duration_seconds": {
+            "title": "Duration Seconds",
+            "type": "number"
+          },
+          "exit_code": {
+            "title": "Exit Code",
+            "type": "integer"
+          },
+          "output_sha256": {
+            "title": "Output Sha256",
+            "type": "string"
+          },
+          "tail": {
+            "default": [],
+            "items": {
+              "type": "string"
+            },
+            "title": "Tail",
+            "type": "array"
+          },
+          "test": {
+            "title": "Test",
+            "type": "string"
+          }
+        },
+        "required": [
+          "test",
+          "exit_code",
+          "duration_seconds",
+          "output_sha256"
+        ],
+        "title": "KillerRun",
+        "type": "object"
+      },
+      "MutantEvidence": {
+        "additionalProperties": false,
+        "properties": {
+          "anchor_found_once": {
+            "title": "Anchor Found Once",
+            "type": "boolean"
+          },
+          "file": {
+            "title": "File",
+            "type": "string"
+          },
+          "id": {
+            "title": "Id",
+            "type": "string"
+          },
+          "runs": {
+            "items": {
+              "$ref": "#/$defs/KillerRun"
+            },
+            "title": "Runs",
+            "type": "array"
+          }
+        },
+        "required": [
+          "id",
+          "file",
+          "anchor_found_once",
+          "runs"
+        ],
+        "title": "MutantEvidence",
+        "type": "object"
+      }
+    },
+    "additionalProperties": false,
+    "properties": {
+      "baseline": {
+        "items": {
+          "$ref": "#/$defs/KillerRun"
+        },
+        "title": "Baseline",
+        "type": "array"
+      },
+      "contract": {
+        "const": "mutation-evidence/v2",
+        "default": "mutation-evidence/v2",
+        "title": "Contract",
+        "type": "string"
+      },
+      "mutants": {
+        "items": {
+          "$ref": "#/$defs/MutantEvidence"
+        },
+        "title": "Mutants",
+        "type": "array"
+      },
+      "tree_listed": {
+        "title": "Tree Listed",
+        "type": "boolean"
+      },
+      "tree_untouched": {
+        "title": "Tree Untouched",
+        "type": "boolean"
+      }
+    },
+    "required": [
+      "tree_listed",
+      "baseline",
+      "mutants",
+      "tree_untouched"
+    ],
+    "title": "MutationEvidence",
+    "type": "object"
+  }
+}

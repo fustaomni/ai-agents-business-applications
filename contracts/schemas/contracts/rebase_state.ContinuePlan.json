@@ -1,0 +1,47 @@
+{
+  "ids": [
+    "continue-plan/v1"
+  ],
+  "json_schema": {
+    "additionalProperties": false,
+    "description": "continue-plan/v1: what a continue would act on, observed before it acts.",
+    "properties": {
+      "contract": {
+        "const": "continue-plan/v1",
+        "default": "continue-plan/v1",
+        "title": "Contract",
+        "type": "string"
+      },
+      "operation": {
+        "enum": [
+          "rebase",
+          "merge",
+          "none"
+        ],
+        "title": "Operation",
+        "type": "string"
+      },
+      "unmerged": {
+        "items": {
+          "type": "string"
+        },
+        "title": "Unmerged",
+        "type": "array"
+      },
+      "with_markers": {
+        "items": {
+          "type": "string"
+        },
+        "title": "With Markers",
+        "type": "array"
+      }
+    },
+    "required": [
+      "operation",
+      "unmerged",
+      "with_markers"
+    ],
+    "title": "ContinuePlan",
+    "type": "object"
+  }
+}

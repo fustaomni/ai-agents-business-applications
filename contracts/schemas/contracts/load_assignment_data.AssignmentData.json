@@ -1,0 +1,48 @@
+{
+  "ids": [
+    "assignment-data/v1"
+  ],
+  "json_schema": {
+    "additionalProperties": false,
+    "description": "assignment-data/v1: what one assignment loads, and where each file lands.",
+    "properties": {
+      "contract": {
+        "const": "assignment-data/v1",
+        "title": "Contract",
+        "type": "string"
+      },
+      "files": {
+        "additionalProperties": {
+          "type": "string"
+        },
+        "minProperties": 1,
+        "title": "Files",
+        "type": "object"
+      },
+      "schema": {
+        "minLength": 1,
+        "title": "Schema",
+        "type": "string"
+      },
+      "staging": {
+        "minLength": 1,
+        "title": "Staging",
+        "type": "string"
+      },
+      "volume": {
+        "minLength": 1,
+        "title": "Volume",
+        "type": "string"
+      }
+    },
+    "required": [
+      "contract",
+      "schema",
+      "volume",
+      "staging",
+      "files"
+    ],
+    "title": "AssignmentData",
+    "type": "object"
+  }
+}

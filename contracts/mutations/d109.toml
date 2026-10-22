@@ -1,0 +1,31 @@
+# contracts/mutations/d109.toml
+# Only a published key signs, an exposed key is refused, and provisioning publishes and protects
+# the key it makes (D.109). Rego anchors use \t escapes.
+
+[[mutants]]
+id = "unlisted-signs"
+file = "scripts/signing.py"
+before = '    return signer if signer.public_key.keyid in listed else None'
+after = '    return signer'
+killers = ["tests/test_signing.py::test_a_key_the_repository_does_not_list_never_signs"]
+
+[[mutants]]
+id = "exposed-allowed"
+file = "policies/runs/signing_keys/signing_keys.rego"
+before = "\tstate.mode != \"0o600\""
+after = "\tfalse"
+killers = ["tests/test_signing.py::test_a_world_readable_key_is_refused"]
+
+[[mutants]]
+id = "publish-skipped"
+file = "scripts/signing.py"
+before = '                _publish(root, public)'
+after = '                pass'
+killers = ["tests/test_signing.py::test_provisioning_creates_a_private_key_outside_the_repository"]
+
+[[mutants]]
+id = "permissive-mode"
+file = "scripts/signing.py"
+before = 'OWNER_MODE = 0o600'
+after = 'OWNER_MODE = 0o644'
+killers = ["tests/test_signing.py::test_provisioning_creates_a_private_key_outside_the_repository"]

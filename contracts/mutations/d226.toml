@@ -1,0 +1,23 @@
+# contracts/mutations/d226.toml
+# source:search reads every pattern in a declared dialect, never the platform's default (D.226).
+
+[[mutants]]
+id = "extended-reads-as-basic"
+file = "scripts/source_search.py"
+before = "\"extended\": \"--extended-regexp\""
+after = "\"extended\": \"--basic-regexp\""
+killers = ["tests/test_source_search.py::test_an_alternation_finds_what_each_branch_finds"]
+
+[[mutants]]
+id = "fixed-reads-as-regex"
+file = "scripts/source_search.py"
+before = "\"fixed\": \"--fixed-strings\""
+after = "\"fixed\": \"--extended-regexp\""
+killers = ["tests/test_source_search.py::test_a_literal_is_searched_as_a_fixed_string"]
+
+[[mutants]]
+id = "dialect-not-recorded"
+file = "scripts/source_search.py"
+before = "        dialect=dialect,\n"
+after = ""
+killers = ["tests/test_source_search.py::test_a_literal_is_searched_as_a_fixed_string"]

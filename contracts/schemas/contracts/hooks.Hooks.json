@@ -1,0 +1,60 @@
+{
+  "ids": [
+    "hooks/v1"
+  ],
+  "json_schema": {
+    "$defs": {
+      "HookJob": {
+        "additionalProperties": false,
+        "properties": {
+          "hook": {
+            "minLength": 1,
+            "title": "Hook",
+            "type": "string"
+          },
+          "name": {
+            "title": "Name",
+            "type": "string"
+          },
+          "run": {
+            "title": "Run",
+            "type": "string"
+          }
+        },
+        "required": [
+          "hook",
+          "name",
+          "run"
+        ],
+        "title": "HookJob",
+        "type": "object"
+      }
+    },
+    "additionalProperties": false,
+    "properties": {
+      "auto_install": {
+        "title": "Auto Install",
+        "type": "boolean"
+      },
+      "contract": {
+        "const": "hooks/v1",
+        "default": "hooks/v1",
+        "title": "Contract",
+        "type": "string"
+      },
+      "jobs": {
+        "items": {
+          "$ref": "#/$defs/HookJob"
+        },
+        "title": "Jobs",
+        "type": "array"
+      }
+    },
+    "required": [
+      "auto_install",
+      "jobs"
+    ],
+    "title": "Hooks",
+    "type": "object"
+  }
+}

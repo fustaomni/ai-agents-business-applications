@@ -1,0 +1,38 @@
+# contracts/mutations/d219.toml
+# Each directive is found as its tool reads it, strings are never directives, the registry
+# decides, and the policy refuses what it does not cover (D.219).
+
+[[mutants]]
+id = "noqa-unseen"
+file = "scripts/suppression_audit.py"
+before = '    ("noqa", re.compile(r"#\s*noqa\b", re.IGNORECASE)),'
+after = '    ("noqa", re.compile(r"#\s*NEVER-MATCHES")),'
+killers = ["tests/test_suppression_audit.py::test_an_unregistered_inline_suppression_is_refused"]
+
+[[mutants]]
+id = "strings-read-as-comments"
+file = "scripts/suppression_audit.py"
+before = "    return [(token.start[0], token.string) for token in tokens if token.type == tokenize.COMMENT]"
+after = "    return [(token.start[0], token.string) for token in tokens if token.type in (tokenize.COMMENT, tokenize.STRING)]"
+killers = ["tests/test_suppression_audit.py::test_a_string_that_mentions_a_directive_is_not_one"]
+
+[[mutants]]
+id = "type-ignore-anywhere"
+file = "scripts/suppression_audit.py"
+before = '    ("type-ignore", re.compile(r"^#\s*type:\s*ignore\b")),'
+after = '    ("type-ignore", re.compile(r"#\s*type:\s*ignore\b")),'
+killers = ["tests/test_suppression_audit.py::test_type_ignore_counts_only_at_a_comments_start"]
+
+[[mutants]]
+id = "registry-ignored"
+file = "scripts/suppression_audit.py"
+before = '    registered = active(f"suppression:{kind}", relative, root=root) is not None'
+after = "    registered = False"
+killers = ["tests/test_suppression_audit.py::test_a_registered_suppression_stands"]
+
+[[mutants]]
+id = "policy-accepts-unregistered"
+file = "policies/runs/suppressions/suppressions.rego"
+before = "not found.registered"
+after = "false"
+killers = ["tests/test_suppression_audit.py::test_an_unregistered_inline_suppression_is_refused"]

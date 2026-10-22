@@ -1,0 +1,31 @@
+# contracts/mutations/d149-lock.toml
+# Slice 1 of D.149: the append lock proven, and a sequence assigned under it that leaves
+# history's digests untouched. d149.toml lands with the slice that completes the step.
+
+[[mutants]]
+id = "lock-removed"
+file = "scripts/run_ledger.py"
+before = '        fcntl.flock(handle, fcntl.LOCK_EX)'
+after = '        pass'
+killers = ["tests/test_ledger_lock.py::test_an_append_waits_while_another_holds_the_lock"]
+
+[[mutants]]
+id = "seq-off-by-one"
+file = "scripts/run_ledger.py"
+before = '            seq=len(lines) + 1,'
+after = '            seq=len(lines) + 2,'
+killers = ["tests/test_ledger_lock.py::test_concurrent_processes_keep_one_linear_chain"]
+
+[[mutants]]
+id = "seq-unchecked"
+file = "scripts/run_ledger.py"
+before = '        placed = record.contract != "run-record/v3" or record.seq == position'
+after = '        placed = True'
+killers = ["tests/test_ledger_lock.py::test_a_record_out_of_sequence_breaks_the_chain"]
+
+[[mutants]]
+id = "seq-in-legacy-digest"
+file = "scripts/run_ledger.py"
+before = '    excluded = {"sha256", "seal"} if record.seq is not None else {"sha256", "seal", "seq"}'
+after = '    excluded = {"sha256", "seal"}'
+killers = ["tests/test_ledger_lock.py::test_a_record_from_before_seq_keeps_its_digest_and_its_place"]

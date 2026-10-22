@@ -1,0 +1,31 @@
+# contracts/mutations/d67.toml
+# Each D.67 proof kills its own mutant, every killer judged alone (D.75): a library that
+# exits again, and each typed error swapped for the wrong cause.
+
+[[mutants]]
+id = "hooks-exits-again"
+file = "scripts/hooks.py"
+before = "raise ToolFailedError("
+after = "raise SystemExit("
+killers = ["tests/test_layer_audit.py::test_libraries_modules_conform"]
+
+[[mutants]]
+id = "wrong-shape-typed-as-tool-failure"
+file = "scripts/databricks_cli.py"
+before = "raise ToolOutputUnreadableError("
+after = "raise ToolFailedError("
+killers = ["tests/test_databricks_cli.py::test_an_unreadable_answer_refuses_naming_the_call", "tests/test_policy_inputs.py::test_cli_output_is_validated_before_policy_reads_it"]
+
+[[mutants]]
+id = "failed-call-typed-as-unreadable"
+file = "scripts/databricks_cli.py"
+before = "raise ToolFailedError("
+after = "raise ToolOutputUnreadableError("
+killers = ["tests/test_databricks_cli.py::test_a_failed_call_refuses"]
+
+[[mutants]]
+id = "missing-develop-typed-as-tool-failure"
+file = "scripts/repo_state.py"
+before = "raise PreconditionError("
+after = "raise ToolFailedError("
+killers = ["tests/test_integration_ref.py::test_a_checkout_with_neither_refuses"]

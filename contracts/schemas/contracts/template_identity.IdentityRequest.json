@@ -1,0 +1,42 @@
+{
+  "ids": [
+    "template-identity/v1"
+  ],
+  "json_schema": {
+    "additionalProperties": false,
+    "description": "template-identity/v1: a project about to take its identity, as observed.",
+    "properties": {
+      "answers_present": {
+        "title": "Answers Present",
+        "type": "boolean"
+      },
+      "commits": {
+        "minimum": 0,
+        "title": "Commits",
+        "type": "integer"
+      },
+      "contract": {
+        "const": "template-identity/v1",
+        "default": "template-identity/v1",
+        "title": "Contract",
+        "type": "string"
+      },
+      "destination": {
+        "title": "Destination",
+        "type": "string"
+      },
+      "has_remote": {
+        "title": "Has Remote",
+        "type": "boolean"
+      }
+    },
+    "required": [
+      "destination",
+      "answers_present",
+      "commits",
+      "has_remote"
+    ],
+    "title": "IdentityRequest",
+    "type": "object"
+  }
+}

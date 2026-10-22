@@ -1,0 +1,24 @@
+# contracts/mutations/d147-ratchet.toml
+# Slice 1 of D.147: the ratchet refuses new and stale entries, and Contract is strict.
+# d147.toml lands with the slice that completes the step.
+
+[[mutants]]
+id = "new-direct-subclass-accepted"
+file = "scripts/model_audit.py"
+before = '    findings = [ModelFinding(entry=entry, kind="unbaselined") for entry in sorted(found - listed)]'
+after = '    findings = []'
+killers = ["tests/test_model_audit.py::test_a_new_direct_subclass_is_refused"]
+
+[[mutants]]
+id = "stale-entry-kept"
+file = "scripts/model_audit.py"
+before = '    findings += [ModelFinding(entry=entry, kind="stale") for entry in sorted(listed - found)]'
+after = '    findings += []'
+killers = ["tests/test_model_audit.py::test_a_baseline_entry_no_longer_true_is_stale"]
+
+[[mutants]]
+id = "contract-lax"
+file = "scripts/contract_base.py"
+before = '    model_config = ConfigDict(frozen=True, extra="forbid", strict=True)'
+after = '    model_config = ConfigDict(frozen=True, extra="forbid")'
+killers = ["tests/test_model_audit.py::test_contract_is_strict_and_reading_is_lax"]

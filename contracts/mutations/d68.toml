@@ -1,0 +1,44 @@
+# contracts/mutations/d68.toml
+# The template and identity tasks on the spine: each proof kills its own mutant (D.68).
+
+[[mutants]]
+id = "unknown-reads-pass"
+file = "scripts/spine.py"
+before = "        evidence_digest=\"\",\n        outcome=\"unknown\",\n        rules=(),\n        reason=reason,"
+after = "        evidence_digest=\"\",\n        outcome=\"pass\",\n        rules=(),\n        reason=reason,"
+killers = ["tests/test_spine.py::test_an_unreachable_verdict_halts_with_its_reason"]
+
+[[mutants]]
+id = "schema-always-passes"
+file = "scripts/spine.py"
+before = "        outcome=\"pass\" if error is None else \"fail\","
+after = "        outcome=\"pass\","
+killers = ["tests/test_spine.py::test_a_request_failing_its_schema_is_refused_by_a_named_rule"]
+
+[[mutants]]
+id = "halt-announced-as-success"
+file = "scripts/command_outcome.py"
+before = "\"halt\": \"failed\""
+after = "\"halt\": \"success\""
+killers = ["tests/test_command_outcome.py::test_the_envelope_is_derived_from_the_decision"]
+
+[[mutants]]
+id = "usage-exits-again"
+file = "scripts/template_new.py"
+before = "        stopped = halted(SUBJECT, ENTRYPOINT, POLICY, usage)"
+after = "        raise SystemExit(usage)"
+killers = ["tests/test_layer_audit.py::test_template_modules_conform"]
+
+[[mutants]]
+id = "refusal-ignored"
+file = "scripts/template_new.py"
+before = "    if decision.action != \"proceed\":"
+after = "    if False:"
+killers = ["tests/test_template_new.py::test_the_task_refuses_before_generating"]
+
+[[mutants]]
+id = "unjudged-reported-as-nothing"
+file = "scripts/project_identity.py"
+before = "    if scanned.outcome == \"unknown\":"
+after = "    if False:"
+killers = ["tests/test_project_identity.py::test_an_unjudged_identity_scan_halts_instead_of_reporting_nothing_left"]

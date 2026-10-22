@@ -1,0 +1,46 @@
+# contracts/mutations/d86.toml
+# nix:lock-update keeps a refreshed lock only if policy allows, restores it otherwise, and
+# updates only the input the CI checker judges (D.86). Rego anchors are basic strings with \t
+# escapes: a literal tab does not survive a terminal paste, so none is ever pasted.
+
+[[mutants]]
+id = "refusal-not-restored"
+file = "scripts/nix_lock_update.py"
+before = '        lock.write_bytes(original)  # refused: the old lock, byte for byte'
+after = '        pass'
+killers = ["tests/test_nix_lock_update.py::test_an_update_still_older_than_30_days_is_refused_and_restored"]
+
+[[mutants]]
+id = "failure-not-restored"
+file = "scripts/nix_lock_update.py"
+before = '        lock.write_bytes(original)  # failed: the old lock, byte for byte'
+after = '        pass'
+killers = ["tests/test_nix_lock_update.py::test_a_failed_update_halts_and_restores"]
+
+[[mutants]]
+id = "stale-allowed"
+file = "policies/runs/nix_lock/nix_lock.rego"
+before = "\tinput.nix_lock.age_days >= input.nix_lock.max_age_days"
+after = "\tfalse"
+killers = ["tests/test_nix_lock_update.py::test_an_update_still_older_than_30_days_is_refused_and_restored"]
+
+[[mutants]]
+id = "owner-unchecked"
+file = "policies/runs/nix_lock/nix_lock.rego"
+before = "\tlower(input.nix_lock.owner) != \"nixos\""
+after = "\tfalse"
+killers = ["tests/test_nix_lock_update.py::test_a_lock_off_the_nixos_owner_is_refused_and_restored"]
+
+[[mutants]]
+id = "every-input-updated"
+file = "scripts/nix_lock_update.py"
+before = '    code, _ = nix(["flake", "update", INPUT])'
+after = '    code, _ = nix(["flake", "update"])'
+killers = ["tests/test_nix_lock_update.py::test_only_the_judged_input_is_updated"]
+
+[[mutants]]
+id = "absent-input-passes"
+file = "policies/runs/nix_lock/nix_lock.rego"
+before = "\tnot input.nix_lock"
+after = "\tfalse"
+killers = ["tests/test_nix_lock_update.py::test_an_absent_request_is_refused_by_the_policy"]

@@ -1,0 +1,38 @@
+# contracts/mutations/d39.toml
+# runs.git_spawns refuses a bare git subprocess and git handed to a generic runner, and
+# accepts one whose environment comes from gitenv (D.39).
+
+[[mutants]]
+id = "unscrubbed-accepted"
+file = "policies/runs/git_spawns/git_spawns.rego"
+before = "\tnot spawn.env_from_gitenv"
+after = "\tfalse"
+killers = ["tests/test_git_subprocesses.py::test_a_bare_git_subprocess_is_refused"]
+
+[[mutants]]
+id = "helper-unseen"
+file = "scripts/git_spawn_audit.py"
+before = "    if call.args and _is_git(call.args[0]):"
+after = "    if False:"
+killers = ["tests/test_git_subprocesses.py::test_git_handed_to_a_generic_runner_is_refused"]
+
+[[mutants]]
+id = "environment-unread"
+file = "scripts/git_spawn_audit.py"
+before = "        if keyword.arg == \"env\":"
+after = "        if keyword.arg == \"cwd\":"
+killers = ["tests/test_git_subprocesses.py::test_a_scrubbed_git_subprocess_is_accepted"]
+
+[[mutants]]
+id = "push-inherits-the-caller"
+file = "scripts/publish_push.py"
+before = '    code, porcelain = pusher(argv, root, _hookless({**scrubbed_env(), **extra_env}))'
+after = '    code, porcelain = pusher(argv, root, _hookless({**__import__("os").environ, **extra_env}))'
+killers = ["tests/test_publish_push.py::test_the_push_never_inherits_a_repository_override"]
+
+[[mutants]]
+id = "push-guard-removed"
+file = "tests/conftest.py"
+before = '    monkeypatch.setattr(pr, "_publish", refuse)'
+after = "    pass"
+killers = ["tests/test_pr_push_failure.py::test_a_test_cannot_reach_the_real_publication"]

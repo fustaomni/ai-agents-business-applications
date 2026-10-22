@@ -1,0 +1,150 @@
+{
+  "ids": [
+    "requirement-matrix/v1"
+  ],
+  "json_schema": {
+    "$defs": {
+      "Requirement": {
+        "additionalProperties": false,
+        "description": "One row: a step or decision, its decided state, and what traces it.",
+        "properties": {
+          "id": {
+            "pattern": "^[0-9A-Z]+\\.[0-9A-Z]+$",
+            "title": "Id",
+            "type": "string"
+          },
+          "justified_by": {
+            "items": {
+              "type": "string"
+            },
+            "title": "Justified By",
+            "type": "array"
+          },
+          "kind": {
+            "enum": [
+              "step",
+              "decision"
+            ],
+            "title": "Kind",
+            "type": "string"
+          },
+          "referenced_by": {
+            "items": {
+              "type": "string"
+            },
+            "title": "Referenced By",
+            "type": "array"
+          },
+          "state": {
+            "anyOf": [
+              {
+                "enum": [
+                  "done",
+                  "unknown",
+                  "in_progress",
+                  "ready",
+                  "blocked"
+                ],
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "State"
+          },
+          "title": {
+            "minLength": 1,
+            "title": "Title",
+            "type": "string"
+          }
+        },
+        "required": [
+          "id",
+          "title",
+          "kind",
+          "state",
+          "justified_by",
+          "referenced_by"
+        ],
+        "title": "Requirement",
+        "type": "object"
+      },
+      "TracedCommit": {
+        "additionalProperties": false,
+        "description": "One commit on the ref, and whether anything authorises it.",
+        "properties": {
+          "cited": {
+            "title": "Cited",
+            "type": "boolean"
+          },
+          "merge": {
+            "title": "Merge",
+            "type": "boolean"
+          },
+          "sha": {
+            "minLength": 1,
+            "title": "Sha",
+            "type": "string"
+          },
+          "steps": {
+            "items": {
+              "type": "string"
+            },
+            "title": "Steps",
+            "type": "array"
+          },
+          "subject": {
+            "title": "Subject",
+            "type": "string"
+          }
+        },
+        "required": [
+          "sha",
+          "subject",
+          "merge",
+          "steps",
+          "cited"
+        ],
+        "title": "TracedCommit",
+        "type": "object"
+      }
+    },
+    "additionalProperties": false,
+    "description": "requirement-matrix/v1: derived from the plan, trace, status and commits -- never by hand.",
+    "properties": {
+      "commits": {
+        "items": {
+          "$ref": "#/$defs/TracedCommit"
+        },
+        "title": "Commits",
+        "type": "array"
+      },
+      "contract": {
+        "const": "requirement-matrix/v1",
+        "default": "requirement-matrix/v1",
+        "title": "Contract",
+        "type": "string"
+      },
+      "ref": {
+        "minLength": 1,
+        "title": "Ref",
+        "type": "string"
+      },
+      "requirements": {
+        "items": {
+          "$ref": "#/$defs/Requirement"
+        },
+        "title": "Requirements",
+        "type": "array"
+      }
+    },
+    "required": [
+      "ref",
+      "requirements",
+      "commits"
+    ],
+    "title": "RequirementMatrix",
+    "type": "object"
+  }
+}

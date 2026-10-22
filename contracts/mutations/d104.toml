@@ -1,0 +1,31 @@
+# contracts/mutations/d104.toml
+# A failed poll says why, a standing failure lists every reason, a good poll resets the count,
+# and the registration wait keeps its reasons too (D.104).
+
+[[mutants]]
+id = "reason-dropped"
+file = "scripts/pr.py"
+before = '                f"poll failed ({consecutive_failures}/{POLL_FAILURE_THRESHOLD}): {observed.reason}",'
+after = '                f"poll failed ({consecutive_failures}/{POLL_FAILURE_THRESHOLD}); still waiting",'
+killers = ["tests/test_pr_progress.py::test_a_failed_poll_says_why"]
+
+[[mutants]]
+id = "failures-not-listed"
+file = "scripts/pr.py"
+before = '                    "a standing failure rather than a blip: " + "; ".join(failures)'
+after = '                    "a standing failure rather than a blip"'
+killers = ["tests/test_pr_progress.py::test_a_standing_failure_refuses_with_every_reason"]
+
+[[mutants]]
+id = "count-not-reset"
+file = "scripts/pr.py"
+before = '        consecutive_failures = 0'
+after = '        pass'
+killers = ["tests/test_pr_progress.py::test_a_good_poll_still_resets_the_count"]
+
+[[mutants]]
+id = "registration-reason-dropped"
+file = "scripts/pr.py"
+before = '            print(f"poll failed while checks register: {observed.reason}", file=sys.stderr)'
+after = '            pass'
+killers = ["tests/test_pr_progress.py::test_a_failed_registration_poll_says_why"]

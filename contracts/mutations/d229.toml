@@ -1,0 +1,23 @@
+# contracts/mutations/d229.toml
+# A local branch is deleted only once proven merged into develop; retire reaches origin (D.229).
+
+[[mutants]]
+id = "ancestry-unproven"
+file = "scripts/worktree.py"
+before = "    if proven.returncode != 0:\n        return _kept(branch, f\"{DEVELOP} does not contain it\")\n"
+after = ""
+killers = ["tests/test_worktree_remove.py::test_a_pushed_branch_not_merged_into_develop_is_kept"]
+
+[[mutants]]
+id = "proof-not-ancestry"
+file = "scripts/worktree.py"
+before = "    proven = git_run(\"merge-base\", \"--is-ancestor\", branch, DEVELOP, cwd=ROOT)\n"
+after = "    proven = git_run(\"rev-parse\", branch, cwd=ROOT)\n"
+killers = ["tests/test_worktree_remove.py::test_a_branch_merged_into_develop_is_still_deleted"]
+
+[[mutants]]
+id = "local-deleted-anyway"
+file = "scripts/branches_retire.py"
+before = "    if not observed.local:\n"
+after = "    if False:\n"
+killers = ["tests/test_branches_retire.py::test_a_branch_only_origin_holds_is_retired_from_its_remote_tip"]

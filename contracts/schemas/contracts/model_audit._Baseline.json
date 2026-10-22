@@ -1,0 +1,28 @@
+{
+  "ids": [
+    "model-baseline/v1"
+  ],
+  "json_schema": {
+    "additionalProperties": false,
+    "properties": {
+      "contract": {
+        "const": "model-baseline/v1",
+        "title": "Contract",
+        "type": "string"
+      },
+      "direct": {
+        "items": {
+          "type": "string"
+        },
+        "title": "Direct",
+        "type": "array"
+      }
+    },
+    "required": [
+      "contract",
+      "direct"
+    ],
+    "title": "_Baseline",
+    "type": "object"
+  }
+}

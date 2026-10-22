@@ -1,0 +1,23 @@
+# contracts/mutations/d260.toml
+# plan:retire retires a step with its reason, keeps its id, and refuses while a live step needs it.
+
+[[mutants]]
+id = "dependents-unchecked"
+file = "scripts/plan_edit.py"
+before = "        checked = _validated(documents)"
+after = "        checked = {path: tomlkit.dumps(doc) for path, doc in documents.items()}"
+killers = ["tests/test_plan_retire.py::test_a_step_a_live_step_depends_on_is_refused"]
+
+[[mutants]]
+id = "liveness-unchecked"
+file = "scripts/plan_edit.py"
+before = "    if not_live:"
+after = "    if False:"
+killers = ["tests/test_plan_retire.py::test_an_unknown_or_retired_id_is_refused"]
+
+[[mutants]]
+id = "wrong-state"
+file = "scripts/plan_edit.py"
+before = '            decision.add("state", "superseded")'
+after = '            decision.add("state", "declined")'
+killers = ["tests/test_plan_retire.py::test_a_step_is_retired_with_its_reason"]

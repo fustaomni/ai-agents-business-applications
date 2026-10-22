@@ -1,0 +1,64 @@
+{
+  "ids": [
+    "named-tasks/v1"
+  ],
+  "json_schema": {
+    "$defs": {
+      "Mention": {
+        "additionalProperties": false,
+        "properties": {
+          "number": {
+            "exclusiveMinimum": 0,
+            "title": "Number",
+            "type": "integer"
+          },
+          "path": {
+            "title": "Path",
+            "type": "string"
+          },
+          "task": {
+            "title": "Task",
+            "type": "string"
+          }
+        },
+        "required": [
+          "path",
+          "number",
+          "task"
+        ],
+        "title": "Mention",
+        "type": "object"
+      }
+    },
+    "additionalProperties": false,
+    "description": "named-tasks/v1: every task a tracked message names, and every task declared.",
+    "properties": {
+      "contract": {
+        "const": "named-tasks/v1",
+        "default": "named-tasks/v1",
+        "title": "Contract",
+        "type": "string"
+      },
+      "declared": {
+        "items": {
+          "type": "string"
+        },
+        "title": "Declared",
+        "type": "array"
+      },
+      "mentions": {
+        "items": {
+          "$ref": "#/$defs/Mention"
+        },
+        "title": "Mentions",
+        "type": "array"
+      }
+    },
+    "required": [
+      "declared",
+      "mentions"
+    ],
+    "title": "NamedTasks",
+    "type": "object"
+  }
+}

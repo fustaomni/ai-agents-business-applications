@@ -1,0 +1,11 @@
+# contracts/mutations/d111.toml
+# A publication that did not succeed ends pr as typed data and is never swallowed (D.111). The
+# exit-code classification it once proved is gone: D.173's readback decides a publication's
+# outcome, and its own mutants prove that (contracts/mutations/d173.toml).
+
+[[mutants]]
+id = "failure-swallowed"
+file = "scripts/pr.py"
+before = '    if published.outcome != "succeeded":'
+after = '    if False:'
+killers = ["tests/test_pr_push_failure.py::test_pr_ends_in_a_typed_outcome_not_a_traceback"]

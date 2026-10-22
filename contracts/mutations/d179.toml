@@ -1,0 +1,31 @@
+# contracts/mutations/d179.toml
+# Only declared transitions, reobserve within its budget and only from ambiguity, and an
+# unanswered escalation denies (D.179).
+
+[[mutants]]
+id = "table-unchecked"
+file = "scripts/publish_states.py"
+before = "    if (trail[-1], to) not in TRANSITIONS:"
+after = "    if False:"
+killers = ["tests/test_publish_states.py::test_an_undeclared_transition_is_refused"]
+
+[[mutants]]
+id = "budget-exceeded"
+file = "scripts/publish_states.py"
+before = "    return \"REOBSERVE\" if attempts < REOBSERVE_BUDGET else \"ESCALATE\""
+after = "    return \"REOBSERVE\" if attempts <= REOBSERVE_BUDGET else \"ESCALATE\""
+killers = ["tests/test_publish_states.py::test_reobserve_stops_at_its_budget"]
+
+[[mutants]]
+id = "silence-not-denied"
+file = "scripts/publish_push.py"
+before = "                trail = advance(trail, \"denied\")"
+after = "                pass"
+killers = ["tests/test_publish_states.py::test_an_unanswered_escalation_denies"]
+
+[[mutants]]
+id = "definite-reread"
+file = "scripts/publish_push.py"
+before = "    while isinstance(read, GitObservationFailure):"
+after = "    while isinstance(read, GitObservationFailure) or len(trail) < 6:"
+killers = ["tests/test_publish_states.py::test_a_retry_follows_only_an_ambiguous_readback"]

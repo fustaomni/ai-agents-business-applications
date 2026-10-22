@@ -1,0 +1,23 @@
+# contracts/mutations/d172.toml
+# The holder is named, every worktree shares the lock, and each branch has its own (D.172).
+
+[[mutants]]
+id = "holder-unrecorded"
+file = "scripts/publish_lock.py"
+before = "    handle.write(holder.model_dump_json())"
+after = '    handle.write("")'
+killers = ["tests/test_publish_lock.py::test_a_second_publication_is_refused_naming_the_first"]
+
+[[mutants]]
+id = "lock-per-worktree"
+file = "scripts/publish_lock.py"
+before = '    common = git(root, "rev-parse", "--path-format=absolute", "--git-common-dir")'
+after = '    common = git(root, "rev-parse", "--path-format=absolute", "--git-dir")'
+killers = ["tests/test_publish_lock.py::test_every_worktree_shares_one_lock"]
+
+[[mutants]]
+id = "one-lock-for-every-branch"
+file = "scripts/publish_lock.py"
+before = '    key = hashlib.sha256(branch.encode("utf-8")).hexdigest()[:24]'
+after = '    key = "publish"'
+killers = ["tests/test_publish_lock.py::test_branches_lock_independently"]

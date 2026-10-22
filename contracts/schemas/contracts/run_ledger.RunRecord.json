@@ -1,0 +1,160 @@
+{
+  "ids": [
+    "run-record/v1",
+    "run-record/v2",
+    "run-record/v3"
+  ],
+  "json_schema": {
+    "$defs": {
+      "JsonValue": {},
+      "RecordSeal": {
+        "additionalProperties": false,
+        "description": "A DSSE envelope over a record's run id and digest, under the record's own payload type.",
+        "properties": {
+          "payload": {
+            "title": "Payload",
+            "type": "string"
+          },
+          "payloadType": {
+            "title": "Payloadtype",
+            "type": "string"
+          },
+          "signatures": {
+            "items": {
+              "$ref": "#/$defs/SealSignature"
+            },
+            "minItems": 1,
+            "title": "Signatures",
+            "type": "array"
+          }
+        },
+        "required": [
+          "payload",
+          "payloadType",
+          "signatures"
+        ],
+        "title": "RecordSeal",
+        "type": "object"
+      },
+      "SealSignature": {
+        "additionalProperties": false,
+        "properties": {
+          "keyid": {
+            "title": "Keyid",
+            "type": "string"
+          },
+          "sig": {
+            "title": "Sig",
+            "type": "string"
+          }
+        },
+        "required": [
+          "keyid",
+          "sig"
+        ],
+        "title": "SealSignature",
+        "type": "object"
+      }
+    },
+    "additionalProperties": false,
+    "description": "run-record/v1: one task run, as data.",
+    "properties": {
+      "branch": {
+        "title": "Branch",
+        "type": "string"
+      },
+      "contract": {
+        "default": "run-record/v3",
+        "enum": [
+          "run-record/v1",
+          "run-record/v2",
+          "run-record/v3"
+        ],
+        "title": "Contract",
+        "type": "string"
+      },
+      "head": {
+        "title": "Head",
+        "type": "string"
+      },
+      "outcome": {
+        "additionalProperties": {
+          "$ref": "#/$defs/JsonValue"
+        },
+        "title": "Outcome",
+        "type": "object"
+      },
+      "previous_sha256": {
+        "pattern": "^[0-9a-f]{64}$",
+        "title": "Previous Sha256",
+        "type": "string"
+      },
+      "recorded_at": {
+        "format": "date-time",
+        "title": "Recorded At",
+        "type": "string"
+      },
+      "run_id": {
+        "pattern": "^[0-9a-f]{32}$",
+        "title": "Run Id",
+        "type": "string"
+      },
+      "seal": {
+        "anyOf": [
+          {
+            "$ref": "#/$defs/RecordSeal"
+          },
+          {
+            "type": "null"
+          }
+        ],
+        "default": null
+      },
+      "seq": {
+        "anyOf": [
+          {
+            "exclusiveMinimum": 0,
+            "type": "integer"
+          },
+          {
+            "type": "null"
+          }
+        ],
+        "default": null,
+        "title": "Seq"
+      },
+      "sha256": {
+        "pattern": "^[0-9a-f]{64}$",
+        "title": "Sha256",
+        "type": "string"
+      },
+      "task": {
+        "minLength": 1,
+        "title": "Task",
+        "type": "string"
+      },
+      "verdict": {
+        "enum": [
+          "pass",
+          "fail",
+          "refused"
+        ],
+        "title": "Verdict",
+        "type": "string"
+      }
+    },
+    "required": [
+      "run_id",
+      "task",
+      "recorded_at",
+      "branch",
+      "head",
+      "verdict",
+      "outcome",
+      "previous_sha256",
+      "sha256"
+    ],
+    "title": "RunRecord",
+    "type": "object"
+  }
+}

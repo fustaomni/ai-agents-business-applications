@@ -1,0 +1,70 @@
+{
+  "ids": [
+    "git-spawn-inventory/v1"
+  ],
+  "json_schema": {
+    "$defs": {
+      "GitSpawn": {
+        "additionalProperties": false,
+        "description": "One place git is started, and whether its environment came from gitenv.",
+        "properties": {
+          "env_from_gitenv": {
+            "title": "Env From Gitenv",
+            "type": "boolean"
+          },
+          "kind": {
+            "enum": [
+              "subprocess",
+              "helper"
+            ],
+            "title": "Kind",
+            "type": "string"
+          },
+          "line": {
+            "title": "Line",
+            "type": "integer"
+          },
+          "path": {
+            "title": "Path",
+            "type": "string"
+          }
+        },
+        "required": [
+          "path",
+          "line",
+          "kind",
+          "env_from_gitenv"
+        ],
+        "title": "GitSpawn",
+        "type": "object"
+      }
+    },
+    "additionalProperties": false,
+    "description": "git-spawn-inventory/v1: every git spawn found under scripts/, gitenv.py excepted.",
+    "properties": {
+      "contract": {
+        "const": "git-spawn-inventory/v1",
+        "default": "git-spawn-inventory/v1",
+        "title": "Contract",
+        "type": "string"
+      },
+      "files_scanned": {
+        "title": "Files Scanned",
+        "type": "integer"
+      },
+      "spawns": {
+        "items": {
+          "$ref": "#/$defs/GitSpawn"
+        },
+        "title": "Spawns",
+        "type": "array"
+      }
+    },
+    "required": [
+      "files_scanned",
+      "spawns"
+    ],
+    "title": "GitSpawnInventory",
+    "type": "object"
+  }
+}

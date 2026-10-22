@@ -1,0 +1,84 @@
+{
+  "ids": [
+    "deps-change/v1"
+  ],
+  "json_schema": {
+    "additionalProperties": false,
+    "description": "deps-change/v1: one addition, and everything it did to the lock.",
+    "properties": {
+      "added": {
+        "items": {
+          "type": "string"
+        },
+        "title": "Added",
+        "type": "array"
+      },
+      "changed": {
+        "items": {
+          "type": "string"
+        },
+        "title": "Changed",
+        "type": "array"
+      },
+      "contract": {
+        "const": "deps-change/v1",
+        "default": "deps-change/v1",
+        "title": "Contract",
+        "type": "string"
+      },
+      "group": {
+        "anyOf": [
+          {
+            "type": "string"
+          },
+          {
+            "type": "null"
+          }
+        ],
+        "title": "Group"
+      },
+      "landed": {
+        "title": "Landed",
+        "type": "boolean"
+      },
+      "lock_current": {
+        "title": "Lock Current",
+        "type": "boolean"
+      },
+      "locked_version": {
+        "anyOf": [
+          {
+            "type": "string"
+          },
+          {
+            "type": "null"
+          }
+        ],
+        "title": "Locked Version"
+      },
+      "package": {
+        "title": "Package",
+        "type": "string"
+      },
+      "removed": {
+        "items": {
+          "type": "string"
+        },
+        "title": "Removed",
+        "type": "array"
+      }
+    },
+    "required": [
+      "package",
+      "group",
+      "lock_current",
+      "landed",
+      "locked_version",
+      "added",
+      "changed",
+      "removed"
+    ],
+    "title": "DepsChange",
+    "type": "object"
+  }
+}

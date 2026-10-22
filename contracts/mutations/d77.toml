@@ -1,0 +1,37 @@
+# contracts/mutations/d77.toml
+# Every D.77 proof must kill its own mutant: expectations ignored, unsent, or unrecorded.
+
+[[mutants]]
+id = "missing-never-waits"
+file = "policies/merge/readiness/readiness.rego"
+before = "waiting if count(missing) > 0"
+after = "waiting if count(missing) > 99"
+killers = ["tests/test_merge_readiness.py::test_an_expected_check_not_yet_registered_waits"]
+
+[[mutants]]
+id = "nothing-is-expected"
+file = "policies/merge/readiness/readiness.rego"
+before = "some name in input.expected_checks"
+after = "some name in input.nothing_declared"
+killers = ["tests/test_merge_readiness.py::test_an_expected_check_not_yet_registered_waits"]
+
+[[mutants]]
+id = "expectations-never-required"
+file = "policies/merge/readiness/readiness.rego"
+before = "not input.expected_checks"
+after = "input.never_supplied"
+killers = ["tests/test_merge_readiness.py::test_a_pull_request_judged_without_expectations_is_refused"]
+
+[[mutants]]
+id = "expectations-not-sent"
+file = "scripts/pr.py"
+before = "\"expected_checks\": list(names),"
+after = "\"expected_checks_unsent\": list(names),"
+killers = ["tests/test_merge_readiness.py::test_every_expected_check_concluded_merges"]
+
+[[mutants]]
+id = "record-names-nothing"
+file = "scripts/pr.py"
+before = "f\"checks judged: {seen}\""
+after = "\"checks judged: \""
+killers = ["tests/test_pr.py::test_the_decision_record_names_every_check_judged"]

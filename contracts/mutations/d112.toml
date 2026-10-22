@@ -1,0 +1,24 @@
+# contracts/mutations/d112.toml
+# The keepalive is added, a configured command is kept, and the push is given its environment
+# (D.112).
+
+[[mutants]]
+id = "keepalive-dropped"
+file = "scripts/pr.py"
+before = '    return " ".join([base or "ssh", *KEEPALIVE])'
+after = '    return base or "ssh"'
+killers = ["tests/test_pr_keepalive.py::test_the_push_keeps_its_connection_alive"]
+
+[[mutants]]
+id = "config-ignored"
+file = "scripts/pr.py"
+before = '        base = found.stdout.strip() if found.returncode == 0 else ""'
+after = '        base = ""'
+killers = ["tests/test_pr_keepalive.py::test_core_ssh_command_is_kept_when_no_variable_is_set"]
+
+[[mutants]]
+id = "env-not-passed"
+file = "scripts/pr.py"
+before = '    published = _publish(ROOT, branch, extra_env=_push_env())'
+after = '    published = _publish(ROOT, branch)'
+killers = ["tests/test_pr_push_failure.py::test_the_publication_is_given_the_keepalive"]

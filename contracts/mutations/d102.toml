@@ -1,0 +1,16 @@
+# contracts/mutations/d102.toml
+# An amend reports itself as one, with the commit it replaced (D.102).
+
+[[mutants]]
+id = "amend-reported-as-commit"
+file = "scripts/commit.py"
+before = '            "amended",'
+after = '            "committed",'
+killers = ["tests/test_commit_amend.py::test_an_amend_reports_the_commit_it_replaced"]
+
+[[mutants]]
+id = "replaced-unrecorded"
+file = "scripts/commit.py"
+before = '    replaced = git(["rev-parse", "HEAD"])[1] if amend else ""'
+after = '    replaced = ""'
+killers = ["tests/test_commit_amend.py::test_an_amend_reports_the_commit_it_replaced"]

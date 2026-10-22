@@ -1,0 +1,31 @@
+# contracts/mutations/d170.toml
+# A failed status or a held lock is unknown, an id of the other format is refused, and a
+# replacement object is never followed (D.170).
+
+[[mutants]]
+id = "failed-status-read-as-clean"
+file = "scripts/git_observe.py"
+before = '        return TreeObservation(state="unknown", reason=status.detail)'
+after = '        return TreeObservation(state="clean", reason=status.detail)'
+killers = ["tests/test_git_observe.py::test_a_failed_status_is_unknown_never_clean"]
+
+[[mutants]]
+id = "lock-ignored"
+file = "scripts/git_observe.py"
+before = "    if (root / lock.stdout.strip()).exists():"
+after = "    if False:"
+killers = ["tests/test_git_observe.py::test_a_held_index_lock_is_unknown"]
+
+[[mutants]]
+id = "format-unchecked"
+file = "scripts/git_observe.py"
+before = "        if len(self.hex) != LENGTHS[self.format] or not set(self.hex) <= HEX:"
+after = "        if False:"
+killers = ["tests/test_git_observe.py::test_an_id_of_another_object_format_is_refused"]
+
+[[mutants]]
+id = "replacements-followed"
+file = "scripts/git_observe.py"
+before = '        ["git", "--no-replace-objects", *args],'
+after = '        ["git", *args],'
+killers = ["tests/test_git_observe.py::test_replace_objects_are_never_followed"]

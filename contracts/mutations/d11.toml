@@ -1,0 +1,72 @@
+# contracts/mutations/d11.toml
+# A merged branch left behind is deleted only once it is proven merged (D.11).
+
+[[mutants]]
+id = "absent-input-passes"
+file = "policies/runs/branches_prune/branches_prune.rego"
+before = "\tnot input.branches_prune\n"
+after = "\tfalse\n"
+killers = ["tests/test_branches_prune.py::test_an_absent_request_is_refused_by_the_policy"]
+
+[[mutants]]
+id = "protected-proposal-passes"
+file = "policies/runs/branches_prune/branches_prune.rego"
+before = "\tcandidate.name in input.branches_prune.protected\n"
+after = "\tfalse\n"
+killers = ["tests/test_branches_prune.py::test_a_protected_branch_is_never_deleted"]
+
+[[mutants]]
+id = "held-proposal-passes"
+file = "policies/runs/branches_prune/branches_prune.rego"
+before = "\tcandidate.held_by != null\n"
+after = "\tfalse\n"
+killers = ["tests/test_branches_prune.py::test_a_branch_a_worktree_holds_is_never_deleted"]
+
+[[mutants]]
+id = "unmerged-proposal-passes"
+file = "policies/runs/branches_prune/branches_prune.rego"
+before = "\tcandidate.merged == false\n"
+after = "\tfalse\n"
+killers = ["tests/test_branches_prune.py::test_only_a_proven_merged_branch_is_deleted"]
+
+[[mutants]]
+id = "local-unmerged-proposed"
+file = "scripts/branches_prune.py"
+before = "        if branch.is_merged\n"
+after = "        if True\n"
+killers = ["tests/test_branches_prune.py::test_only_a_proven_merged_branch_is_deleted"]
+
+[[mutants]]
+id = "local-held-proposed"
+file = "scripts/branches_prune.py"
+before = "        if branch.is_merged\n        and branch.held_by is None\n"
+after = "        if branch.is_merged\n        and True\n"
+killers = ["tests/test_branches_prune.py::test_a_branch_a_worktree_holds_is_never_deleted"]
+
+[[mutants]]
+id = "local-protected-proposed"
+file = "scripts/branches_prune.py"
+before = "        and not branch.is_protected\n        and branch.position in WITHOUT_REMOTE\n"
+after = "        and True\n        and branch.position in WITHOUT_REMOTE\n"
+killers = ["tests/test_branches_prune.py::test_a_protected_branch_is_never_deleted"]
+
+[[mutants]]
+id = "remote-protected-proposed"
+file = "scripts/branches_prune.py"
+before = "if branch.is_merged and branch.name not in PROTECTED_BRANCHES"
+after = "if branch.is_merged"
+killers = ["tests/test_branches_prune.py::test_a_protected_branch_is_never_deleted"]
+
+[[mutants]]
+id = "never-pushed-ignored"
+file = "scripts/branches_prune.py"
+before = "and branch.position in WITHOUT_REMOTE"
+after = "and branch.position == \"gone\""
+killers = ["tests/test_branches_prune.py::test_a_merged_branch_never_pushed_is_deleted"]
+
+[[mutants]]
+id = "dry-run-deletes"
+file = "scripts/branches_prune.py"
+before = "    if not execute:"
+after = "    if False:"
+killers = ["tests/test_branches_prune.py::test_a_dry_run_deletes_nothing"]

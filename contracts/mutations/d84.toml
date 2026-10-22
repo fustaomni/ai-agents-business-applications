@@ -1,0 +1,24 @@
+# contracts/mutations/d84.toml
+# The workflow audit is wired, runs in the hooks, and runs pedantic (D.84); since D.95 the gate
+# runs the governed audit:workflows, so the anchors follow it there.
+
+[[mutants]]
+id = "gate-unwired"
+file = "scripts/check_all.py"
+before = 'command=("uv", "run", "python", "scripts/workflow_audit.py"),'
+after = 'command=("true",),'
+killers = ["tests/test_workflow_audit.py::test_the_gate_runs_the_workflow_audit_in_every_mode"]
+
+[[mutants]]
+id = "gate-hooks-skip-it"
+file = "scripts/check_all.py"
+before = "\"scripts/workflow_audit.py\"),\n        runs_in_hooks=True,"
+after = "\"scripts/workflow_audit.py\"),\n        runs_in_hooks=False,"
+killers = ["tests/test_workflow_audit.py::test_the_gate_runs_the_workflow_audit_in_every_mode"]
+
+[[mutants]]
+id = "persona-default"
+file = "scripts/workflow_audit.py"
+before = '"--persona=pedantic", '
+after = ''
+killers = ["tests/test_workflow_audit.py::test_a_write_all_token_is_refused"]

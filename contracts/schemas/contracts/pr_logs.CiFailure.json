@@ -1,0 +1,179 @@
+{
+  "ids": [
+    "ci-failure/v2"
+  ],
+  "json_schema": {
+    "$defs": {
+      "Excerpt": {
+        "additionalProperties": false,
+        "description": "A run of lines around one or more signals; first_line is 1-based within its step.",
+        "properties": {
+          "first_line": {
+            "minimum": 0,
+            "title": "First Line",
+            "type": "integer"
+          },
+          "lines": {
+            "items": {
+              "$ref": "#/$defs/LogLine"
+            },
+            "title": "Lines",
+            "type": "array"
+          }
+        },
+        "required": [
+          "first_line",
+          "lines"
+        ],
+        "title": "Excerpt",
+        "type": "object"
+      },
+      "FailedStep": {
+        "additionalProperties": false,
+        "properties": {
+          "excerpts": {
+            "default": [],
+            "items": {
+              "$ref": "#/$defs/Excerpt"
+            },
+            "title": "Excerpts",
+            "type": "array"
+          },
+          "job": {
+            "title": "Job",
+            "type": "string"
+          },
+          "lines": {
+            "minimum": 0,
+            "title": "Lines",
+            "type": "integer"
+          },
+          "step": {
+            "title": "Step",
+            "type": "string"
+          },
+          "tail": {
+            "items": {
+              "$ref": "#/$defs/LogLine"
+            },
+            "title": "Tail",
+            "type": "array"
+          }
+        },
+        "required": [
+          "job",
+          "step",
+          "lines",
+          "tail"
+        ],
+        "title": "FailedStep",
+        "type": "object"
+      },
+      "LogLine": {
+        "additionalProperties": false,
+        "properties": {
+          "text": {
+            "title": "Text",
+            "type": "string"
+          },
+          "timestamp": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Timestamp"
+          }
+        },
+        "required": [
+          "timestamp",
+          "text"
+        ],
+        "title": "LogLine",
+        "type": "object"
+      }
+    },
+    "additionalProperties": false,
+    "description": "ci-failure/v2: the branch's latest failed run, what explains it, and its signals.\n\nv2 adds not_successful: every step or job that ended other than in success. v1 read\n--log-failed alone, so a cancelled step, or a job no runner acquired, read as nothing.",
+    "properties": {
+      "branch": {
+        "title": "Branch",
+        "type": "string"
+      },
+      "contract": {
+        "const": "ci-failure/v2",
+        "default": "ci-failure/v2",
+        "title": "Contract",
+        "type": "string"
+      },
+      "head_sha": {
+        "anyOf": [
+          {
+            "type": "string"
+          },
+          {
+            "type": "null"
+          }
+        ],
+        "title": "Head Sha"
+      },
+      "not_successful": {
+        "default": [],
+        "items": {
+          "type": "string"
+        },
+        "title": "Not Successful",
+        "type": "array"
+      },
+      "run_id": {
+        "anyOf": [
+          {
+            "type": "integer"
+          },
+          {
+            "type": "null"
+          }
+        ],
+        "title": "Run Id"
+      },
+      "signals": {
+        "items": {
+          "type": "string"
+        },
+        "title": "Signals",
+        "type": "array"
+      },
+      "steps": {
+        "items": {
+          "$ref": "#/$defs/FailedStep"
+        },
+        "title": "Steps",
+        "type": "array"
+      },
+      "url": {
+        "anyOf": [
+          {
+            "type": "string"
+          },
+          {
+            "type": "null"
+          }
+        ],
+        "title": "Url"
+      }
+    },
+    "required": [
+      "branch",
+      "run_id",
+      "head_sha",
+      "url",
+      "steps",
+      "signals"
+    ],
+    "title": "CiFailure",
+    "type": "object"
+  }
+}

@@ -1,0 +1,58 @@
+{
+  "ids": [
+    "plan-step/v1"
+  ],
+  "json_schema": {
+    "$defs": {
+      "JsonValue": {}
+    },
+    "additionalProperties": false,
+    "description": "plan-step/v1: one step, validated and as written.",
+    "properties": {
+      "block": {
+        "items": {
+          "type": "string"
+        },
+        "minItems": 2,
+        "title": "Block",
+        "type": "array"
+      },
+      "contract": {
+        "const": "plan-step/v1",
+        "default": "plan-step/v1",
+        "title": "Contract",
+        "type": "string"
+      },
+      "file": {
+        "title": "File",
+        "type": "string"
+      },
+      "first_line": {
+        "exclusiveMinimum": 0,
+        "title": "First Line",
+        "type": "integer"
+      },
+      "last_line": {
+        "exclusiveMinimum": 0,
+        "title": "Last Line",
+        "type": "integer"
+      },
+      "step": {
+        "additionalProperties": {
+          "$ref": "#/$defs/JsonValue"
+        },
+        "title": "Step",
+        "type": "object"
+      }
+    },
+    "required": [
+      "file",
+      "first_line",
+      "last_line",
+      "step",
+      "block"
+    ],
+    "title": "PlanStepView",
+    "type": "object"
+  }
+}

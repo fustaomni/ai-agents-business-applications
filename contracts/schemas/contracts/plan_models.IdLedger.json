@@ -1,0 +1,59 @@
+{
+  "ids": [
+    "id-ledger/v1"
+  ],
+  "json_schema": {
+    "$defs": {
+      "IssuedId": {
+        "additionalProperties": false,
+        "description": "One identifier, issued once. A retired id stays, so none is ever reused.",
+        "properties": {
+          "first_title": {
+            "minLength": 1,
+            "title": "First Title",
+            "type": "string"
+          },
+          "id": {
+            "pattern": "^[A-Z0-9]+\\.[A-Za-z0-9]+$",
+            "title": "Id",
+            "type": "string"
+          },
+          "retired": {
+            "default": false,
+            "title": "Retired",
+            "type": "boolean"
+          }
+        },
+        "required": [
+          "id",
+          "first_title"
+        ],
+        "title": "IssuedId",
+        "type": "object"
+      }
+    },
+    "additionalProperties": false,
+    "description": "context/plan-ids.yaml: append-only.\n\nNAMED plan-ids, NOT \"the ledger\": nix_ledger.py already holds a hash-chained\nledger of Nix evidence here, and one word meaning two things is a defect.",
+    "properties": {
+      "contract": {
+        "const": "id-ledger/v1",
+        "default": "id-ledger/v1",
+        "title": "Contract",
+        "type": "string"
+      },
+      "issued": {
+        "items": {
+          "$ref": "#/$defs/IssuedId"
+        },
+        "minItems": 1,
+        "title": "Issued",
+        "type": "array"
+      }
+    },
+    "required": [
+      "issued"
+    ],
+    "title": "IdLedger",
+    "type": "object"
+  }
+}

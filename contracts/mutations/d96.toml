@@ -1,0 +1,33 @@
+# contracts/mutations/d96.toml
+# The workspace host, account and CI client are required identity, scanned for copies, and held
+# by slots in ci.yml (D.96).
+
+[[mutants]]
+id = "field-optional"
+file = "scripts/project_identity.py"
+before = '    workspace_host: str = Field(pattern=r"^https://[a-z0-9.-]+$")'
+after = '    workspace_host: str = "https://unset.cloud.databricks.com"'
+killers = ["tests/test_workspace_identity.py::test_an_identity_without_its_workspace_values_is_refused"]
+
+[[mutants]]
+id = "host-unscanned"
+file = "scripts/project_identity.py"
+before = '        "workspace_host": identity.workspace_host,'
+after = ''
+# NOT THE SCANNING PROOF: mutation:check runs killers in a plain copy of the tree, where git grep
+# finds nothing, so that proof fails unmutated. Rendering needs _values, and no git.
+killers = ["tests/test_workspace_identity.py::test_a_new_identity_renders_its_own_host_into_ci"]
+
+[[mutants]]
+id = "spec-restated"
+file = "scripts/project_identity.py"
+before = 'class IdentitySpec(IdentityValues):'
+after = 'class IdentitySpec(Contract):'
+killers = ["tests/test_workspace_identity.py::test_a_spec_accepts_exactly_the_declared_values"]
+
+[[mutants]]
+id = "host-unslotted"
+file = "contracts/project-identity.toml"
+before = '  { path = ".github/workflows/ci.yml", line = "          DATABRICKS_HOST: {workspace_host}" },'
+after = ''
+killers = ["tests/test_workspace_identity.py::test_a_new_identity_renders_its_own_host_into_ci"]

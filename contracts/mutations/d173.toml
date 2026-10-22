@@ -1,0 +1,23 @@
+# contracts/mutations/d173.toml
+# The readback decides, the lease is explicit, and a failed gate never connects (D.173).
+
+[[mutants]]
+id = "landed-push-not-read-back"
+file = "scripts/publish_push.py"
+before = "    if after == commit:"
+after = "    if False:"
+killers = ["tests/test_publish_push.py::test_a_push_that_landed_before_the_drop_is_succeeded"]
+
+[[mutants]]
+id = "lease-dropped-for-force"
+file = "scripts/publish_push.py"
+before = '        f"--force-with-lease=refs/heads/{branch}:{expected}",'
+after = '        "--force",'
+killers = ["tests/test_publish_push.py::test_a_moved_remote_is_refused_by_the_lease"]
+
+[[mutants]]
+id = "gate-ignored"
+file = "scripts/publish_push.py"
+before = '    if verdict.outcome != "passed" or verdict.commit != commit.hex:'
+after = "    if False:"
+killers = ["tests/test_publish_push.py::test_a_failed_gate_never_pushes"]

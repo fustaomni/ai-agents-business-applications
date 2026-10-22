@@ -1,0 +1,96 @@
+{
+  "ids": [
+    "capability-inventory/v1"
+  ],
+  "json_schema": {
+    "$defs": {
+      "TaskCapability": {
+        "additionalProperties": false,
+        "properties": {
+          "governed": {
+            "title": "Governed",
+            "type": "boolean"
+          },
+          "kind": {
+            "enum": [
+              "script",
+              "tool"
+            ],
+            "title": "Kind",
+            "type": "string"
+          },
+          "module": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Module"
+          },
+          "name": {
+            "title": "Name",
+            "type": "string"
+          },
+          "owner": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Owner"
+          },
+          "owner_planned": {
+            "title": "Owner Planned",
+            "type": "boolean"
+          },
+          "run": {
+            "items": {
+              "type": "string"
+            },
+            "title": "Run",
+            "type": "array"
+          }
+        },
+        "required": [
+          "name",
+          "run",
+          "kind",
+          "module",
+          "governed",
+          "owner",
+          "owner_planned"
+        ],
+        "title": "TaskCapability",
+        "type": "object"
+      }
+    },
+    "additionalProperties": false,
+    "description": "capability-inventory/v1: every task, classified.",
+    "properties": {
+      "contract": {
+        "const": "capability-inventory/v1",
+        "default": "capability-inventory/v1",
+        "title": "Contract",
+        "type": "string"
+      },
+      "tasks": {
+        "items": {
+          "$ref": "#/$defs/TaskCapability"
+        },
+        "title": "Tasks",
+        "type": "array"
+      }
+    },
+    "required": [
+      "tasks"
+    ],
+    "title": "CapabilityInventory",
+    "type": "object"
+  }
+}

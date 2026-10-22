@@ -1,0 +1,31 @@
+# contracts/mutations/d106.toml
+# Every killer run keeps its status, duration and output digest; a failed one also its tail,
+# which the refusal quotes (D.106, M41). Rego anchors use \t escapes.
+
+[[mutants]]
+id = "tail-dropped"
+file = "scripts/mutation_check.py"
+before = '        tail=_tail(output) if done.returncode != 0 else (),'
+after = '        tail=(),'
+killers = ["tests/test_mutation_check.py::test_a_failed_run_keeps_metadata_and_its_tail"]
+
+[[mutants]]
+id = "passing-run-carries-output"
+file = "scripts/mutation_check.py"
+before = '        tail=_tail(output) if done.returncode != 0 else (),'
+after = '        tail=_tail(output),'
+killers = ["tests/test_mutation_check.py::test_a_passing_run_keeps_its_metadata_not_its_output"]
+
+[[mutants]]
+id = "success-unrecorded"
+file = "scripts/mutation_check.py"
+before = '        output_sha256=hashlib.sha256(output.encode("utf-8")).hexdigest(),'
+after = '        output_sha256="",'
+killers = ["tests/test_mutation_check.py::test_a_passing_run_keeps_its_metadata_not_its_output"]
+
+[[mutants]]
+id = "message-silent"
+file = "policies/runs/mutation/mutation.rego"
+before = "\t\t\"message\": sprintf(\"%s fails unmutated (exit %d)%s\", [run.test, run.exit_code, _said(run)]),"
+after = "\t\t\"message\": sprintf(\"%s fails unmutated (exit %d)\", [run.test, run.exit_code]),"
+killers = ["tests/test_mutation_check.py::test_a_failing_baseline_names_its_failure"]

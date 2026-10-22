@@ -1,0 +1,73 @@
+{
+  "ids": [
+    "any-inventory/v1"
+  ],
+  "json_schema": {
+    "$defs": {
+      "AnyUse": {
+        "additionalProperties": false,
+        "description": "One Any: written in source, or implied by a missing annotation.",
+        "properties": {
+          "form": {
+            "enum": [
+              "explicit",
+              "implicit"
+            ],
+            "title": "Form",
+            "type": "string"
+          },
+          "line": {
+            "exclusiveMinimum": 0,
+            "title": "Line",
+            "type": "integer"
+          },
+          "name": {
+            "minLength": 1,
+            "title": "Name",
+            "type": "string"
+          },
+          "path": {
+            "minLength": 1,
+            "title": "Path",
+            "type": "string"
+          }
+        },
+        "required": [
+          "path",
+          "line",
+          "form",
+          "name"
+        ],
+        "title": "AnyUse",
+        "type": "object"
+      }
+    },
+    "additionalProperties": false,
+    "properties": {
+      "contract": {
+        "const": "any-inventory/v1",
+        "default": "any-inventory/v1",
+        "title": "Contract",
+        "type": "string"
+      },
+      "files_scanned": {
+        "exclusiveMinimum": 0,
+        "title": "Files Scanned",
+        "type": "integer"
+      },
+      "uses": {
+        "items": {
+          "$ref": "#/$defs/AnyUse"
+        },
+        "title": "Uses",
+        "type": "array"
+      }
+    },
+    "required": [
+      "files_scanned",
+      "uses"
+    ],
+    "title": "AnyInventory",
+    "type": "object"
+  }
+}

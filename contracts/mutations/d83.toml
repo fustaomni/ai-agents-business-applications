@@ -1,0 +1,31 @@
+# contracts/mutations/d83.toml
+# ci:rerun refuses an unsteady, foreign or absent request, and never reads an
+# accepted re-run as a started one (D.83).
+
+[[mutants]]
+id = "steadiness-ignored"
+file = "policies/runs/ci_rerun/ci_rerun.rego"
+before = "\tnot _steady\n"
+after = "\tfalse\n"
+killers = ["tests/test_ci_rerun.py::test_a_rerun_is_refused_while_actions_is_unsteady"]
+
+[[mutants]]
+id = "any-commit-rerun"
+file = "policies/runs/ci_rerun/ci_rerun.rego"
+before = "\tinput.ci_rerun.run_head != input.ci_rerun.branch_head\n"
+after = "\tfalse\n"
+killers = ["tests/test_ci_rerun.py::test_a_rerun_is_refused_when_the_run_is_not_the_branch_head"]
+
+[[mutants]]
+id = "absent-input-passes"
+file = "policies/runs/ci_rerun/ci_rerun.rego"
+before = "\tnot input.ci_rerun\n"
+after = "\tfalse\n"
+killers = ["tests/test_ci_rerun.py::test_an_absent_request_is_refused_by_the_policy"]
+
+[[mutants]]
+id = "accepted-read-as-started"
+file = "scripts/ci_rerun.py"
+before = "after.attempt > viewed.attempt"
+after = "True"
+killers = ["tests/test_ci_rerun.py::test_an_accepted_but_unobserved_rerun_halts"]

@@ -1,0 +1,31 @@
+# contracts/mutations/d171.toml
+# The gate runs on the snapshot, refuses an unproven environment, treats a changed snapshot
+# as unknown, and keeps global git config out (D.171).
+
+[[mutants]]
+id = "gate-in-the-working-tree"
+file = "scripts/snapshot_gate.py"
+before = "            ran = run(argv, deadline=deadline, cwd=snapshot, env=hermetic)"
+after = "            ran = run(argv, deadline=deadline, cwd=root, env=hermetic)"
+killers = ["tests/test_snapshot_gate.py::test_an_ignored_file_cannot_change_the_gate"]
+
+[[mutants]]
+id = "rewrite-ignored"
+file = "scripts/snapshot_gate.py"
+before = '    if after.state != "clean" or isinstance(still, GitObservationFailure) or still.hex != tree.hex:'
+after = "    if False:"
+killers = ["tests/test_snapshot_gate.py::test_a_gate_that_rewrites_the_snapshot_is_unknown"]
+
+[[mutants]]
+id = "unproven-environment-gated"
+file = "scripts/snapshot_gate.py"
+before = "    if not _succeeded(proven.termination):"
+after = "    if False:"
+killers = ["tests/test_snapshot_gate.py::test_an_unsynced_environment_refuses_to_gate"]
+
+[[mutants]]
+id = "global-config-kept"
+file = "scripts/snapshot_gate.py"
+before = '        "GIT_CONFIG_GLOBAL": os.devnull,'
+after = '        "GIT_CONFIG_UNUSED": os.devnull,'
+killers = ["tests/test_snapshot_gate.py::test_the_gate_sees_only_the_allowed_environment"]

@@ -1,0 +1,24 @@
+# contracts/mutations/d31.toml
+# worktree:continue refuses any leftover marker line and any continue without a rebase
+# (D.31). Rego anchors use \t escapes: no literal tab is ever pasted.
+
+[[mutants]]
+id = "marker-rule-narrowed"
+file = "scripts/rebase_state.py"
+before = '    return any(line == m or line.startswith(m + " ") for m in MARKERS)'
+after = '    return line.startswith(OURS)'
+killers = ["tests/test_worktree_continue.py::test_a_stray_marker_line_is_refused"]
+
+[[mutants]]
+id = "markers-unrecorded"
+file = "scripts/rebase_state.py"
+before = '    with_markers = tuple(name for name in unmerged if _marked(path, name))'
+after = '    with_markers: tuple[str, ...] = ()'
+killers = ["tests/test_worktree_continue.py::test_a_remaining_marker_is_refused"]
+
+[[mutants]]
+id = "no-rebase-allowed"
+file = "policies/runs/worktree_continue/worktree_continue.rego"
+before = "\tinput.worktree_continue.operation != \"rebase\""
+after = "\tfalse"
+killers = ["tests/test_worktree_continue.py::test_continue_without_a_rebase_is_refused"]

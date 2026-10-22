@@ -1,0 +1,30 @@
+{
+  "ids": [
+    "publish-expectations/v1"
+  ],
+  "json_schema": {
+    "additionalProperties": false,
+    "description": "publish-expectations/v1: the gates that must pass on the snapshot before publishing.",
+    "properties": {
+      "contract": {
+        "const": "publish-expectations/v1",
+        "default": "publish-expectations/v1",
+        "title": "Contract",
+        "type": "string"
+      },
+      "gates": {
+        "items": {
+          "type": "string"
+        },
+        "minItems": 1,
+        "title": "Gates",
+        "type": "array"
+      }
+    },
+    "required": [
+      "gates"
+    ],
+    "title": "Expectations",
+    "type": "object"
+  }
+}

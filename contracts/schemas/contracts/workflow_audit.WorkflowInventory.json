@@ -1,0 +1,229 @@
+{
+  "ids": [
+    "workflow-inventory/v1"
+  ],
+  "json_schema": {
+    "$defs": {
+      "Allowance": {
+        "additionalProperties": false,
+        "description": "One grant the closed allow-list permits, exactly, with the reason it is needed.",
+        "properties": {
+          "access": {
+            "title": "Access",
+            "type": "string"
+          },
+          "environment": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Environment"
+          },
+          "job": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Job"
+          },
+          "reason": {
+            "minLength": 1,
+            "title": "Reason",
+            "type": "string"
+          },
+          "scope": {
+            "title": "Scope",
+            "type": "string"
+          },
+          "workflow": {
+            "title": "Workflow",
+            "type": "string"
+          }
+        },
+        "required": [
+          "workflow",
+          "scope",
+          "access",
+          "reason"
+        ],
+        "title": "Allowance",
+        "type": "object"
+      },
+      "Finding": {
+        "additionalProperties": false,
+        "properties": {
+          "ident": {
+            "title": "Ident",
+            "type": "string"
+          },
+          "severity": {
+            "title": "Severity",
+            "type": "string"
+          }
+        },
+        "required": [
+          "ident",
+          "severity"
+        ],
+        "title": "Finding",
+        "type": "object"
+      },
+      "Grant": {
+        "additionalProperties": false,
+        "description": "One token grant as written: at workflow level (job None) or in one job.",
+        "properties": {
+          "access": {
+            "title": "Access",
+            "type": "string"
+          },
+          "environment": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Environment"
+          },
+          "job": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Job"
+          },
+          "scope": {
+            "title": "Scope",
+            "type": "string"
+          },
+          "workflow": {
+            "title": "Workflow",
+            "type": "string"
+          }
+        },
+        "required": [
+          "workflow",
+          "job",
+          "scope",
+          "access",
+          "environment"
+        ],
+        "title": "Grant",
+        "type": "object"
+      },
+      "Suppression": {
+        "additionalProperties": false,
+        "properties": {
+          "line": {
+            "title": "Line",
+            "type": "integer"
+          },
+          "path": {
+            "title": "Path",
+            "type": "string"
+          }
+        },
+        "required": [
+          "path",
+          "line"
+        ],
+        "title": "Suppression",
+        "type": "object"
+      },
+      "WorkflowFile": {
+        "additionalProperties": false,
+        "properties": {
+          "declares_permissions": {
+            "title": "Declares Permissions",
+            "type": "boolean"
+          },
+          "path": {
+            "title": "Path",
+            "type": "string"
+          }
+        },
+        "required": [
+          "path",
+          "declares_permissions"
+        ],
+        "title": "WorkflowFile",
+        "type": "object"
+      }
+    },
+    "additionalProperties": false,
+    "description": "workflow-inventory/v1: every workflow, grant, allowance, finding and suppression.",
+    "properties": {
+      "allow_list": {
+        "items": {
+          "$ref": "#/$defs/Allowance"
+        },
+        "title": "Allow List",
+        "type": "array"
+      },
+      "contract": {
+        "const": "workflow-inventory/v1",
+        "default": "workflow-inventory/v1",
+        "title": "Contract",
+        "type": "string"
+      },
+      "findings": {
+        "items": {
+          "$ref": "#/$defs/Finding"
+        },
+        "title": "Findings",
+        "type": "array"
+      },
+      "grants": {
+        "items": {
+          "$ref": "#/$defs/Grant"
+        },
+        "title": "Grants",
+        "type": "array"
+      },
+      "suppressions": {
+        "items": {
+          "$ref": "#/$defs/Suppression"
+        },
+        "title": "Suppressions",
+        "type": "array"
+      },
+      "workflows": {
+        "items": {
+          "$ref": "#/$defs/WorkflowFile"
+        },
+        "title": "Workflows",
+        "type": "array"
+      },
+      "zizmor_ok": {
+        "default": true,
+        "title": "Zizmor Ok",
+        "type": "boolean"
+      }
+    },
+    "required": [
+      "workflows",
+      "grants",
+      "allow_list",
+      "findings",
+      "suppressions"
+    ],
+    "title": "WorkflowInventory",
+    "type": "object"
+  }
+}

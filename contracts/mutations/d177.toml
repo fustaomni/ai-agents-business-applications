@@ -1,0 +1,38 @@
+# contracts/mutations/d177.toml
+# Declared codes must be registered, entries never repurposed, prose never dispatched on, each
+# entry an RFC 9457 type, and template:publish reads NOT_FOUND by type (D.177).
+
+[[mutants]]
+id = "unregistered-accepted"
+file = "policies/runs/problems/problems.rego"
+before = "not code in _registered"
+after = "false"
+killers = ["tests/test_problem_codes.py::test_an_unregistered_code_is_refused"]
+
+[[mutants]]
+id = "retitle-accepted"
+file = "policies/runs/problems/problems.rego"
+before = "now.title == old.title"
+after = "true"
+killers = ["tests/test_problem_codes.py::test_a_registered_code_is_never_repurposed"]
+
+[[mutants]]
+id = "prose-unseen"
+file = "scripts/problem_codes.py"
+before = "            if _tests_in(op) and isinstance(right, ast.Attribute) and right.attr in STREAMS:"
+after = "            if False:"
+killers = ["tests/test_problem_codes.py::test_a_branch_on_message_text_fails_the_audit"]
+
+[[mutants]]
+id = "severity-unchecked"
+file = "scripts/problem_codes.py"
+before = "        if self.severity != expected:"
+after = "        if False:"
+killers = ["tests/test_problem_codes.py::test_every_entry_has_the_rfc_9457_members"]
+
+[[mutants]]
+id = "not-found-unread"
+file = "scripts/template_publish.py"
+before = '    if any(e.type == "NOT_FOUND" and e.path[:1] == ("repository",) for e in answer.errors):'
+after = "    if False:"
+killers = ["tests/test_problem_codes.py::test_a_missing_repository_is_read_from_the_error_type"]

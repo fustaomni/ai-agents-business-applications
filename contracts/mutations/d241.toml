@@ -1,0 +1,23 @@
+# contracts/mutations/d241.toml
+# worktree:remove finishes a worktree git unregistered, once its folder holds only its branch.
+
+[[mutants]]
+id = "verdict-ignored"
+file = "scripts/worktree.py"
+before = "    if differs is not None:"
+after = "    if False:"
+killers = ["tests/test_worktree_remove.py::test_an_orphan_with_other_contents_is_kept"]
+
+[[mutants]]
+id = "tracked-unchecked"
+file = "scripts/worktree.py"
+before = "        if changed.stdout.strip():"
+after = "        if False:"
+killers = ["tests/test_worktree_remove.py::test_the_proof_sees_a_changed_file"]
+
+[[mutants]]
+id = "untracked-unchecked"
+file = "scripts/worktree.py"
+before = "        if extra.stdout.strip():"
+after = "        if False:"
+killers = ["tests/test_worktree_remove.py::test_the_proof_sees_an_untracked_file"]

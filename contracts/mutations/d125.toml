@@ -1,0 +1,37 @@
+# contracts/mutations/d125.toml
+# pr:logs reads a failing step whole, once, and by name (D.125).
+
+[[mutants]]
+id = "signals-read-the-tail"
+file = "scripts/pr_logs.py"
+before = "        for excerpt in step.excerpts\n        for line in excerpt.lines\n"
+after = "        for line in step.tail\n"
+killers = ["tests/test_pr_logs.py::test_a_failure_far_from_the_tail_is_read_as_a_signal"]
+
+[[mutants]]
+id = "excerpts-never-filled"
+file = "scripts/pr_logs.py"
+before = "            excerpts=_excerpts(lines),\n"
+after = ""
+killers = ["tests/test_pr_logs.py::test_a_failure_far_from_the_tail_is_read_as_a_signal"]
+
+[[mutants]]
+id = "error-annotation-dropped"
+file = "scripts/pr_logs.py"
+before = "r\"##\\[error\\]|FAIL"
+after = "r\"FAIL"
+killers = ["tests/test_pr_logs.py::test_an_error_annotation_is_a_signal"]
+
+[[mutants]]
+id = "step-read-twice"
+file = "scripts/pr_logs.py"
+before = "                and (step.job, step.step) not in seen\n"
+after = ""
+killers = ["tests/test_pr_logs.py::test_a_step_is_read_once"]
+
+[[mutants]]
+id = "header-ignored"
+file = "scripts/pr_logs.py"
+before = "        if step == UNKNOWN_STEP and parsed.text.startswith(HEADER):"
+after = "        if False:"
+killers = ["tests/test_pr_logs.py::test_lines_gh_cannot_place_are_named_by_their_step_header"]

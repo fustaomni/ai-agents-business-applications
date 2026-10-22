@@ -1,0 +1,74 @@
+{
+  "ids": [
+    "plan-status/v1"
+  ],
+  "json_schema": {
+    "$defs": {
+      "StepStatus": {
+        "additionalProperties": false,
+        "properties": {
+          "blocked_by": {
+            "default": [],
+            "items": {
+              "type": "string"
+            },
+            "title": "Blocked By",
+            "type": "array"
+          },
+          "state": {
+            "enum": [
+              "done",
+              "unknown",
+              "in_progress",
+              "ready",
+              "blocked"
+            ],
+            "title": "State",
+            "type": "string"
+          },
+          "unmet": {
+            "default": [],
+            "items": {
+              "type": "string"
+            },
+            "title": "Unmet",
+            "type": "array"
+          }
+        },
+        "required": [
+          "state"
+        ],
+        "title": "StepStatus",
+        "type": "object"
+      }
+    },
+    "additionalProperties": false,
+    "description": "plan-status/v1: the policy's decision, validated on its way back from OPA.",
+    "properties": {
+      "contract": {
+        "const": "plan-status/v1",
+        "default": "plan-status/v1",
+        "title": "Contract",
+        "type": "string"
+      },
+      "ref": {
+        "minLength": 1,
+        "title": "Ref",
+        "type": "string"
+      },
+      "steps": {
+        "additionalProperties": {
+          "$ref": "#/$defs/StepStatus"
+        },
+        "title": "Steps",
+        "type": "object"
+      }
+    },
+    "required": [
+      "ref",
+      "steps"
+    ],
+    "title": "PlanStatus",
+    "type": "object"
+  }
+}

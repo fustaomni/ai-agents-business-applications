@@ -1,0 +1,10 @@
+# contracts/ledger-waivers.toml
+# Unsigned records written after sealing began, each accounted for by its exact position and run.
+# The ledger is append-only: a record is never rewritten, only accounted for here (D.165).
+contract = "ledger-waivers/v1"
+
+[[waivers]]
+position = 2430
+run_id = "51663c7d048143ffb07553289e644462"
+reason = "repo_report appended repo:state's own record without a signer, before append refused that"
+step = "D.165"

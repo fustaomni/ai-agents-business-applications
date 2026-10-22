@@ -1,0 +1,90 @@
+{
+  "ids": [
+    "source-matches/v1"
+  ],
+  "json_schema": {
+    "$defs": {
+      "Match": {
+        "additionalProperties": false,
+        "properties": {
+          "number": {
+            "exclusiveMinimum": 0,
+            "title": "Number",
+            "type": "integer"
+          },
+          "path": {
+            "title": "Path",
+            "type": "string"
+          },
+          "text": {
+            "title": "Text",
+            "type": "string"
+          }
+        },
+        "required": [
+          "path",
+          "number",
+          "text"
+        ],
+        "title": "Match",
+        "type": "object"
+      }
+    },
+    "additionalProperties": false,
+    "description": "source-matches/v1: every tracked line matching a pattern.",
+    "properties": {
+      "contract": {
+        "const": "source-matches/v1",
+        "default": "source-matches/v1",
+        "title": "Contract",
+        "type": "string"
+      },
+      "count": {
+        "minimum": 0,
+        "title": "Count",
+        "type": "integer"
+      },
+      "dialect": {
+        "default": "extended",
+        "enum": [
+          "extended",
+          "fixed"
+        ],
+        "title": "Dialect",
+        "type": "string"
+      },
+      "files": {
+        "minimum": 0,
+        "title": "Files",
+        "type": "integer"
+      },
+      "matches": {
+        "items": {
+          "$ref": "#/$defs/Match"
+        },
+        "title": "Matches",
+        "type": "array"
+      },
+      "paths": {
+        "items": {
+          "type": "string"
+        },
+        "title": "Paths",
+        "type": "array"
+      },
+      "pattern": {
+        "title": "Pattern",
+        "type": "string"
+      }
+    },
+    "required": [
+      "pattern",
+      "paths",
+      "matches",
+      "count",
+      "files"
+    ],
+    "title": "SourceMatches",
+    "type": "object"
+  }
+}

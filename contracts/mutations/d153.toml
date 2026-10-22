@@ -1,0 +1,31 @@
+# contracts/mutations/d153.toml
+# The sandbox is its own repository, its fault is real, and its summary is the run's own
+# (D.153). Each mutant is a way the harness could pass while proving nothing.
+
+[[mutants]]
+id = "read-only-not-applied"
+file = "tests/acceptance/acceptance_sandbox.py"
+before = '        self.ledger.parent.chmod(stat.S_IRUSR | stat.S_IXUSR)'
+after = '        self.ledger.parent.chmod(stat.S_IRWXU)'
+killers = ["tests/acceptance/test_sandbox.py::test_a_read_only_ledger_is_a_fault_the_run_cannot_hide"]
+
+[[mutants]]
+id = "summary-from-first-line"
+file = "tests/acceptance/acceptance_sandbox.py"
+before = '        return RunSummary.model_validate_json(lines[-1])'
+after = '        return RunSummary.model_validate_json(lines[0])'
+killers = ["tests/acceptance/test_sandbox.py::test_a_declared_task_runs_end_to_end_into_the_sandbox_ledger"]
+
+[[mutants]]
+id = "environment-from-file-location"
+file = "tests/acceptance/acceptance_sandbox.py"
+before = '            "UV_PROJECT_ENVIRONMENT": sys.prefix,'
+after = '            "UV_PROJECT_ENVIRONMENT": str(SOURCE / ".venv"),'
+killers = ["tests/acceptance/test_sandbox.py::test_a_declared_task_runs_end_to_end_into_the_sandbox_ledger"]
+
+[[mutants]]
+id = "sandbox-inside-another-repo"
+file = "tests/acceptance/acceptance_sandbox.py"
+before = '        _git(root, "init", "-q", "-b", "develop")'
+after = '        _git(base, "init", "-q", "-b", "develop")'
+killers = ["tests/acceptance/test_sandbox.py::test_a_declared_task_runs_end_to_end_into_the_sandbox_ledger"]

@@ -1,0 +1,23 @@
+# contracts/mutations/d91.toml
+# The Databricks workspace is deployed to and run only through governed capabilities (D.91).
+
+[[mutants]]
+id = "variable-unchecked"
+file = "policies/runs/bundle_task/bundle_task.rego"
+before = "\tsome name in input.bundle_task.unset"
+after = "\tsome name in []"
+killers = ["tests/test_bundle_capability.py::test_a_missing_bundle_variable_is_refused_with_its_remedy"]
+
+[[mutants]]
+id = "validate-unchecked"
+file = "policies/runs/bundle_task/bundle_task.rego"
+before = "\tnot _validated_first"
+after = "\tfalse"
+killers = ["tests/test_bundle_capability.py::test_a_deploy_is_refused_without_a_strict_validate_of_the_same_target"]
+
+[[mutants]]
+id = "default-ignored"
+file = "scripts/bundle.py"
+before = "            if \"default\" not in variable.model_fields_set"
+after = "            if True"
+killers = ["tests/test_bundle_capability.py::test_a_missing_bundle_variable_is_refused_with_its_remedy"]

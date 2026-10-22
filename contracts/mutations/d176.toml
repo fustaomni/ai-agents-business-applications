@@ -1,0 +1,24 @@
+# contracts/mutations/d176.toml
+# The hooks run only hook gates, a timeout is never a pass, and a reuse names its provenance
+# (D.176: R2, R3).
+
+[[mutants]]
+id = "hooks-run-ci-only-gates"
+file = "scripts/check_all.py"
+before = "    return tuple(spec for spec in specs if spec.runs_in_hooks or not hooks)"
+after = "    return tuple(specs)"
+killers = ["tests/test_gate_spec.py::test_a_ci_only_gate_never_runs_in_hooks"]
+
+[[mutants]]
+id = "timeout-read-as-pass"
+file = "scripts/check_all.py"
+before = '        state: State = "timed_out"'
+after = '        state: State = "executed_passed"'
+killers = ["tests/test_gate_spec.py::test_a_timed_out_gate_is_never_passed"]
+
+[[mutants]]
+id = "reuse-without-provenance"
+file = "scripts/check_all.py"
+before = '        if (self.state == "reused") != (self.provenance is not None):'
+after = "        if False:"
+killers = ["tests/test_gate_spec.py::test_a_reused_gate_names_its_provenance"]

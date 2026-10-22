@@ -1,0 +1,24 @@
+# contracts/mutations/d105.toml
+# An absent worktree is already removed, a remaining branch still goes, and nothing is forced
+# (D.105).
+
+[[mutants]]
+id = "absent-refused"
+file = "scripts/worktree.py"
+before = '        _git("worktree", "prune")'
+after = '        raise SystemExit(f"{path} does not exist")'
+killers = ["tests/test_worktree_remove.py::test_an_absent_worktree_with_no_branch_is_already_removed"]
+
+[[mutants]]
+id = "branch-ignored"
+file = "scripts/worktree.py"
+before = '        if found.returncode == 1:'
+after = '        if True:'
+killers = ["tests/test_worktree_remove.py::test_an_absent_worktree_whose_branch_remains_has_it_deleted"]
+
+[[mutants]]
+id = "branch-forced"
+file = "scripts/worktree.py"
+before = '    result = git_run("branch", "-d", branch, cwd=ROOT)'
+after = '    result = git_run("branch", "-D", branch, cwd=ROOT)'
+killers = ["tests/test_worktree_remove.py::test_an_unmerged_branch_is_never_forced"]

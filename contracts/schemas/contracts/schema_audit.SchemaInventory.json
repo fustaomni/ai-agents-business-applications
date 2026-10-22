@@ -1,0 +1,140 @@
+{
+  "ids": [
+    "schema-inventory/v1"
+  ],
+  "json_schema": {
+    "$defs": {
+      "ContractSchema": {
+        "additionalProperties": false,
+        "description": "One versioned contract: its live schema, and what its snapshot recorded.",
+        "properties": {
+          "changes": {
+            "items": {
+              "$ref": "#/$defs/SchemaChange"
+            },
+            "title": "Changes",
+            "type": "array"
+          },
+          "digest": {
+            "title": "Digest",
+            "type": "string"
+          },
+          "entry": {
+            "title": "Entry",
+            "type": "string"
+          },
+          "ids": {
+            "items": {
+              "type": "string"
+            },
+            "title": "Ids",
+            "type": "array"
+          },
+          "snapshot_digest": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Snapshot Digest"
+          },
+          "snapshot_ids": {
+            "anyOf": [
+              {
+                "items": {
+                  "type": "string"
+                },
+                "type": "array"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Snapshot Ids"
+          }
+        },
+        "required": [
+          "entry",
+          "ids",
+          "digest",
+          "snapshot_ids",
+          "snapshot_digest",
+          "changes"
+        ],
+        "title": "ContractSchema",
+        "type": "object"
+      },
+      "SchemaChange": {
+        "additionalProperties": false,
+        "description": "One observed difference between a snapshot and the live schema, by kind.",
+        "properties": {
+          "kind": {
+            "enum": [
+              "property_removed",
+              "required_property_added",
+              "optional_property_added",
+              "property_became_required",
+              "property_became_optional",
+              "type_narrowed",
+              "type_widened",
+              "enum_value_removed",
+              "enum_value_added",
+              "annotation_changed",
+              "unclassified_change"
+            ],
+            "title": "Kind",
+            "type": "string"
+          },
+          "path": {
+            "title": "Path",
+            "type": "string"
+          }
+        },
+        "required": [
+          "path",
+          "kind"
+        ],
+        "title": "SchemaChange",
+        "type": "object"
+      }
+    },
+    "additionalProperties": false,
+    "description": "schema-inventory/v1: every versioned contract against its committed snapshot.",
+    "properties": {
+      "contract": {
+        "const": "schema-inventory/v1",
+        "default": "schema-inventory/v1",
+        "title": "Contract",
+        "type": "string"
+      },
+      "contracts": {
+        "items": {
+          "$ref": "#/$defs/ContractSchema"
+        },
+        "title": "Contracts",
+        "type": "array"
+      },
+      "modules_scanned": {
+        "title": "Modules Scanned",
+        "type": "integer"
+      },
+      "orphans": {
+        "items": {
+          "type": "string"
+        },
+        "title": "Orphans",
+        "type": "array"
+      }
+    },
+    "required": [
+      "modules_scanned",
+      "contracts",
+      "orphans"
+    ],
+    "title": "SchemaInventory",
+    "type": "object"
+  }
+}

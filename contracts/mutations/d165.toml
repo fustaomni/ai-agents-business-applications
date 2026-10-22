@@ -1,0 +1,31 @@
+# contracts/mutations/d165.toml
+# An unsigned append after sealing is refused before writing, every writer seals, and a waiver
+# accounts only for the exact record it names (D.165). Rego anchors use \t escapes.
+
+[[mutants]]
+id = "unsigned-append-allowed"
+file = "scripts/run_ledger.py"
+before = '        if signer is None and _sealing_began(lines):'
+after = '        if False:'
+killers = ["tests/test_ledger_signing.py::test_an_unsigned_append_after_sealing_is_refused_and_writes_nothing"]
+
+[[mutants]]
+id = "writer-unsigned"
+file = "scripts/repo_report.py"
+before = '    append(outcome, ledger=ledger, signer=resolve(signer))'
+after = '    append(outcome, ledger=ledger, signer=None)'
+killers = ["tests/test_ledger_signing.py::test_every_writer_seals_through_append"]
+
+[[mutants]]
+id = "waiver-unmatched-ignored"
+file = "policies/runs/ledger/ledger.rego"
+before = "\tsome position in input.ledger.waivers_unmatched"
+after = "\tsome position in []"
+killers = ["tests/test_ledger_signing.py::test_a_waiver_must_name_the_exact_record"]
+
+[[mutants]]
+id = "waiver-run-unchecked"
+file = "scripts/run_ledger.py"
+before = '        waived=tuple(w.position for w in waivers if runs.get(w.position) == w.run_id),'
+after = '        waived=tuple(w.position for w in waivers),'
+killers = ["tests/test_ledger_signing.py::test_a_waiver_must_name_the_exact_record"]

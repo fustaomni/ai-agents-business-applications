@@ -1,0 +1,9 @@
+# contracts/mutations/d225.toml
+# mutation:check documents the mutation spec it reads, never another task's (D.225).
+
+[[mutants]]
+id = "plan-spec-help-restored"
+file = "mise.toml"
+before = "[[mutants]] with id, file, before, after and killers"
+after = "[[steps]] and one [trace]"
+killers = ["tests/test_mutation_check.py::test_the_declared_spec_help_names_the_mutation_spec"]

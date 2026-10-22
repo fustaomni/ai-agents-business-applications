@@ -1,0 +1,38 @@
+# contracts/mutations/d169.toml
+# A bounded runner ends the whole process group at its deadline, escalates an ignored SIGTERM,
+# names a signal death, and reports a program that could not start (D.169).
+
+[[mutants]]
+id = "only-the-leader-is-signalled"
+file = "scripts/bounded.py"
+before = "        os.killpg(pgid, number)"
+after = "        os.kill(pgid, number)"
+killers = ["tests/test_bounded.py::test_a_grandchild_ignoring_sigterm_is_gone_after_the_timeout"]
+
+[[mutants]]
+id = "no-new-session"
+file = "scripts/bounded.py"
+before = "            start_new_session=True,"
+after = "            start_new_session=False,"
+killers = ["tests/test_bounded.py::test_a_grandchild_ignoring_sigterm_is_gone_after_the_timeout"]
+
+[[mutants]]
+id = "never-escalated"
+file = "scripts/bounded.py"
+before = "    _signal_group(pgid, signal.SIGKILL)"
+after = "    _signal_group(pgid, signal.SIGTERM)"
+killers = ["tests/test_bounded.py::test_a_leader_ignoring_sigterm_is_killed_within_its_grace"]
+
+[[mutants]]
+id = "signal-name-lost"
+file = "scripts/bounded.py"
+before = "        return Signaled(name=signal.Signals(-code).name, number=-code)"
+after = "        return Signaled(name='UNKNOWN', number=-code)"
+killers = ["tests/test_bounded.py::test_a_signal_death_is_reported_by_name"]
+
+[[mutants]]
+id = "launch-failure-raises"
+file = "scripts/bounded.py"
+before = "    except OSError as error:"
+after = "    except ValueError as error:"
+killers = ["tests/test_bounded.py::test_a_missing_program_is_launch_failed"]

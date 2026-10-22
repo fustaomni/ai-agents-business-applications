@@ -1,0 +1,70 @@
+# contracts/layer-remediation.toml
+# Every module that does not yet implement all five layers, and the planned step that
+# fixes it (D.66). The layer audit refuses a failing module with no owner here, and a
+# failing module whose owner is already committed: this list can only shrink.
+
+[[owners]]
+step = "D.69"
+# The plan tasks evaluate, decide and enforce
+modules = [
+  "scripts/plan_edit.py",
+  "scripts/plan_files.py",
+  "scripts/plan_init.py",
+  "scripts/plan_matrix.py",
+  "scripts/plan_status.py",
+  "scripts/plan_step.py",
+  "scripts/plan_trailers.py",
+]
+
+[[owners]]
+step = "D.70"
+# The source-reading tasks evaluate, decide and enforce
+modules = [
+  "scripts/source_read.py",
+  "scripts/source_restore.py",
+  "scripts/source_search.py",
+  "scripts/source_structure.py",
+  "scripts/source_units.py",
+  "scripts/tasks_list.py",
+]
+
+[[owners]]
+step = "D.71"
+# The commit, PR, sync and worktree tasks evaluate, decide and enforce
+modules = [
+  "scripts/commit.py",
+  "scripts/pr.py",
+  "scripts/pr_logs.py",
+  "scripts/repo_history.py",
+  "scripts/repo_report.py",
+  "scripts/run_ledger.py",
+  "scripts/run_task.py",
+  "scripts/sync.py",
+  "scripts/worktree.py",
+]
+
+[[owners]]
+step = "D.72"
+# The gates and their aggregator evaluate, decide and enforce
+modules = [
+  "scripts/check_all.py",
+  "scripts/check_env_parity.py",
+  "scripts/check_pii.py",
+  "scripts/check_prereqs.py",
+  "scripts/check_repo_hygiene.py",
+  "scripts/check_ruleset.py",
+  "scripts/evaluate_policies.py",
+  "scripts/nix_contract.py",
+  "scripts/update_fixtures.py",
+]
+
+[[owners]]
+step = "D.73"
+# The release, export, data and dependency tasks evaluate and enforce
+modules = [
+  "scripts/bootstrap_identity.py",
+  "scripts/deps_add.py",
+  "scripts/export_copy.py",
+  "scripts/release.py",
+  "scripts/verify_export.py",
+]

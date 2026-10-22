@@ -1,0 +1,43 @@
+{
+  "ids": [
+    "environment-sync/v1"
+  ],
+  "json_schema": {
+    "additionalProperties": false,
+    "description": "environment-sync/v1: did the lock change, and does the environment follow it.",
+    "properties": {
+      "contract": {
+        "const": "environment-sync/v1",
+        "default": "environment-sync/v1",
+        "title": "Contract",
+        "type": "string"
+      },
+      "install_exit_code": {
+        "anyOf": [
+          {
+            "type": "integer"
+          },
+          {
+            "type": "null"
+          }
+        ],
+        "title": "Install Exit Code"
+      },
+      "installed": {
+        "title": "Installed",
+        "type": "boolean"
+      },
+      "lock_changed": {
+        "title": "Lock Changed",
+        "type": "boolean"
+      }
+    },
+    "required": [
+      "lock_changed",
+      "installed",
+      "install_exit_code"
+    ],
+    "title": "EnvironmentSync",
+    "type": "object"
+  }
+}

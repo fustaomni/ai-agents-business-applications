@@ -1,0 +1,85 @@
+{
+  "ids": [
+    "export-copy/v1"
+  ],
+  "json_schema": {
+    "additionalProperties": false,
+    "description": "export-copy/v1: one copy of a released export, before and after.",
+    "properties": {
+      "assignment": {
+        "minLength": 1,
+        "title": "Assignment",
+        "type": "string"
+      },
+      "contract": {
+        "const": "export-copy/v1",
+        "default": "export-copy/v1",
+        "title": "Contract",
+        "type": "string"
+      },
+      "copy_sha256": {
+        "anyOf": [
+          {
+            "pattern": "^[0-9a-f]{64}$",
+            "type": "string"
+          },
+          {
+            "type": "null"
+          }
+        ],
+        "default": null,
+        "title": "Copy Sha256"
+      },
+      "destination": {
+        "title": "Destination",
+        "type": "string"
+      },
+      "destination_existed": {
+        "title": "Destination Existed",
+        "type": "boolean"
+      },
+      "source": {
+        "title": "Source",
+        "type": "string"
+      },
+      "source_exists": {
+        "title": "Source Exists",
+        "type": "boolean"
+      },
+      "source_sha256": {
+        "anyOf": [
+          {
+            "pattern": "^[0-9a-f]{64}$",
+            "type": "string"
+          },
+          {
+            "type": "null"
+          }
+        ],
+        "default": null,
+        "title": "Source Sha256"
+      },
+      "tag": {
+        "anyOf": [
+          {
+            "type": "string"
+          },
+          {
+            "type": "null"
+          }
+        ],
+        "title": "Tag"
+      }
+    },
+    "required": [
+      "assignment",
+      "tag",
+      "source",
+      "destination",
+      "source_exists",
+      "destination_existed"
+    ],
+    "title": "ExportCopy",
+    "type": "object"
+  }
+}

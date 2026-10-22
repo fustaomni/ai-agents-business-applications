@@ -1,0 +1,30 @@
+# contracts/mutations/d230.toml
+# source:search never reports nothing found when it did not look (D.230).
+
+[[mutants]]
+id = "unknown-option-taken-as-path"
+file = "scripts/source_search.py"
+before = "        elif arg.startswith(\"-\"):\n"
+after = "        elif False:\n"
+killers = ["tests/test_source_search.py::test_an_unknown_option_is_refused_never_searched"]
+
+[[mutants]]
+id = "missing-path-searched"
+file = "scripts/source_search.py"
+before = "        elif not GLOB & set(arg) and not (ROOT / arg).exists():\n"
+after = "        elif False:\n"
+killers = ["tests/test_source_search.py::test_a_path_that_does_not_exist_is_refused"]
+
+[[mutants]]
+id = "dialect-ignored"
+file = "scripts/source_search.py"
+before = "                dialect = \"fixed\"\n"
+after = "                dialect = \"extended\"\n"
+killers = ["tests/test_source_search.py::test_the_dialect_is_chosen_on_the_command_line"]
+
+[[mutants]]
+id = "untracked-skipped"
+file = "scripts/source_search.py"
+before = "        found = search(ROOT, pattern, paths, untracked=True, dialect=dialect)\n"
+after = "        found = search(ROOT, pattern, paths, untracked=False, dialect=dialect)\n"
+killers = ["tests/test_source_search.py::test_an_untracked_file_is_searched_from_the_command_line"]

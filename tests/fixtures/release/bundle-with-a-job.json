@@ -1,0 +1,109 @@
+{
+  "bundle": {
+    "environment": "fixture",
+    "name": "example-project",
+    "target": "fixture"
+  },
+  "include": [
+    "resources/assignment_01_job.yml",
+    "resources/assignment_02_job.yml",
+    "resources/unity_catalog.yml"
+  ],
+  "resources": {
+    "jobs": {
+      "assignment_01_ingest": {
+        "deployment": {
+          "kind": "BUNDLE",
+          "metadata_file_path": "/Workspace/.bundle-fixture-never-deployed/example-project/state/metadata.json"
+        },
+        "edit_mode": "UI_LOCKED",
+        "email_notifications": {
+          "on_failure": [
+            "fixture-user@example.invalid"
+          ]
+        },
+        "environments": [
+          {
+            "environment_key": "default",
+            "spec": {
+              "environment_version": "5"
+            }
+          }
+        ],
+        "format": "MULTI_TASK",
+        "max_concurrent_runs": 1,
+        "name": "assignment-01-spark-api",
+        "parameters": [
+          {
+            "default": "example_catalog",
+            "name": "catalog"
+          },
+          {
+            "default": "assignment_01",
+            "name": "schema"
+          },
+          {
+            "default": "/Volumes/example_catalog/assignment_01/raw",
+            "name": "volume"
+          }
+        ],
+        "queue": {
+          "enabled": true
+        },
+        "tasks": [
+          {
+            "environment_key": "default",
+            "notebook_task": {
+              "notebook_path": "/Workspace/.bundle-fixture-never-deployed/example-project/files/assignments/assignment-01/notebooks/assignment_01_spark_api"
+            },
+            "task_key": "ingest"
+          }
+        ]
+      }
+    }
+  },
+  "sync": {
+    "paths": [
+      "."
+    ]
+  },
+  "variables": {
+    "catalog": {
+      "default": "example_catalog",
+      "description": "Unity Catalog catalog. NOT created by this bundle - prerequisite.",
+      "value": "example_catalog"
+    },
+    "environment_version": {
+      "default": "5",
+      "description": "Databricks serverless environment version. AUTHORITATIVE: this value determines the Python interpreter the server runs, and contracts/environment-versions.json maps it to the local .python-version. check:env-parity fails the build when the two disagree.",
+      "value": "5"
+    },
+    "owner_email": {
+      "default": "fixture-user@example.invalid",
+      "description": "Where job failure notifications go. NOT the deployer: on_failure was the deploying user's address, which sends CI failures to the service principal -- an identity with no inbox. A notification nobody receives is worse than none, because it looks like coverage.\nNO DEFAULT, DELIBERATELY. An address here would be personal data committed to the repository, which the PII scanner correctly reports. Each target supplies its own: a placeholder for fixture capture, the real address via BUNDLE_VAR_owner_email when deploying.",
+      "value": "fixture-user@example.invalid"
+    },
+    "reader_principal": {
+      "default": "example_readers",
+      "description": "Account group granted read access to this bundle's UC objects. Provisioned by `mise run bootstrap:identity`, NOT by this bundle -- groups are not a bundle resource type, so a bundle can only reference them.\nMUST BE AN ACCOUNT GROUP. `users` and `admins` are WORKSPACE-LOCAL, and workspace-local groups cannot hold privileges on UC securables at all. The API reports that attempt as PRINCIPAL_DOES_NOT_EXIST, which reads like a missing group but is a category error, and it is a documented common cause of UC access failures.\nNOT `account users` either: that exists and would work, but it means every account user. UC best practice is least privilege via purpose-named groups.\nNOT a user identity: owners already hold all privileges, so a self-grant is redundant, and UC best practice is to avoid direct grants to users.",
+      "value": "example_readers"
+    },
+    "schema": {
+      "default": "assignment_01",
+      "description": "Bare schema name. The RESOURCE keeps this plain value. Never interpolate schema_prefix into resources.schemas.*.name -- the CLI adds its own prefix on top and you get dev_user_dev_user_<schema>.",
+      "value": "assignment_01"
+    },
+    "schema_prefix": {
+      "default": "",
+      "description": "What the CLI prepends in this target. Consumers -- job parameters, notebook widgets -- build the effective name as assignment_01 so nothing hardcodes a name that development mode is going to rewrite.",
+      "value": ""
+    }
+  },
+  "workspace": {
+    "artifact_path": "/Workspace/.bundle-fixture-never-deployed/example-project/artifacts",
+    "file_path": "/Workspace/.bundle-fixture-never-deployed/example-project/files",
+    "resource_path": "/Workspace/.bundle-fixture-never-deployed/example-project/resources",
+    "root_path": "/Workspace/.bundle-fixture-never-deployed/example-project",
+    "state_path": "/Workspace/.bundle-fixture-never-deployed/example-project/state"
+  }
+}

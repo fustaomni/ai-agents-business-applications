@@ -1,0 +1,22 @@
+# contracts/capability-remediation.toml
+# Which planned step governs which raw tool task (D.89). A raw tool task -- one whose run line
+# names no scripts/<module>.py -- is never governed. An owner names the step converting it; it
+# admits nothing (M37). Script tasks are owned through contracts/layer-remediation.toml.
+#
+# Ordered by blast radius: what each family can change outside this repository.
+
+[[owners]]
+step = "D.90"
+tasks = ["auth:describe", "auth:rotate-ci-secret", "repo:configure"]
+
+[[owners]]
+step = "D.92"
+tasks = ["deps:install", "nix:bootstrap", "nix:flake-check", "nix:shell", "setup"]
+
+[[owners]]
+step = "D.93"
+tasks = ["check:policy", "fmt", "lint", "nix:policy", "test", "test:integration", "types"]
+
+[[owners]]
+step = "D.94"
+tasks = ["pr-status", "start:check", "start:here", "status"]

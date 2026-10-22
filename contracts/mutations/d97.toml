@@ -1,0 +1,31 @@
+# contracts/mutations/d97.toml
+# A declared profile is never removed, an account profile names its account, an undeclared
+# duplicate is removed, and every declared profile is verified after login (D.97).
+
+[[mutants]]
+id = "stale-desired-allowed"
+file = "policies/runs/auth_login/auth_login.rego"
+before = "\twanted.name == name"
+after = "\tfalse"
+killers = ["tests/test_auth_login.py::test_a_declared_profile_is_never_removed"]
+
+[[mutants]]
+id = "account-id-unchecked"
+file = "policies/runs/auth_login/auth_login.rego"
+before = "\tprofile.account_id == null"
+after = "\tfalse"
+killers = ["tests/test_auth_login.py::test_an_account_profile_without_its_id_is_refused"]
+
+[[mutants]]
+id = "stale-kept"
+file = "scripts/auth_login.py"
+before = '    stale = tuple(p.name for p in observed if p.name not in names and _host(p.host) in hosts)'
+after = '    stale: tuple[str, ...] = ()'
+killers = ["tests/test_auth_login.py::test_a_stale_duplicate_is_removed"]
+
+[[mutants]]
+id = "revalidation-skipped"
+file = "scripts/auth_login.py"
+before = '    if after is None or invalid:'
+after = '    if False:'
+killers = ["tests/test_auth_login.py::test_a_login_that_leaves_a_profile_invalid_halts"]

@@ -1,0 +1,16 @@
+# contracts/mutations/d265.toml
+# The identity commit names its plan step, as the generated commit does.
+
+[[mutants]]
+id = "identity-untrailered"
+file = "scripts/template_identity.py"
+before = 'MESSAGE = f"chore: take the project identity\n\n{TRAILER}"'
+after = 'MESSAGE = "chore: take the project identity"'
+killers = ["tests/test_template_identity.py::test_the_identity_commit_names_its_plan_step"]
+
+[[mutants]]
+id = "birth-step-drift"
+file = "scripts/template_init.py"
+before = 'TRAILER = "Plan-Step: A.1"'
+after = 'TRAILER = "Plan-Step: A.2"'
+killers = ["tests/test_template_identity.py::test_the_identity_commit_names_its_plan_step"]

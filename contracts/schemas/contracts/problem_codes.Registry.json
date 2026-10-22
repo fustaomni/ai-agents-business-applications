@@ -1,0 +1,65 @@
+{
+  "ids": [
+    "problems/v1"
+  ],
+  "json_schema": {
+    "$defs": {
+      "Problem": {
+        "additionalProperties": false,
+        "description": "One registered problem type: its stable code, title and severity.",
+        "properties": {
+          "code": {
+            "pattern": "^(ERR|WARN)_[A-Z0-9_]+$",
+            "title": "Code",
+            "type": "string"
+          },
+          "retired": {
+            "default": false,
+            "title": "Retired",
+            "type": "boolean"
+          },
+          "severity": {
+            "enum": [
+              "error",
+              "warning"
+            ],
+            "title": "Severity",
+            "type": "string"
+          },
+          "title": {
+            "minLength": 1,
+            "title": "Title",
+            "type": "string"
+          }
+        },
+        "required": [
+          "code",
+          "title",
+          "severity"
+        ],
+        "title": "Problem",
+        "type": "object"
+      }
+    },
+    "additionalProperties": false,
+    "description": "problems/v1: contracts/problems.toml.",
+    "properties": {
+      "contract": {
+        "const": "problems/v1",
+        "default": "problems/v1",
+        "title": "Contract",
+        "type": "string"
+      },
+      "problems": {
+        "default": [],
+        "items": {
+          "$ref": "#/$defs/Problem"
+        },
+        "title": "Problems",
+        "type": "array"
+      }
+    },
+    "title": "Registry",
+    "type": "object"
+  }
+}

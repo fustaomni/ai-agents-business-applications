@@ -1,0 +1,59 @@
+{
+  "ids": [
+    "command-outcome/v1"
+  ],
+  "json_schema": {
+    "$defs": {
+      "JsonValue": {}
+    },
+    "additionalProperties": false,
+    "description": "One command's result: the only thing it writes to stdout.\n\nFROZEN, extra=\"forbid\" AND STRICT, like every contract here (D.147). A\nfield appearing is as much a contract change as a field vanishing, and both\nfail at the boundary rather than downstream.",
+    "properties": {
+      "code": {
+        "pattern": "^[a-z][a-z0-9_]*$",
+        "title": "Code",
+        "type": "string"
+      },
+      "command": {
+        "minLength": 1,
+        "title": "Command",
+        "type": "string"
+      },
+      "contract": {
+        "const": "command-outcome/v1",
+        "default": "command-outcome/v1",
+        "title": "Contract",
+        "type": "string"
+      },
+      "data": {
+        "additionalProperties": {
+          "$ref": "#/$defs/JsonValue"
+        },
+        "title": "Data",
+        "type": "object"
+      },
+      "message": {
+        "minLength": 1,
+        "title": "Message",
+        "type": "string"
+      },
+      "outcome": {
+        "enum": [
+          "success",
+          "refused",
+          "failed"
+        ],
+        "title": "Outcome",
+        "type": "string"
+      }
+    },
+    "required": [
+      "command",
+      "outcome",
+      "code",
+      "message"
+    ],
+    "title": "CommandOutcome",
+    "type": "object"
+  }
+}
